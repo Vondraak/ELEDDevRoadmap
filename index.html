@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Dev roadmap and checklist for the ELED quote and install platform.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='2' width='5' height='5' rx='1' fill='%23F0971F'/%3E%3Crect x='9' y='2' width='5' height='5' rx='1' fill='%23F0971F'/%3E%3Crect x='2' y='9' width='5' height='5' rx='1' fill='%23F0971F'/%3E%3Crect x='9' y='9' width='5' height='5' rx='1' fill='%23C9CDD4'/%3E%3C/svg%3E">
+<title>ELED Platform Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:ital,wght@0,400..700;1,400&display=swap">
+<style>
+/* Layout: sticky phase rail on the left, one reading column on the right; progress drawn as LED pixels, one per task */
+:root{
+  --bg:#F3F4F6; --panel:#FFFFFF; --ink:#15171C; --muted:#5A616E; --line:#DDE0E6; --line-strong:#9AA1AD;
+  --accent:#D0700E; --accent-ink:#9C4F04; --accent-soft:rgba(208,112,14,.12); --px-off:#DEE1E7; --px-on:#F0971F; --px-glow:rgba(240,151,31,0);
+  --good:#23734A; --good-soft:rgba(35,115,74,.10); --code:#ECEEF2; --zone:rgba(21,23,28,.035); --shadow:0 1px 2px rgba(21,23,28,.06);
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif; --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1115; --panel:#171A20; --ink:#E7E9EE; --muted:#9AA1AE; --line:#282D37; --line-strong:#5D6573;
+  --accent:#F2A33A; --accent-ink:#F6B75E; --accent-soft:rgba(242,163,58,.14); --px-off:#252A33; --px-on:#FFB547; --px-glow:rgba(255,181,71,.55);
+  --good:#4FBF83; --good-soft:rgba(79,191,131,.12); --code:#0B0D11; --zone:rgba(255,255,255,.03); --shadow:none; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0F1115; --panel:#171A20; --ink:#E7E9EE; --muted:#9AA1AE; --line:#282D37; --line-strong:#5D6573;
+  --accent:#F2A33A; --accent-ink:#F6B75E; --accent-soft:rgba(242,163,58,.14); --px-off:#252A33; --px-on:#FFB547; --px-glow:rgba(255,181,71,.55);
+  --good:#4FBF83; --good-soft:rgba(79,191,131,.12); --code:#0B0D11; --zone:rgba(255,255,255,.03); --shadow:none; color-scheme:dark }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important} }
+body{background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased}
+a{color:var(--accent-ink)}
+code{font-family:var(--f-mono); font-size:.84em; background:var(--code); padding:.08em .35em; border-radius:4px; overflow-wrap:anywhere}
+h1,h2,h3,h4{font-family:var(--f-display); font-stretch:82%; text-wrap:balance; margin:0; line-height:1.15}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+
+/* ---- top bar ---- */
+.topbar{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.tb-in{max-width:1200px; margin:0 auto; padding-block:10px; padding-inline:max(16px,3vw); display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.tb-name{font-family:var(--f-display); font-stretch:80%; font-weight:700; font-size:15px; letter-spacing:.01em}
+.meter{flex:1 1 140px; min-width:100px; height:8px; border-radius:2px; background:var(--px-off); overflow:hidden}
+.meter-fill{display:block; height:100%; width:0; background:var(--px-on); box-shadow:0 0 8px var(--px-glow); transition:width .3s ease}
+.tb-count{font-variant-numeric:tabular-nums; font-size:14px; color:var(--muted); white-space:nowrap}
+.sync{font-size:12.5px; color:var(--muted); display:inline-flex; align-items:center; gap:6px; white-space:nowrap}
+.sync::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--line-strong)}
+.sync[data-s="synced"]::before{background:var(--good)}
+.sync[data-s="error"]::before,.sync[data-s="readonly"]::before{background:var(--accent)}
+#jump{display:none; font:inherit; font-size:14px; padding:6px 8px; border-radius:6px; border:1px solid var(--line); background:var(--panel); color:var(--ink); max-width:100%}
+
+/* ---- layout ---- */
+.layout{max-width:1200px; margin:0 auto; padding-inline:max(16px,3vw); display:grid; grid-template-columns:200px minmax(0,1fr); gap:48px}
+main{min-width:0; max-width:820px; padding-block:28px 96px}
+.side{position:relative}
+.side-in{position:sticky; top:calc(env(safe-area-inset-top,0px) + 64px); padding-block:28px; max-height:calc(100vh - 64px); overflow:auto}
+.side-label{font-size:11.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); font-weight:600; margin:18px 0 6px}
+.side-label:first-child{margin-top:0}
+.nav-phases,.nav-ref{list-style:none; margin:0; padding:0; display:grid; gap:1px}
+.side a{display:flex; align-items:baseline; gap:8px; padding:5px 8px; border-radius:6px; text-decoration:none; color:var(--ink); font-size:14.5px}
+.side a:hover{background:var(--panel)}
+.side a.active{background:var(--accent-soft)}
+.np{font-family:var(--f-mono); font-size:12px; color:var(--muted); width:1ch}
+.nn{flex:1}
+.nc{font-variant-numeric:tabular-nums; font-size:12.5px; color:var(--muted)}
+@media (max-width: 980px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  #jump{display:block}
+  main{max-width:none}
+}
+
+/* ---- hero ---- */
+.hero{display:grid; gap:18px; padding-bottom:36px; border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent-ink); font-weight:700}
+h1{font-size:clamp(2.1rem,4.6vw,3.1rem); font-weight:800; font-stretch:78%; letter-spacing:-.005em}
+.byline{margin:0; color:var(--muted); font-size:14.5px}
+.summary p{margin:0 0 10px; max-width:68ch}
+.summary ul{margin:0; padding-left:1.2em; display:grid; gap:6px; max-width:70ch}
+.controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.btn,.controls button{font:inherit; font-size:14px; padding:6px 12px; border-radius:6px; border:1px solid var(--line); background:var(--panel); color:var(--ink); cursor:pointer}
+.controls button:hover{border-color:var(--line-strong)}
+.switch{display:inline-flex; align-items:center; gap:8px; font-size:14px; color:var(--muted); cursor:pointer}
+
+/* ---- overview board ---- */
+.board{display:grid; gap:10px}
+.row{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)) 86px; gap:8px}
+.row-b{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tile{display:flex; flex-direction:column; gap:2px; padding:10px 10px 9px; border:1px solid var(--line); background:var(--panel); border-radius:8px; text-decoration:none; color:var(--ink); min-width:0; box-shadow:var(--shadow)}
+.tile:hover{border-color:var(--line-strong)}
+.tile.complete{border-color:var(--good)}
+.t-n{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:600}
+.t-name{font-family:var(--f-display); font-stretch:80%; font-weight:700; font-size:16px; line-height:1.2}
+.t-h{font-size:12.5px; color:var(--muted)}
+.t-c{font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; margin-top:2px}
+.pixels{display:flex; flex-wrap:wrap; gap:3px; margin-top:6px}
+.pixels i{width:8px; height:8px; border-radius:1.5px; background:var(--px-off); transition:background .2s, box-shadow .2s}
+.pixels i.on{background:var(--px-on); box-shadow:0 0 6px var(--px-glow)}
+.gate{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-decoration:none; color:var(--ink); text-align:center; padding:4px}
+.diamond{width:26px; height:26px; transform:rotate(45deg); border:2px solid var(--accent); background:var(--accent-soft); border-radius:3px; margin-bottom:6px}
+.gate.on .diamond{background:var(--px-on); box-shadow:0 0 10px var(--px-glow)}
+.g-t{font-weight:700; font-size:13px; line-height:1.1}
+.g-s{font-size:11.5px; color:var(--muted); line-height:1.2}
+@media (max-width: 760px){
+  .row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .row-b{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gate{flex-direction:row; grid-column:1 / -1; justify-content:flex-start; gap:10px; padding:6px 4px}
+  .diamond{margin:0 4px}
+}
+@media (max-width: 420px){ .row{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* ---- sections ---- */
+.block{padding-top:44px; scroll-margin-top:72px}
+.block > h2{font-size:clamp(1.5rem,2.6vw,1.9rem); font-weight:750; margin-bottom:14px}
+.block p, .block li{max-width:70ch}
+.block > p{margin:0 0 12px}
+.block ol, .block ul{padding-left:1.3em}
+.block li{margin:4px 0}
+h2 .count{font-family:var(--f-body); font-stretch:100%; font-size:14px; font-weight:400; color:var(--muted); margin-left:8px}
+.tablewrap{overflow-x:auto; margin:14px 0 18px; border:1px solid var(--line); border-radius:8px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:14px; line-height:1.45}
+th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:600; background:var(--zone)}
+th,td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+.decisions td:nth-child(2){font-weight:600; min-width:150px}
+.c-ck{width:1%; text-align:center}
+tr.item.done td{color:var(--muted)}
+
+/* code blocks */
+.code{margin:12px 0 16px; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--code)}
+.code-bar{display:flex; justify-content:space-between; align-items:center; padding:5px 8px 5px 12px; border-bottom:1px solid var(--line); font-family:var(--f-mono); font-size:11.5px; color:var(--muted); background:var(--zone)}
+.copy{font:inherit; font-family:var(--f-body); font-size:12.5px; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:5px; padding:2px 9px; cursor:pointer}
+pre{margin:0; padding:12px 14px; overflow-x:auto; font-size:12.5px; line-height:1.55}
+pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; white-space:pre}
+.block > pre, .step-body > pre, .howto-intro > pre{border:1px solid var(--line); border-radius:8px; background:var(--code)}
+
+/* diagram */
+.diagram{margin:10px 0 16px; overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:12px}
+.diagram svg{display:block; width:100%; min-width:620px; height:auto; font-family:var(--f-body)}
+.diagram figcaption{font-size:13px; color:var(--muted); margin-top:6px}
+.arch .bx{fill:none; stroke:var(--line-strong); stroke-width:1.25}
+.arch .bx.main{fill:var(--accent-soft); stroke:var(--accent); stroke-width:2}
+.arch .zone{fill:var(--zone); stroke:var(--line-strong); stroke-width:1.25}
+.arch text{font-size:13px}
+.arch .nm{fill:var(--ink); font-weight:600}
+.arch .sb{fill:var(--muted); font-size:11.5px}
+.arch .sb.ink{fill:var(--ink)}
+.arch .el{fill:var(--muted); font-size:11.5px}
+.arch .cn path{fill:none; stroke:var(--line-strong); stroke-width:1.25}
+.arch .arwh{fill:var(--line-strong)}
+
+/* ---- phases ---- */
+.phase{margin-top:30px; padding:22px 22px 20px; background:var(--panel); border:1px solid var(--line); border-radius:10px; scroll-margin-top:72px; box-shadow:var(--shadow)}
+.phase-head{display:grid; gap:4px; margin-bottom:16px}
+.phase-num{font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent-ink); font-weight:700}
+.phase h3{font-size:clamp(1.3rem,2.4vw,1.6rem); font-weight:750}
+.phase-meta{display:flex; gap:12px; flex-wrap:wrap; align-items:center; font-size:14px; color:var(--muted)}
+.budget{border:1px solid var(--line); border-radius:999px; padding:1px 10px; font-size:13px}
+.count{font-variant-numeric:tabular-nums}
+.phase-head .pixels i{width:10px; height:10px}
+.label{font-family:var(--f-body); font-stretch:100%; font-size:12px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); font-weight:700; margin:0 0 6px}
+.tasks{list-style:none; margin:0 0 16px; padding:0; display:grid; gap:2px}
+.item > label, .step-head label{display:flex; gap:10px; align-items:flex-start; cursor:pointer; padding:5px 6px; margin:0 -6px; border-radius:6px}
+.item > label:hover, .step-head label:hover{background:var(--zone)}
+.item > label > span{min-width:0}
+.item.done > label > span{color:var(--muted)}
+
+/* checkbox: an LED that lights when done */
+.ck{appearance:none; -webkit-appearance:none; flex:none; width:18px; height:18px; margin:3px 0 0; border:1.5px solid var(--line-strong); border-radius:4px; background:var(--panel); cursor:pointer; display:grid; place-content:center; transition:background .15s, border-color .15s, box-shadow .15s}
+.ck::after{content:""; width:9px; height:5px; border-left:2px solid #1B1204; border-bottom:2px solid #1B1204; transform:rotate(-45deg) translate(1px,-1px); opacity:0}
+.ck:checked{background:var(--px-on); border-color:var(--px-on); box-shadow:0 0 8px var(--px-glow)}
+.ck:checked::after{opacity:1}
+.ck:disabled{cursor:not-allowed; opacity:.7}
+.ck.sub{width:16px; height:16px; margin-top:4px; vertical-align:-3px; margin-right:8px}
+.ck.sub::after{width:8px; height:4px}
+
+/* how to */
+.howto{border-top:1px solid var(--line); margin-top:4px; padding-top:10px}
+.howto > summary{display:flex; align-items:baseline; gap:10px; cursor:pointer; list-style:none; padding:4px 0 8px}
+.howto > summary::-webkit-details-marker{display:none}
+.howto > summary::before{content:""; width:7px; height:7px; border-right:2px solid var(--muted); border-bottom:2px solid var(--muted); transform:rotate(-45deg); margin-right:2px; transition:transform .15s; align-self:center}
+.howto[open] > summary::before{transform:rotate(45deg)}
+.howto > summary .label{margin:0}
+.howto-count{font-size:13px; color:var(--muted)}
+.howto-intro p{margin:0 0 10px}
+.steps{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.step-head label{align-items:flex-start}
+.step-n{flex:none; font-family:var(--f-mono); font-size:12px; font-weight:600; color:var(--accent-ink); border:1px solid var(--line); border-radius:4px; padding:0 6px; margin-top:2px; line-height:20px}
+.step-title{font-weight:700; min-width:0}
+.step.done > .step-head .step-title{color:var(--muted)}
+.step.done > .step-body{opacity:.62}
+.step-body{padding-left:62px; min-width:0}
+.step-body > p{margin:4px 0 8px}
+.step-body ul, .step-body ol{margin:6px 0 10px; padding-left:1.3em}
+.step-body li.subitem{margin:6px 0}
+.step-body ul > li.subitem{list-style:none; margin-left:-1.3em}
+.step-body li.subitem.done{color:var(--muted)}
+@media (max-width: 560px){ .step-body{padding-left:0} .phase{padding:16px 14px} }
+
+.exit{margin-top:16px; border:1px dashed var(--line-strong); border-radius:8px; padding:8px 12px}
+.exit > label{margin:0}
+.exit.done{border-style:solid; border-color:var(--good); background:var(--good-soft)}
+.exit.done > label > span{color:var(--ink)}
+.pilot{border-color:var(--accent)}
+
+.hide-done .item.done{display:none}
+/* backup controls, shown only when progress lives in this browser */
+.backup{display:inline-flex; gap:8px; flex-wrap:wrap}
+.import-bar{display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--accent); background:var(--accent-soft); border-radius:8px; font-size:14px}
+.import-bar .msg{flex:1 1 240px; min-width:0}
+.import-bar .primary{background:var(--px-on); border-color:var(--px-on); color:#1B1204; font-weight:600}
+.sync[data-s="nostore"]::before{background:var(--accent)}
+/* grid children that hold code or tables must be allowed to shrink */
+.hero,.board,.phase-head,.tasks,.steps{grid-template-columns:minmax(0,1fr)}
+.hero > *,.steps > li,.tasks > li,.step-body,.howto,.phase{min-width:0}
+.footnote{margin-top:48px; font-size:13px; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="tb-in">
+  <span class="tb-name">ELED Platform Roadmap</span>
+  <div class="meter" role="progressbar" aria-label="Tasks complete" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="meter-fill"></span></div>
+  <span class="tb-count" id="overall">0 of 0 tasks</span>
+  <span class="sync" id="sync" data-s="local">Saved in this browser</span>
+  <select id="jump" aria-label="Jump to section"><option value="">Jump to…</option><option value="phase-0">Phase 0: Prereqs</option><option value="phase-1">Phase 1: Azure setup</option><option value="phase-2">Phase 2: Data model</option><option value="phase-3">Phase 3: API</option><option value="phase-4">Phase 4: ELEDCalc</option><option value="phase-5">Phase 5: ELEDInstall</option><option value="phase-6">Phase 6: Search UI</option><option value="phase-7">Phase 7: Sample import</option><option value="phase-8">Phase 8: Power BI</option><option value="phase-9">Phase 9: Cutover</option><option value="current-state">Current state</option><option value="architecture">Architecture</option><option value="repo-and-ci-cd">Repo and CI/CD</option><option value="data-model">Data model</option><option value="api-and-auth">API and auth</option><option value="rules-engine">Rules engine</option><option value="decisions">Decisions</option><option value="risks">Risks</option><option value="sources">Sources</option></select>
+</div></div>
+
+<div class="layout">
+<nav class="side" aria-label="Sections"><div class="side-in">
+<div class="side-label">Phases</div><ol class="nav-phases">
+<li><a href="#phase-0"><span class="np">0</span><span class="nn">Prereqs</span><span class="nc" data-count="0"></span></a></li>
+<li><a href="#phase-1"><span class="np">1</span><span class="nn">Azure setup</span><span class="nc" data-count="1"></span></a></li>
+<li><a href="#phase-2"><span class="np">2</span><span class="nn">Data model</span><span class="nc" data-count="2"></span></a></li>
+<li><a href="#phase-3"><span class="np">3</span><span class="nn">API</span><span class="nc" data-count="3"></span></a></li>
+<li><a href="#phase-4"><span class="np">4</span><span class="nn">ELEDCalc</span><span class="nc" data-count="4"></span></a></li>
+<li><a href="#phase-5"><span class="np">5</span><span class="nn">ELEDInstall</span><span class="nc" data-count="5"></span></a></li>
+<li><a href="#phase-6"><span class="np">6</span><span class="nn">Search UI</span><span class="nc" data-count="6"></span></a></li>
+<li><a href="#phase-7"><span class="np">7</span><span class="nn">Sample import</span><span class="nc" data-count="7"></span></a></li>
+<li><a href="#phase-8"><span class="np">8</span><span class="nn">Power BI</span><span class="nc" data-count="8"></span></a></li>
+<li><a href="#phase-9"><span class="np">9</span><span class="nn">Cutover</span><span class="nc" data-count="9"></span></a></li>
+</ol><div class="side-label">Reference</div><ul class="nav-ref">
+<li><a href="#current-state">Current state</a></li>
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#repo-and-ci-cd">Repo and CI/CD</a></li>
+<li><a href="#data-model">Data model</a></li>
+<li><a href="#api-and-auth">API and auth</a></li>
+<li><a href="#rules-engine">Rules engine</a></li>
+<li><a href="#decisions">Decisions</a></li>
+<li><a href="#risks">Risks</a></li>
+<li><a href="#sources">Sources</a></li>
+</ul></div></nav>
+<main>
+  <header class="hero" id="top">
+    <div class="eyebrow">Enlightened LED · Quote and Install Platform</div>
+    <h1>Dev roadmap</h1>
+    <p class="byline">Prepared 30 Sep 2026 against the scope of work dated 29 Sep 2026 · RFP estimate 50 to 86 build hours, plan for 65 to 70</p>
+    <div class="summary"><p>Build one Azure Static Web App that hosts ELEDCalc, ELEDInstall and a new search portal behind Entra SSO, backed by one Azure SQL database and one Blob container. Keep both apps as plain HTML/JS (no framework rewrite) and add a thin shared <code>eled-api.js</code> client. That is what keeps the build inside the RFP's 65 to 70 hour plan.</p>
+<ul>
+<li><strong>Pilot milestone (about 40 to 60 hrs):</strong> save a quote from ELEDCalc, approve it, get an auto-built checklist in ELEDInstall, find both in basic search. Phases 0 to 5 below, with search trimmed to a list view.</li>
+<li><strong>Full scope:</strong> add the search UI, sample import, Power BI and cutover (Phases 6 to 9).</li>
+<li><strong>How to use this doc:</strong> work the phases in order. Each has tasks you can tick, an hour budget from the RFP, and exit criteria. Do not start a phase until the previous exit criteria pass.</li>
+</ul></div>
+    <div class="controls">
+      <button type="button" id="toggle-howto">Collapse all how-tos</button>
+      <label class="switch"><input type="checkbox" id="hide-done" class="ck"> Hide completed items</label>
+      <span class="backup" id="backup" hidden>
+        <button type="button" id="export-progress">Export progress</button>
+        <button type="button" id="import-progress">Import progress</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden>
+      </span>
+    </div>
+    <div class="import-bar" id="import-bar" role="status" hidden>
+      <span class="msg" id="import-msg"></span>
+      <button type="button" class="btn primary" id="import-yes">Replace</button>
+      <button type="button" class="btn" id="import-no">Cancel</button>
+    </div>
+    <div class="board">
+<div class="row"><a class="tile" href="#phase-0" data-tile="0"><span class="t-n">Phase 0</span><span class="t-name">Prereqs</span><span class="t-h">setup only</span><span class="pixels"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-exit"></i></span><span class="t-c" data-count="0"></span></a><a class="tile" href="#phase-1" data-tile="1"><span class="t-n">Phase 1</span><span class="t-name">Azure setup</span><span class="t-h">4 to 8 h</span><span class="pixels"><i data-px="p1-t0"></i><i data-px="p1-t1"></i><i data-px="p1-t2"></i><i data-px="p1-t3"></i><i data-px="p1-t4"></i><i data-px="p1-t5"></i><i data-px="p1-t6"></i><i data-px="p1-t7"></i><i data-px="p1-exit"></i></span><span class="t-c" data-count="1"></span></a><a class="tile" href="#phase-2" data-tile="2"><span class="t-n">Phase 2</span><span class="t-name">Data model</span><span class="t-h">8 to 12 h</span><span class="pixels"><i data-px="p2-t0"></i><i data-px="p2-t1"></i><i data-px="p2-t2"></i><i data-px="p2-t3"></i><i data-px="p2-t4"></i><i data-px="p2-t5"></i><i data-px="p2-exit"></i></span><span class="t-c" data-count="2"></span></a><a class="tile" href="#phase-3" data-tile="3"><span class="t-n">Phase 3</span><span class="t-name">API</span><span class="t-h">8 to 16 h</span><span class="pixels"><i data-px="p3-t0"></i><i data-px="p3-t1"></i><i data-px="p3-t2"></i><i data-px="p3-t3"></i><i data-px="p3-t4"></i><i data-px="p3-t5"></i><i data-px="p3-t6"></i><i data-px="p3-t7"></i><i data-px="p3-t8"></i><i data-px="p3-exit"></i></span><span class="t-c" data-count="3"></span></a><a class="tile" href="#phase-4" data-tile="4"><span class="t-n">Phase 4</span><span class="t-name">ELEDCalc</span><span class="t-h">6 to 10 h</span><span class="pixels"><i data-px="p4-t0"></i><i data-px="p4-t1"></i><i data-px="p4-t2"></i><i data-px="p4-t3"></i><i data-px="p4-t4"></i><i data-px="p4-t5"></i><i data-px="p4-exit"></i></span><span class="t-c" data-count="4"></span></a><a class="tile" href="#phase-5" data-tile="5"><span class="t-n">Phase 5</span><span class="t-name">ELEDInstall</span><span class="t-h">10 to 16 h</span><span class="pixels"><i data-px="p5-t0"></i><i data-px="p5-t1"></i><i data-px="p5-t2"></i><i data-px="p5-t3"></i><i data-px="p5-t4"></i><i data-px="p5-t5"></i><i data-px="p5-exit"></i></span><span class="t-c" data-count="5"></span></a><a class="gate" href="#phase-5" data-gate><span class="diamond"></span><span class="g-t">Pilot gate</span><span class="g-s">demo the full flow</span></a></div>
+<div class="row row-b"><a class="tile" href="#phase-6" data-tile="6"><span class="t-n">Phase 6</span><span class="t-name">Search UI</span><span class="t-h">8 to 14 h</span><span class="pixels"><i data-px="p6-t0"></i><i data-px="p6-t1"></i><i data-px="p6-t2"></i><i data-px="p6-t3"></i><i data-px="p6-exit"></i></span><span class="t-c" data-count="6"></span></a><a class="tile" href="#phase-7" data-tile="7"><span class="t-n">Phase 7</span><span class="t-name">Sample import</span><span class="t-h">in Phase 2 hours</span><span class="pixels"><i data-px="p7-t0"></i><i data-px="p7-t1"></i><i data-px="p7-t2"></i><i data-px="p7-t3"></i><i data-px="p7-exit"></i></span><span class="t-c" data-count="7"></span></a><a class="tile" href="#phase-8" data-tile="8"><span class="t-n">Phase 8</span><span class="t-name">Power BI</span><span class="t-h">6 to 10 h</span><span class="pixels"><i data-px="p8-t0"></i><i data-px="p8-t1"></i><i data-px="p8-t2"></i><i data-px="p8-exit"></i></span><span class="t-c" data-count="8"></span></a><a class="tile" href="#phase-9" data-tile="9"><span class="t-n">Phase 9</span><span class="t-name">Cutover</span><span class="t-h">from buffer</span><span class="pixels"><i data-px="p9-t0"></i><i data-px="p9-t1"></i><i data-px="p9-t2"></i><i data-px="p9-t3"></i></span><span class="t-c" data-count="9"></span></a></div>
+</div>
+  </header>
+  <section class="block" id="current-state"><h2>Current state: what the repos tell us</h2><p>Both apps are single <code>index.html</code> files with no build step, which makes them easy to wrap but means state capture has to be added by hand. Findings from <code>vondraak/eledcalc</code> and <code>vondraak/eledinstall</code> as of today:</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>ELEDCalc</th>
+<th>ELEDInstall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Size</td>
+<td>1,349 lines, 154 KB, plus logo PNG</td>
+<td>776 lines, 97 KB</td>
+</tr>
+<tr>
+<td>Hosting</td>
+<td>Public GitHub Pages (<code>vondraak.github.io/ELEDCalc/</code>), public repo</td>
+<td>Public repo on personal account</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>None. Reset reloads the page</td>
+<td><code>localStorage</code> key <code>eled-install-prep.v1</code>, plus JSON export/import (<code>app: eled-install-prep, version: 1</code>)</td>
+</tr>
+<tr>
+<td>Data shape</td>
+<td>\~45 input ids (<code>p_*</code>, <code>q_*</code>, <code>hs_*</code>, <code>mu_*</code>...), overrides in <code>ST{}</code>, computed output in <code>SNAP{}</code> incl. <code>lines[]</code></td>
+<td>Flat map <code>st.v</code> keyed like <code>sys.pitch</code>, <code>access.6.s</code>, plus <code>st.rows</code> for added table rows</td>
+</tr>
+<tr>
+<td>Catalog / template</td>
+<td><code>DATA</code>: 67 products, 37 processors; <code>ANC</code>, <code>SPARE</code>, <code>HFRAME</code>, <code>HCARD</code>, <code>LABOR</code> arrays with unit prices</td>
+<td><code>SECTIONS</code>: 9 tabs (Project, Scope, Stakeholders, Site survey, Structural, Electrical, Signal, Logistics, Readiness gate)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Customer PDF via <code>window.print()</code> (sell price only)</td>
+<td>PDF via <code>window.print()</code></td>
+</tr>
+<tr>
+<td>Link between apps</td>
+<td>None</td>
+<td>Manual: "pull size, power, BTU from the calculator" links to <code>CALC_URL</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>What this means for the build:</p>
+<ol>
+<li><strong>Pricing is exposed today.</strong> Unit prices, markups and the cost side of the BOM ship to every visitor of the public Pages site. Putting the calc behind SSO with a Sales/Admin route rule is the first security win, and the Pages site must be turned off at cutover.</li>
+<li><strong>ELEDCalc needs a real state API.</strong> Add <code>getQuoteState()</code> (inputs + <code>ST</code> + processor and H-series picks) and <code>setQuoteState()</code>. Store <code>SNAP</code> alongside it as the frozen result.</li>
+<li><strong>Reloading an old quote must not reprice it.</strong> <code>calc()</code> reads the embedded catalog, so a reopened quote would silently use today's prices. Store the frozen <code>SNAP</code> and a catalog version; recalc only when the user creates a new version.</li>
+<li><strong>ELEDInstall keys are positional.</strong> <code>access.6.s</code> means "the 7th item". Any template edit shifts data. Give every check item a stable key before any data goes into SQL.</li>
+<li><strong>The RFP rules need fields ELEDCalc does not have.</strong> The catalog is 67 Ariel COB products, all IP 40 (indoor). There is no field for outdoor, transparent, foldable/hydraulic lift, mount type or delivery date. Add a small "Install attributes" card to the Quote tab.</li>
+<li><strong>Free wins already exist.</strong> ELEDInstall's JSON export is a ready-made import format, and its <code>sys.*</code> fields map almost 1:1 to <code>SNAP</code> (size, resolution, weight, power, BTU, processor).</li>
+</ol></section>
+<section class="block" id="architecture"><h2>Target architecture</h2><figure class="diagram"><svg class="arch" viewBox="0 0 760 490" role="img" aria-label="Both apps share one sign-in, one API and one database">
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="arwh" d="M0 0L10 5L0 10z"/></marker></defs>
+<g class="cn">
+<path d="M124 90V124" marker-end="url(#arw)"/><path d="M626 124V90" marker-end="url(#arw)"/>
+<path d="M148 222V246" marker-end="url(#arw)"/><path d="M380 222V246" marker-end="url(#arw)"/><path d="M612 222V246" marker-end="url(#arw)"/>
+<path d="M190 308V364" marker-end="url(#arw)"/><path d="M460 308V364" marker-end="url(#arw)"/>
+<path d="M656 436V456H190V436" marker-end="url(#arw)"/></g>
+<rect class="bx" x="24" y="34" width="200" height="56" rx="8"/>
+<text class="nm" x="124" y="58" text-anchor="middle">Staff browsers</text>
+<text class="sb" x="124" y="76" text-anchor="middle">Sales, Install, Admin</text>
+<rect class="bx" x="516" y="34" width="220" height="56" rx="8"/>
+<text class="nm" x="626" y="58" text-anchor="middle">Microsoft Entra ID</text>
+<text class="sb" x="626" y="76" text-anchor="middle">single tenant, app roles</text>
+<text class="el" x="134" y="112" text-anchor="start">sign in</text>
+<text class="el" x="636" y="112" text-anchor="start">SSO</text>
+<rect class="zone" x="24" y="124" width="712" height="200" rx="8"/>
+<text class="nm" x="40" y="150" text-anchor="start">Azure Static Web App (Standard plan)</text>
+<rect class="bx" x="40" y="166" width="216" height="56" rx="8"/>
+<text class="nm" x="148" y="190" text-anchor="middle">ELEDCalc  /calc</text>
+<text class="sb" x="148" y="208" text-anchor="middle">Sales and Admin only</text>
+<rect class="bx" x="272" y="166" width="216" height="56" rx="8"/>
+<text class="nm" x="380" y="190" text-anchor="middle">ELEDInstall  /install</text>
+<text class="sb" x="380" y="208" text-anchor="middle">all roles</text>
+<rect class="bx" x="504" y="166" width="216" height="56" rx="8"/>
+<text class="nm" x="612" y="190" text-anchor="middle">Portal  /portal</text>
+<text class="sb" x="612" y="208" text-anchor="middle">search, recall, rules admin</text>
+<rect class="bx main" x="40" y="246" width="680" height="62" rx="8"/>
+<text class="nm" x="380" y="272" text-anchor="middle">API: managed Functions  /api  (enforces roles)</text>
+<text class="sb ink" x="380" y="292" text-anchor="middle">quotes, versions, checklists, search, rules engine, attachment SAS</text>
+<rect class="bx" x="40" y="364" width="300" height="72" rx="8"/>
+<text class="nm" x="190" y="388" text-anchor="middle">Azure SQL Database (S0)</text>
+<text class="sb" x="190" y="406" text-anchor="middle">quotes, versions, checklists</text>
+<text class="sb" x="190" y="422" text-anchor="middle">rules, templates, audit log</text>
+<rect class="bx" x="372" y="364" width="176" height="72" rx="8"/>
+<text class="nm" x="460" y="388" text-anchor="middle">Blob Storage</text>
+<text class="sb" x="460" y="406" text-anchor="middle">PDFs, photos, drawings</text>
+<rect class="bx" x="576" y="364" width="160" height="72" rx="8"/>
+<text class="nm" x="656" y="388" text-anchor="middle">Power BI Pro</text>
+<text class="sb" x="656" y="406" text-anchor="middle">reads rpt views</text>
+<text class="el" x="470" y="340" text-anchor="start">SAS links</text>
+<text class="el" x="423" y="476" text-anchor="middle">scheduled refresh, read-only login</text>
+</svg><figcaption>Target architecture: one Static Web App, one API, SQL and Blob behind it, Power BI reading SQL.</figcaption></figure>
+<p>The three pages are static files; the API is the only thing that touches SQL or issues Blob links, so role checks and cost stripping live in one place. Browsers upload photos straight to Blob with a short-lived SAS the API hands out.</p></section>
+<section class="block" id="repo-and-ci-cd"><h2>Repo layout, environments and CI/CD</h2><p>Move to one private monorepo in an Enlightened LED GitHub org so the company, not a personal account, owns the code and the deploy pipeline.</p>
+<pre><code>eled-platform/
+  apps/                      &lt;- SWA app_location
+    staticwebapp.config.json &lt;- routes, roles, auth provider (must live here)
+    calc/index.html          &lt;- from vondraak/eledcalc (git subtree keeps history)
+    install/index.html       &lt;- from vondraak/eledinstall
+    portal/index.html        &lt;- new: search, recall, quote detail, admin (rules)
+    shared/eled-api.js       &lt;- fetch wrapper, auth check, save/load helpers
+    shared/eled.css
+  api/                       &lt;- Azure Functions (Node 20, JS), SWA api_location
+    src/functions/*.js
+    src/lib/db.js  rules.js  blob.js  auth.js
+  db/
+    migrate.js               &lt;- applies unapplied migrations, records SchemaVersion
+    migrations/001_init.sql  002_fulltext.sql ...
+    seed/checklist_template_v1.json  rules_v1.json
+  tools/import/              &lt;- Python: sample xlsx/pdf quote import
+  powerbi/                   &lt;- .pbip project (text format, diffable)
+  .github/workflows/deploy.yml  db-migrate.yml
+</code></pre>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>What it is</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local</td>
+<td>SWA CLI (<code>swa start</code>) serving <code>apps/</code> + <code>api/</code>, auth emulator</td>
+<td>Local SQL in Docker, or the dev DB</td>
+</tr>
+<tr>
+<td>Preview</td>
+<td>SWA staging environment per pull request</td>
+<td>Dev DB</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>SWA production, custom domain optional</td>
+<td>Prod DB (S0)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>A dev database (Basic tier, roughly $5/month) is not in the RFP cost table. Recommend it so PR previews never write to production. Confirm in the Azure pricing calculator.</li>
+<li><strong>Deploy:</strong> <code>Azure/static-web-apps-deploy</code> action on push to <code>main</code>, app location <code>apps</code>, API location <code>api</code>, no build step for the front end.</li>
+<li><strong>Migrations:</strong> numbered, forward-only <code>.sql</code> files applied by a <code>db-migrate</code> workflow using GitHub OIDC to Azure (no stored passwords), tracked in a <code>SchemaVersion</code> table.</li>
+<li><strong>Branching:</strong> trunk-based. Every change on a short branch, PR opens a preview URL, merge deploys.</li>
+</ul></section>
+<section class="block" id="data-model"><h2>Data model</h2><p>Normalize what gets searched and reported on; keep each app's full state as JSON so the pages reload exactly as saved. Every table carries <code>CreatedAt</code>, <code>CreatedBy</code>, <code>UpdatedAt</code>, <code>UpdatedBy</code> (Entra object id + UPN) and a <code>rowversion</code> for optimistic concurrency.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Key columns</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Customers</code></td>
+<td><code>CustomerId</code>, <code>Name</code>, <code>Company</code>, <code>Email</code>, <code>Phone</code></td>
+<td>Dedupe on normalized company name + email</td>
+</tr>
+<tr>
+<td><code>Projects</code></td>
+<td><code>ProjectId</code>, <code>CustomerId</code>, <code>Name</code>, <code>SiteAddress</code>, <code>City</code>, <code>State</code>, <code>Zip</code></td>
+<td>One customer, many projects</td>
+</tr>
+<tr>
+<td><code>Quotes</code></td>
+<td><code>QuoteId</code>, <code>QuoteNumber</code> (unique), <code>ProjectId</code>, <code>CurrentVersionNo</code>, <code>Status</code></td>
+<td>Header. Status: Draft, Sent, Approved, Rejected</td>
+</tr>
+<tr>
+<td><code>QuoteVersions</code></td>
+<td><code>QuoteVersionId</code>, <code>QuoteId</code>, <code>VersionNo</code>, <code>InputsJson</code>, <code>SnapJson</code>, <code>CatalogVersion</code>, <code>TotalSell</code>, <code>Discount</code>, <code>ProductModel</code>, <code>PitchMm</code>, <code>CabinetCount</code>, <code>WidthMm</code>, <code>HeightMm</code>, <code>MaxPowerW</code>, <code>Btu</code>, <code>Environment</code>, <code>MountType</code>, <code>LiftType</code>, <code>IsTransparent</code>, <code>DeliveryDate</code>, <code>SearchText</code></td>
+<td>Unique (<code>QuoteId</code>, <code>VersionNo</code>). Immutable once status leaves Draft</td>
+</tr>
+<tr>
+<td><code>QuoteLines</code></td>
+<td><code>QuoteVersionId</code>, <code>LineNo</code>, <code>Item</code>, <code>Description</code>, <code>Qty</code>, <code>UnitSell</code>, <code>ExtSell</code>, <code>UnitCost</code></td>
+<td>From <code>SNAP.lines</code>. <code>UnitCost</code> visible to Sales/Admin only</td>
+</tr>
+<tr>
+<td><code>QuoteStatusHistory</code></td>
+<td><code>QuoteId</code>, <code>FromStatus</code>, <code>ToStatus</code>, <code>At</code>, <code>By</code>, <code>Note</code></td>
+<td>Feeds approval rate and time-to-approval KPIs</td>
+</tr>
+<tr>
+<td><code>ChecklistTemplates</code></td>
+<td><code>TemplateId</code>, <code>Version</code>, <code>DefinitionJson</code>, <code>IsActive</code></td>
+<td><code>SECTIONS</code> moved out of code, with stable item keys</td>
+</tr>
+<tr>
+<td><code>Rules</code></td>
+<td><code>RuleId</code>, <code>Name</code>, <code>Priority</code>, <code>IsActive</code>, <code>ConditionJson</code>, <code>ActionJson</code>, <code>TemplateVersion</code></td>
+<td>See rules engine section</td>
+</tr>
+<tr>
+<td><code>Checklists</code></td>
+<td><code>ChecklistId</code>, <code>QuoteId</code> (unique), <code>QuoteVersionId</code>, <code>TemplateId</code>, DefinitionJson, SearchText, <code>Status</code>, <code>StateJson</code>, <code>AppliedRulesJson</code>, <code>CompletedAt</code>, <code>CompletedBy</code></td>
+<td>Unique <code>QuoteId</code> enforces one checklist per approved quote</td>
+</tr>
+<tr>
+<td><code>ChecklistItems</code></td>
+<td><code>ChecklistId</code>, <code>ItemKey</code>, <code>SectionKey</code>, <code>Text</code>, <code>Status</code> (Open, Done, Issue, N/A), <code>Owner</code>, <code>Note</code>, <code>ChangedAt</code>, <code>ChangedBy</code>, <code>SourceRuleId</code></td>
+<td>Normalized check items for search and install KPIs</td>
+</tr>
+<tr>
+<td><code>Attachments</code></td>
+<td><code>AttachmentId</code>, <code>ParentType</code>, <code>ParentId</code>, <code>BlobPath</code>, <code>FileName</code>, <code>ContentType</code>, <code>SizeBytes</code></td>
+<td>Blob path <code>quotes/{id}/...</code> or <code>checklists/{id}/...</code></td>
+</tr>
+<tr>
+<td><code>AuditLog</code></td>
+<td><code>At</code>, <code>By</code>, <code>Entity</code>, <code>EntityId</code>, <code>Action</code>, <code>DiffJson</code></td>
+<td>Written by the API on every save</td>
+</tr>
+</tbody>
+</table></div>
+<p>Search: a full-text catalog over <code>QuoteVersions.SearchText</code> (customer, project, product, notes) and <code>Checklists</code> job fields, plus ordinary indexes on status, dates and <code>QuoteNumber</code>. At roughly 5,000 records S0 is plenty.</p>
+<p>Reporting: Power BI reads three views only, never base tables: <code>rpt.vQuoteFacts</code>, <code>rpt.vInstallFacts</code>, <code>rpt.vDate</code>. Views let the schema change without breaking the report.</p></section>
+<section class="block" id="api-and-auth"><h2>API surface and auth</h2><p>All endpoints live under <code>/api</code>, run as SWA managed Functions, and trust only the <code>x-ms-client-principal</code> header SWA injects. The API, not the page, decides what each role sees.</p>
+<p><strong>Auth setup</strong></p>
+<ul>
+<li>Entra app registration in the company tenant; SWA custom <code>azureActiveDirectory</code> provider with issuer <code>login.microsoftonline.com/&lt;tenantId&gt;/v2.0</code>. That single-tenant issuer is what blocks other tenants, and custom providers need the SWA Standard plan (already in the RFP).</li>
+<li>App roles on the registration: <code>Sales</code>, <code>Install</code>, <code>Admin</code>. Assign via Entra groups. A <code>rolesSource</code> function maps the token's roles claim to SWA roles at sign-in.</li>
+<li><code>staticwebapp.config.json</code>: <code>/calc/*</code> requires <code>sales</code> or <code>admin</code>; <code>/install/*</code> and <code>/portal/*</code> require any of the three; <code>/api/*</code> requires <code>authenticated</code>; 401 redirects to <code>/.auth/login/aad</code>.</li>
+<li>SQL connection: managed Functions cannot use a managed identity, so store a least-privilege SQL login (<code>eled_app</code>, <code>db_datareader</code> + <code>db_datawriter</code> + <code>EXECUTE</code>) in SWA app settings. If you later want passwordless, link a separate Function App (Standard feature) with managed identity.</li>
+</ul>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>Roles</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/me</code></td>
+<td>all</td>
+<td>Name, roles, feature flags</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/quotes</code></td>
+<td>Sales, Admin</td>
+<td>Create quote + v1 (server assigns <code>QuoteNumber</code>)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/quotes/{id}</code></td>
+<td>all</td>
+<td>Header, versions, status history; cost fields stripped unless Sales/Admin</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/quotes/{id}/versions/{n}</code></td>
+<td>Sales, Admin</td>
+<td>Save draft version (rowversion check)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/quotes/{id}/versions</code></td>
+<td>Sales, Admin</td>
+<td>New version cloned from current</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/quotes/{id}/status</code></td>
+<td>Sales, Admin</td>
+<td>Draft to Sent to Approved/Rejected; Approved runs quote-to-checklist in one transaction</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/quotes/{id}/clone</code></td>
+<td>Sales, Admin</td>
+<td>New quote from an existing one</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/checklists/{id}</code></td>
+<td>all</td>
+<td>Template + state + items</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/checklists/{id}</code></td>
+<td>Install, Admin</td>
+<td>Save state; upserts <code>ChecklistItems</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/checklists/{id}/complete</code></td>
+<td>Install, Admin</td>
+<td>Close out; sets <code>CompletedAt/By</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/search</code></td>
+<td>all</td>
+<td><code>q</code>, customer, product, status, date range, quote no., install state; paged</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/attachments/upload-url</code></td>
+<td>all</td>
+<td>Returns a 15 minute write SAS for a blob path the API chose</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/attachments/{id}</code></td>
+<td>all</td>
+<td>Returns a short read SAS</td>
+</tr>
+<tr>
+<td>GET/PUT</td>
+<td><code>/api/admin/rules</code>, <code>/api/admin/templates</code></td>
+<td>Admin</td>
+<td>Manage rules and template versions</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/admin/rules/preview</code></td>
+<td>Admin</td>
+<td>Dry-run rules against a quote</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Validate every body with a JSON schema (<code>ajv</code>). Reject unknown status transitions server side.</li>
+<li>Every write goes to <code>AuditLog</code>. Use parameterized queries only (<code>mssql</code> package).</li>
+</ul></section>
+<section class="block" id="rules-engine"><h2>Quote to checklist: rules engine</h2><p>Approval builds the checklist in three steps inside one SQL transaction: copy the active template, map quote fields into it, then apply rules in priority order. The result records which rules fired, so the install team can see why an item is there.</p>
+<p><strong>Step 1: field mapping (fixed code, not rules)</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Checklist field</th>
+<th>Source in quote</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job.cust</code>, <code>job.addr</code></td>
+<td>Customer company, project site address</td>
+</tr>
+<tr>
+<td><code>job.jobno</code></td>
+<td><code>QuoteNumber</code></td>
+</tr>
+<tr>
+<td><code>job.dates</code></td>
+<td>Install attributes: delivery / install date</td>
+</tr>
+<tr>
+<td><code>sys.model</code>, <code>sys.pitch</code>, <code>sys.ip</code></td>
+<td><code>SNAP.f</code> model, pitch, IP rating</td>
+</tr>
+<tr>
+<td><code>sys.size</code>, <code>sys.array</code>, <code>sys.res</code></td>
+<td><code>SNAP</code> Wt x Ht, cabinet columns x rows, RW x RH</td>
+</tr>
+<tr>
+<td><code>sys.weight</code>, <code>sys.power</code>, <code>sys.heat</code></td>
+<td><code>SNAP.kg</code>, <code>avgW</code> / <code>maxW</code>, <code>btu</code></td>
+</tr>
+<tr>
+<td><code>sys.proc</code>, <code>sys.spares</code></td>
+<td>Selected processor or H-series config, spare lines</td>
+</tr>
+<tr>
+<td><code>type</code> chips</td>
+<td>Install attributes: environment, mount type</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Step 2: rules as data.</strong> Conditions use JSON Logic (<code>json-logic-js</code>, a small, well-known library) over a flat facts object built from the quote. Actions are a closed list the engine understands.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Outdoor installs&quot;,
+  &quot;priority&quot;: 100,
+  &quot;when&quot;: { &quot;==&quot;: [ { &quot;var&quot;: &quot;environment&quot; }, &quot;Outdoor&quot; ] },
+  &quot;then&quot;: [
+    { &quot;addItems&quot;: { &quot;section&quot;: &quot;elec&quot;, &quot;block&quot;: &quot;elc&quot;, &quot;items&quot;: [
+      { &quot;key&quot;: &quot;elc.out.gfci&quot;, &quot;text&quot;: &quot;Outdoor rated GFCI / weatherproof disconnect verified&quot; },
+      { &quot;key&quot;: &quot;elc.out.drain&quot;, &quot;text&quot;: &quot;Cabinet drainage and water ingress path inspected&quot; } ] } },
+    { &quot;setChip&quot;: { &quot;id&quot;: &quot;type&quot;, &quot;option&quot;: &quot;Outdoor&quot; } },
+    { &quot;markNA&quot;: { &quot;items&quot;: [ &quot;site.indoor-hvac&quot; ] } }
+  ]
+}
+</code></pre>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addItems</code></td>
+<td>Append items (with stable keys) to a check block</td>
+</tr>
+<tr>
+<td><code>markNA</code></td>
+<td>Pre-set items to N/A with note "Not applicable per rule"</td>
+</tr>
+<tr>
+<td><code>setChip</code> / <code>setField</code></td>
+<td>Pre-fill a scope chip or field</td>
+</tr>
+<tr>
+<td><code>addRows</code></td>
+<td>Add rows to a table block (e.g. extra crew roles for a lift)</td>
+</tr>
+<tr>
+<td><code>addNote</code></td>
+<td>Insert a warning note at the top of a section</td>
+</tr>
+</tbody>
+</table></div>
+<p>Facts available to conditions: <code>environment</code>, <code>mountType</code>, <code>liftType</code>, <code>isTransparent</code>, <code>productModel</code>, <code>pitchMm</code>, <code>brightnessNits</code>, <code>cabinetCount</code>, <code>areaSqm</code>, <code>weightKg</code>, <code>maxPowerW</code>, <code>screenCount</code>, <code>hasHSeries</code>, <code>hasHdr</code>, <code>hasFiber</code>. Adding a fact is a code change; adding or editing a rule is not.</p>
+<p>Starter rules to define with the install team: outdoor or high brightness (3000 nits and up), foldable or hydraulic lift, transparent screen, large cabinet count (threshold TBD), fiber data path, flown / suspended mount, H-series processor.</p>
+<p>Safety net: the admin page has a "preview" that runs the rules against any saved quote and shows the resulting checklist before a rule goes live.</p></section>
+<section class="block" id="phases"><h2>Phase by phase roadmap</h2><p>Seven build phases map 1:1 to the RFP hour table (50 to 86 hrs), plus a prerequisites phase and a cutover phase that fit inside the "plan for 65 to 70" buffer. The pilot gate sits after Phase 5.</p><section class="phase" id="phase-0" data-phase="0">
+<header class="phase-head">
+<div class="phase-num">Phase 0</div>
+<h3>Prerequisites</h3>
+<div class="phase-meta"><span class="budget">no build hours</span><span class="count" data-count="0"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t0" id="ck-p0-t0" aria-label="Done"><span>Create an Enlightened LED GitHub org; transfer or subtree both repos into private <code>eled-platform</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t1" id="ck-p0-t1" aria-label="Done"><span>Confirm Azure subscription and who can create resources and Entra app registrations (RFP next step 1)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t2" id="ck-p0-t2" aria-label="Done"><span>Confirm Power BI Pro licensing for the dashboard user (RFP next step 2)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t3" id="ck-p0-t3" aria-label="Done"><span>Collect 3 to 5 example quotes with their matching install checklists (RFP next step 3)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t4" id="ck-p0-t4" aria-label="Done"><span>Book a 60 minute rules workshop with the install lead</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t5" id="ck-p0-t5" aria-label="Done"><span>Decide the items in "Decisions needed" below marked Before Phase 1</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="0"></span></summary>
+<ol class="steps">
+<li class="step item" data-step="p0-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s1" id="ck-p0-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">GitHub org</span></label></div><div class="step-body"><p>github.com, the <strong>+</strong> menu (top right), <strong>New organization</strong>, Free plan. Name it for the company (e.g. <code>enlightened-led</code>) and add a second owner so the company is never locked out.</p></div></li>
+<li class="step item" data-step="p0-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s2" id="ck-p0-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Monorepo with history</span></label></div><div class="step-body"><p>both repos use <code>main</code>. From your Mac:</p>
+<pre><code class="language-bash">mkdir eled-platform &amp;&amp; cd eled-platform &amp;&amp; git init -b main
+git commit --allow-empty -m &quot;init&quot;
+git subtree add --prefix=apps/calc https://github.com/vondraak/eledcalc main
+git subtree add --prefix=apps/install https://github.com/vondraak/eledinstall main
+gh repo create enlightened-led/eled-platform --private --source . --push
+</code></pre></div></li>
+<li class="step item" data-step="p0-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s3" id="ck-p0-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Azure rights</span></label></div><div class="step-body"><p>portal.azure.com, <strong>Subscriptions</strong>, pick the subscription, <strong>Access control (IAM)</strong>, <strong>Check access</strong>, <strong>View my access</strong>. You need <strong>Owner</strong> (or Contributor plus User Access Administrator), because Phase 1 creates role assignments for GitHub deploys and the SQL admin group.</p></div></li>
+<li class="step item" data-step="p0-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s4" id="ck-p0-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Entra rights</span></label></div><div class="step-body"><p>entra.microsoft.com, <strong>Users</strong>, your account, <strong>Assigned roles</strong>. <strong>Application Administrator</strong> or <strong>Cloud Application Administrator</strong> covers the app registration and role assignments. If you have neither, check <strong>Users</strong>, <strong>User settings</strong>, "Users can register applications"; that lets you create the registration but not grant tenant-wide consent.</p></div></li>
+<li class="step item" data-step="p0-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s5" id="ck-p0-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Licensing check</span></label></div><div class="step-body"><p>admin.microsoft.com, <strong>Billing</strong>, <strong>Licenses</strong>. Look for Power BI Pro (included in E5) and Entra ID P1 (included in Business Premium, E3, E5). <strong>P1 matters:</strong> assigning <em>groups</em> to app roles needs it. Without P1, assign individual users to roles instead; everything else in this plan still works.</p></div></li>
+<li class="step item" data-step="p0-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s6" id="ck-p0-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Sample data</span></label></div><div class="step-body"><p>ask for 3 to 5 quotes as the original .xlsx and PDF, plus the finished checklist (or ELEDInstall JSON export) for each. Put them in <code>samples/</code> in the repo, but add <code>samples/</code> to <code>.gitignore</code> if they contain customer pricing.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p0-exit" id="ck-p0-exit" aria-label="Done"><span><b>Exit criteria met.</b> Repo exists, subscription access confirmed, sample quotes in hand.</span></label></div>
+</section><section class="phase" id="phase-1" data-phase="1">
+<header class="phase-head">
+<div class="phase-num">Phase 1</div>
+<h3>Azure foundation</h3>
+<div class="phase-meta"><span class="budget">4 to 8 hrs</span><span class="count" data-count="1"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p1-t0"></i><i data-px="p1-t1"></i><i data-px="p1-t2"></i><i data-px="p1-t3"></i><i data-px="p1-t4"></i><i data-px="p1-t5"></i><i data-px="p1-t6"></i><i data-px="p1-t7"></i><i data-px="p1-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t0" id="ck-p1-t0" aria-label="Done"><span>Resource group <code>rg-eled-platform</code> in one region (e.g. Central US); tag owner and cost center</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t1" id="ck-p1-t1" aria-label="Done"><span>Azure SQL logical server (Entra admin = an admin group), <code>eled-prod</code> S0, <code>eled-dev</code> Basic</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t2" id="ck-p1-t2" aria-label="Done"><span>Storage account, private container <code>attachments</code>, soft delete on (7 days)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t3" id="ck-p1-t3" aria-label="Done"><span>Static Web App, Standard plan, linked to <code>eled-platform</code> <code>main</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t4" id="ck-p1-t4" aria-label="Done"><span>Entra app registration, app roles Sales / Install / Admin, groups assigned</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t5" id="ck-p1-t5" aria-label="Done"><span><code>staticwebapp.config.json</code> with custom provider, route rules, <code>rolesSource</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t6" id="ck-p1-t6" aria-label="Done"><span>GitHub OIDC federated credential; <code>deploy.yml</code> and <code>db-migrate.yml</code> workflows</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t7" id="ck-p1-t7" aria-label="Done"><span>Application Insights attached to the API</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="1"></span></summary>
+<div class="howto-intro"><p>Order matters: resource group, SQL, storage, Static Web App (you need its URL), then the Entra app registration (it needs that URL), then app settings.</p></div>
+<ol class="steps">
+<li class="step item" data-step="p1-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s1" id="ck-p1-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Resource group, SQL and storage (Cloud Shell or your Mac with <code>az login</code>)</span></label></div><div class="step-body"><pre><code class="language-bash">RG=rg-eled-platform; LOC=centralus; SQL=sql-eled-platform; ST=steledplatform   # storage name: 3-24 lowercase, globally unique
+az group create -n $RG -l $LOC --tags owner=eled costcenter=it
+
+# SQL server with both SQL and Entra auth (managed Functions need a SQL login)
+az sql server create -g $RG -n $SQL -l $LOC --admin-user eledsqladmin --admin-password '&lt;strong-pw&gt;'
+az sql server ad-admin create -g $RG -s $SQL --display-name &quot;ELED SQL Admins&quot; --object-id &lt;entra-group-object-id&gt;
+az sql server firewall-rule create -g $RG -s $SQL -n AllowAzure --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+az sql server firewall-rule create -g $RG -s $SQL -n MyMac --start-ip-address &lt;your-ip&gt; --end-ip-address &lt;your-ip&gt;
+az sql db create -g $RG -s $SQL -n eled-prod --service-objective S0 --backup-storage-redundancy Local
+az sql db create -g $RG -s $SQL -n eled-dev  --service-objective Basic --backup-storage-redundancy Local
+
+# Storage: private, TLS 1.2, soft delete
+az storage account create -g $RG -n $ST -l $LOC --sku Standard_LRS --kind StorageV2 \
+  --min-tls-version TLS1_2 --allow-blob-public-access false
+az storage account blob-service-properties update -g $RG -n $ST \
+  --enable-delete-retention true --delete-retention-days 7 \
+  --enable-container-delete-retention true --container-delete-retention-days 7
+az storage container create --account-name $ST -n attachments --auth-mode login
+</code></pre>
+<p>Portal equivalent: <strong>Create a resource</strong>, <strong>SQL Database</strong>. On <strong>Server</strong>, pick "Use both SQL and Microsoft Entra authentication". On <strong>Networking</strong>, Public endpoint, "Allow Azure services and resources to access this server" = Yes, "Add current client IP" = Yes. On <strong>Compute + storage</strong>, <strong>Configure database</strong>, service tier <strong>Standard (DTU)</strong>, <strong>S0</strong>. For storage: <strong>Storage accounts</strong>, <strong>Create</strong>, Standard / LRS; <strong>Advanced</strong>, anonymous access off; <strong>Data protection</strong>, soft delete for blobs and containers on.</p>
+<ul>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s1-0" id="ck-p1-s1-0" aria-label="Done"><strong>Blob CORS</strong> (browsers upload photos straight to Blob): storage account, <strong>Settings</strong>, <strong>Resource sharing (CORS)</strong>, <strong>Blob service</strong> tab: origin = your SWA URL (and <code>http://localhost:4280</code> for local), methods GET, PUT, HEAD, allowed and exposed headers <code>*</code>, max age 3600.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s1-1" id="ck-p1-s1-1" aria-label="Done"><strong>Keys for the API:</strong> storage account, <strong>Security + networking</strong>, <strong>Access keys</strong>, copy a connection string. It goes into SWA settings in step 4.</li>
+</ul></div></li>
+<li class="step item" data-step="p1-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s2" id="ck-p1-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Static Web App</span></label></div><div class="step-body"><p>Portal: <strong>Static Web Apps</strong>, <strong>Create</strong>. Resource group <code>rg-eled-platform</code>, name <code>swa-eled-platform</code>, <strong>Plan type: Standard</strong>. Source <strong>GitHub</strong>, sign in, org <code>enlightened-led</code>, repo <code>eled-platform</code>, branch <code>main</code>. Build preset <strong>Custom</strong>: App location <code>/apps</code>, Api location <code>/api</code>, Output location blank. Region for the API: Central US.</p>
+<p>Azure commits a workflow to <code>.github/workflows/</code> and stores the deploy token as a repo secret. Keep that file, just rename it <code>deploy.yml</code>. Copy the default hostname (<code>https://&lt;name&gt;.azurestaticapps.net</code>) from <strong>Overview</strong>.</p></div></li>
+<li class="step item" data-step="p1-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s3" id="ck-p1-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Entra app registration (entra.microsoft.com)</span></label></div><div class="step-body"><ol>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-0" id="ck-p1-s3-0" aria-label="Done"><strong>App registrations</strong>, <strong>New registration</strong>: name <code>ELED Platform</code>, <strong>Accounts in this organizational directory only</strong>, redirect URI type <strong>Web</strong>: <code>https://&lt;swa-host&gt;/.auth/login/aad/callback</code>. Copy the <strong>Tenant ID</strong> and <strong>Application (client) ID</strong> from Overview.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-1" id="ck-p1-s3-1" aria-label="Done"><strong>Authentication</strong>: add the logout URL <code>https://&lt;swa-host&gt;/.auth/logout/aad/callback</code>. Under implicit grant, tick <strong>ID tokens</strong>.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-2" id="ck-p1-s3-2" aria-label="Done"><strong>Certificates &amp; secrets</strong>, <strong>New client secret</strong>, 24 months. Put a renewal reminder on your calendar now; an expired secret locks everyone out.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-3" id="ck-p1-s3-3" aria-label="Done"><strong>App roles</strong>, <strong>Create app role</strong> three times: display name Sales / Install / Admin, allowed member types <strong>Users/Groups</strong>, value <code>sales</code> / <code>install</code> / <code>admin</code>.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-4" id="ck-p1-s3-4" aria-label="Done"><strong>Enterprise applications</strong>, <code>ELED Platform</code>, <strong>Properties</strong>, <strong>Assignment required? = Yes</strong> (only assigned people can sign in at all). Then <strong>Users and groups</strong>, <strong>Add user/group</strong>, pick a role for each person or group (groups need Entra ID P1).</li>
+</ol></div></li>
+<li class="step item" data-step="p1-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s4" id="ck-p1-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">SWA app settings</span></label></div><div class="step-body"><p>SWA, <strong>Settings</strong>, <strong>Environment variables</strong> (Production): <code>AZURE_CLIENT_ID</code>, <code>AZURE_CLIENT_SECRET</code>, <code>SQL_CONNECTION_STRING</code>, <code>STORAGE_CONNECTION_STRING</code>. Avoid names that start with <code>AZURE_FUNCTION_</code>, <code>FUNCTIONS_</code>, <code>WEBSITE_</code>, <code>APPSETTING_</code> (reserved).</p></div></li>
+<li class="step item" data-step="p1-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s5" id="ck-p1-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title"><code>apps/staticwebapp.config.json</code></span></label></div><div class="step-body"><p>(must sit in the app location, <code>apps/</code>, not the repo root)</p>
+<pre><code class="language-json">{
+  &quot;auth&quot;: {
+    &quot;rolesSource&quot;: &quot;/api/GetRoles&quot;,
+    &quot;identityProviders&quot;: {
+      &quot;azureActiveDirectory&quot;: {
+        &quot;registration&quot;: {
+          &quot;openIdIssuer&quot;: &quot;https://login.microsoftonline.com/&lt;TENANT_ID&gt;/v2.0&quot;,
+          &quot;clientIdSettingName&quot;: &quot;AZURE_CLIENT_ID&quot;,
+          &quot;clientSecretSettingName&quot;: &quot;AZURE_CLIENT_SECRET&quot;
+        }
+      }
+    }
+  },
+  &quot;routes&quot;: [
+    { &quot;route&quot;: &quot;/.auth/login/github&quot;, &quot;statusCode&quot;: 404 },
+    { &quot;route&quot;: &quot;/.auth/login/twitter&quot;, &quot;statusCode&quot;: 404 },
+    { &quot;route&quot;: &quot;/calc/*&quot;,    &quot;allowedRoles&quot;: [&quot;sales&quot;, &quot;admin&quot;] },
+    { &quot;route&quot;: &quot;/install/*&quot;, &quot;allowedRoles&quot;: [&quot;sales&quot;, &quot;install&quot;, &quot;admin&quot;] },
+    { &quot;route&quot;: &quot;/portal/*&quot;,  &quot;allowedRoles&quot;: [&quot;sales&quot;, &quot;install&quot;, &quot;admin&quot;] },
+    { &quot;route&quot;: &quot;/api/GetRoles&quot;, &quot;allowedRoles&quot;: [&quot;anonymous&quot;, &quot;authenticated&quot;] },
+    { &quot;route&quot;: &quot;/api/*&quot;,     &quot;allowedRoles&quot;: [&quot;authenticated&quot;] },
+    { &quot;route&quot;: &quot;/&quot;,          &quot;redirect&quot;: &quot;/portal/&quot; }
+  ],
+  &quot;responseOverrides&quot;: {
+    &quot;401&quot;: { &quot;redirect&quot;: &quot;/.auth/login/aad&quot;, &quot;statusCode&quot;: 302 }
+  }
+}
+</code></pre></div></li>
+<li class="step item" data-step="p1-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s6" id="ck-p1-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title"><code>api/src/functions/GetRoles.js</code></span></label></div><div class="step-body"><p>SWA calls this after every sign-in and puts what it returns into <code>userRoles</code>, which is the only role data the API ever sees (the <code>x-ms-client-principal</code> header does not carry app-role claims). Log <code>req.body</code> once on first deploy to confirm the payload shape; custom role functions are marked preview in the docs.</p>
+<pre><code class="language-js">const { app } = require('@azure/functions');
+const KNOWN = ['sales', 'install', 'admin'];
+app.http('GetRoles', { methods: ['POST'], authLevel: 'anonymous', handler: async (req) =&gt; {
+  const body = await req.json();
+  const roles = (body.claims || [])
+    .filter(c =&gt; c.typ === 'roles' &amp;&amp; KNOWN.includes(c.val))
+    .map(c =&gt; c.val);
+  return { jsonBody: { roles } };
+}});
+</code></pre></div></li>
+<li class="step item" data-step="p1-s7"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s7" id="ck-p1-s7" aria-label="Done"><span class="step-n">7</span><span class="step-title">GitHub to Azure for migrations (OIDC, no stored password)</span></label></div><div class="step-body"><ul>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-0" id="ck-p1-s7-0" aria-label="Done">Entra, <strong>App registrations</strong>, <strong>New registration</strong> <code>eled-github-deploy</code>. <strong>Certificates &amp; secrets</strong>, <strong>Federated credentials</strong>, <strong>Add</strong>, scenario <strong>GitHub Actions deploying Azure resources</strong>, org <code>enlightened-led</code>, repo <code>eled-platform</code>, entity <strong>Branch</strong> <code>main</code>.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-1" id="ck-p1-s7-1" aria-label="Done">Give it <strong>SQL Server Contributor</strong> on <code>sql-eled-platform</code> (IAM blade) so the workflow can open a temporary firewall rule for the runner.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-2" id="ck-p1-s7-2" aria-label="Done">In each database, as the Entra admin: <code>CREATE USER [eled-github-deploy] FROM EXTERNAL PROVIDER; ALTER ROLE db_owner ADD MEMBER [eled-github-deploy];</code></li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-3" id="ck-p1-s7-3" aria-label="Done">Repo <strong>Settings</strong>, <strong>Secrets and variables</strong>, <strong>Actions</strong>: <code>AZURE_CLIENT_ID</code> (of this deploy app), <code>AZURE_TENANT_ID</code>, <code>AZURE_SUBSCRIPTION_ID</code>. The workflow itself is written in Phase 2.</li>
+</ul></div></li>
+<li class="step item" data-step="p1-s8"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s8" id="ck-p1-s8" aria-label="Done"><span class="step-n">8</span><span class="step-title">Monitoring</span></label></div><div class="step-body"><p>SWA, <strong>Settings</strong>, <strong>Application Insights</strong>, enable and create a new resource in the same group.</p></div></li>
+<li class="step item" data-step="p1-s9"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s9" id="ck-p1-s9" aria-label="Done"><span class="step-n">9</span><span class="step-title">Smoke test</span></label></div><div class="step-body"><p>commit a one-line <code>apps/portal/index.html</code> and a <code>/api/me</code> function that echoes the decoded <code>x-ms-client-principal</code>. Sign in as yourself (expect your role), then as an unassigned user (expect the Entra "not assigned" error).</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p1-exit" id="ck-p1-exit" aria-label="Done"><span><b>Exit criteria met.</b> Company account signs in and <code>/api/me</code> shows the right role; a personal Microsoft account is refused; migration workflow runs.</span></label></div>
+</section><section class="phase" id="phase-2" data-phase="2">
+<header class="phase-head">
+<div class="phase-num">Phase 2</div>
+<h3>Data model and template</h3>
+<div class="phase-meta"><span class="budget">8 to 12 hrs, shared with Phase 7</span><span class="count" data-count="2"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p2-t0"></i><i data-px="p2-t1"></i><i data-px="p2-t2"></i><i data-px="p2-t3"></i><i data-px="p2-t4"></i><i data-px="p2-t5"></i><i data-px="p2-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t0" id="ck-p2-t0" aria-label="Done"><span><code>001_init.sql</code>: all tables, keys, unique constraints, <code>SchemaVersion</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t1" id="ck-p2-t1" aria-label="Done"><span>Give every ELEDInstall check item a stable <code>key</code>; write a one-time map from positional keys (<code>access.6</code>) to stable keys</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t2" id="ck-p2-t2" aria-label="Done"><span>Extract <code>SECTIONS</code> to <code>db/seed/checklist_template_v1.json</code>; seed as template v1</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t3" id="ck-p2-t3" aria-label="Done"><span><code>002_fulltext.sql</code>: full-text catalog and indexes</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t4" id="ck-p2-t4" aria-label="Done"><span><code>003_reporting_views.sql</code>: first cut of <code>rpt</code> views</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p2-t5" id="ck-p2-t5" aria-label="Done"><span>SQL logins: <code>eled_app</code> (read/write/execute), <code>eled_bi</code> (read on <code>rpt</code> only)</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="2"></span></summary>
+<div class="howto-intro"><p><strong>Tools:</strong> VS Code with the <strong>SQL Server (mssql)</strong> extension (Azure Data Studio is retired). New connection, server <code>sql-eled-platform.database.windows.net</code>, database <code>eled-dev</code>, auth <strong>Microsoft Entra ID, Universal with MFA</strong>. Always build against <code>eled-dev</code> first.</p></div>
+<ol class="steps">
+<li class="step item" data-step="p2-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s1" id="ck-p2-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Migration runner</span></label></div><div class="step-body"><p><code>db/migrate.js</code> (Node, <code>mssql</code> + <code>@azure/identity</code>) signs in with whatever <code>az login</code> or the GitHub OIDC step provides, so the same command works on your Mac and in CI:</p>
+<pre><code class="language-js">// node db/migrate.js eled-dev
+const sql = require('mssql'); const fs = require('fs'); const path = require('path');
+const db = process.argv[2];
+const cfg = { server: 'sql-eled-platform.database.windows.net', database: db,
+  authentication: { type: 'azure-active-directory-default' }, options: { encrypt: true } };
+(async () =&gt; {
+  const pool = await sql.connect(cfg);
+  await pool.query(`IF OBJECT_ID('dbo.SchemaVersion') IS NULL
+    CREATE TABLE dbo.SchemaVersion (Version int PRIMARY KEY, FileName nvarchar(200), AppliedAt datetime2 DEFAULT sysutcdatetime())`);
+  const done = new Set((await pool.query('SELECT Version FROM dbo.SchemaVersion')).recordset.map(r =&gt; r.Version));
+  const dir = path.join(__dirname, 'migrations');
+  for (const f of fs.readdirSync(dir).filter(f =&gt; /^\d{3}_.*\.sql$/.test(f)).sort()) {
+    const v = parseInt(f); if (done.has(v)) continue;
+    const text = fs.readFileSync(path.join(dir, f), 'utf8');
+    const batches = text.split(/^\s*GO\s*$/im).filter(b =&gt; b.trim());
+    const noTx = /^--\s*no-transaction/m.test(text);        // full-text DDL cannot run in a transaction
+    const tx = noTx ? null : new sql.Transaction(pool); if (tx) await tx.begin();
+    for (const b of batches) await (tx ? new sql.Request(tx) : pool.request()).batch(b);
+    await (tx ? new sql.Request(tx) : pool.request()).input('v', v).input('f', f)
+      .query('INSERT dbo.SchemaVersion(Version, FileName) VALUES (@v, @f)');
+    if (tx) await tx.commit(); console.log('applied', f);
+  }
+  await pool.close();
+})().catch(e =&gt; { console.error(e); process.exit(1); });
+</code></pre></div></li>
+<li class="step item" data-step="p2-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s2" id="ck-p2-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">First migration</span></label></div><div class="step-body"><p>In <code>001_init.sql</code>, create <code>Customers</code> and <code>Projects</code> first, then the three tables the pilot depends on, and grow it from the Data model table:</p>
+<pre><code class="language-sql">CREATE TABLE dbo.Quotes (
+  QuoteId int IDENTITY PRIMARY KEY,
+  QuoteNumber varchar(20) NOT NULL CONSTRAINT UQ_Quotes_Number UNIQUE,
+  ProjectId int NOT NULL REFERENCES dbo.Projects(ProjectId),
+  Status varchar(10) NOT NULL CONSTRAINT CK_Quotes_Status CHECK (Status IN ('Draft','Sent','Approved','Rejected')),
+  CurrentVersionNo int NOT NULL DEFAULT 1,
+  CreatedAt datetime2 NOT NULL DEFAULT sysutcdatetime(), CreatedBy nvarchar(200) NOT NULL,
+  UpdatedAt datetime2 NULL, UpdatedBy nvarchar(200) NULL, RowVer rowversion);
+CREATE TABLE dbo.QuoteVersions (
+  QuoteVersionId int IDENTITY CONSTRAINT PK_QuoteVersions PRIMARY KEY,
+  QuoteId int NOT NULL REFERENCES dbo.Quotes(QuoteId), VersionNo int NOT NULL,
+  InputsJson nvarchar(max) NOT NULL CHECK (ISJSON(InputsJson) = 1),
+  SnapJson nvarchar(max) NOT NULL CHECK (ISJSON(SnapJson) = 1),
+  CatalogVersion varchar(20) NOT NULL, TotalSell decimal(12,2) NOT NULL,
+  SearchText nvarchar(4000) NULL,  -- plus the fact columns listed in Data model
+  CONSTRAINT UQ_QuoteVersions UNIQUE (QuoteId, VersionNo));
+CREATE TABLE dbo.Checklists (
+  ChecklistId int IDENTITY PRIMARY KEY,
+  QuoteId int NOT NULL CONSTRAINT UQ_Checklists_Quote UNIQUE REFERENCES dbo.Quotes(QuoteId),
+  QuoteVersionId int NOT NULL REFERENCES dbo.QuoteVersions(QuoteVersionId),
+  TemplateId int NOT NULL, Status varchar(12) NOT NULL DEFAULT 'Open',
+  StateJson nvarchar(max) NOT NULL, AppliedRulesJson nvarchar(max) NULL,
+  CompletedAt datetime2 NULL, CompletedBy nvarchar(200) NULL, RowVer rowversion);
+</code></pre>
+<p><code>002_fulltext.sql</code> starts with the line <code>-- no-transaction</code>, then <code>CREATE FULLTEXT CATALOG ftEled AS DEFAULT;</code> and <code>CREATE FULLTEXT INDEX ON dbo.QuoteVersions(SearchText) KEY INDEX PK_QuoteVersions;</code>.</p></div></li>
+<li class="step item" data-step="p2-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s3" id="ck-p2-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">App logins</span></label></div><div class="step-body"><p>(run in each database as the Entra admin, passwords into SWA settings / Power BI only):</p>
+<pre><code class="language-sql">CREATE USER eled_app WITH PASSWORD = '&lt;pw&gt;';   -- contained user, no master login needed
+ALTER ROLE db_datareader ADD MEMBER eled_app; ALTER ROLE db_datawriter ADD MEMBER eled_app;
+GRANT EXECUTE TO eled_app;
+CREATE USER eled_bi WITH PASSWORD = '&lt;pw&gt;';
+GRANT SELECT ON SCHEMA::rpt TO eled_bi;
+</code></pre></div></li>
+<li class="step item" data-step="p2-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s4" id="ck-p2-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Stable checklist keys</span></label></div><div class="step-body"><p>Write <code>tools/extract-template.js</code>: read <code>apps/install/index.html</code>, slice the text from <code>const SECTIONS = [</code> to the <code>];</code> before the sample-job comment, evaluate it with <code>new Function('return ' + text)()</code>, and for every <code>check</code> block turn each item string into <code>{ key, text }</code>. Generate keys as <code>blockId.slug</code> from the first three words (<code>access.delivery-appointment-dock</code>), then hand-review. Write two files: <code>db/seed/checklist_template_v1.json</code> and <code>db/seed/keymap_v1.json</code> (<code>"access.6": "access.work-zone-barricaded"</code>). The keymap is what migrates existing <code>localStorage</code> and exported JSON later. Fixed table rows (gates, roles, crew) can stay positional for now since their row labels are fixed.</p></div></li>
+<li class="step item" data-step="p2-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s5" id="ck-p2-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">CI</span></label></div><div class="step-body"><p><code>.github/workflows/db-migrate.yml</code>, run manually or on changes to <code>db/**</code>:</p>
+<pre><code class="language-yaml">permissions: { id-token: write, contents: read }
+steps:
+  - uses: actions/checkout@v4
+  - uses: azure/login@v2
+    with: { client-id: '${{ secrets.AZURE_CLIENT_ID }}', tenant-id: '${{ secrets.AZURE_TENANT_ID }}', subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}' }
+  - run: |
+      IP=$(curl -s https://api.ipify.org)
+      az sql server firewall-rule create -g rg-eled-platform -s sql-eled-platform -n gh-runner --start-ip-address $IP --end-ip-address $IP
+  - run: npm ci --prefix db &amp;&amp; node db/migrate.js eled-prod
+  - if: always()
+    run: az sql server firewall-rule delete -g rg-eled-platform -s sql-eled-platform -n gh-runner
+</code></pre></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p2-exit" id="ck-p2-exit" aria-label="Done"><span><b>Exit criteria met.</b> Migrations apply cleanly to dev and prod from CI; template v1 loads.</span></label></div>
+</section><section class="phase" id="phase-3" data-phase="3">
+<header class="phase-head">
+<div class="phase-num">Phase 3</div>
+<h3>API</h3>
+<div class="phase-meta"><span class="budget">8 to 16 hrs</span><span class="count" data-count="3"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p3-t0"></i><i data-px="p3-t1"></i><i data-px="p3-t2"></i><i data-px="p3-t3"></i><i data-px="p3-t4"></i><i data-px="p3-t5"></i><i data-px="p3-t6"></i><i data-px="p3-t7"></i><i data-px="p3-t8"></i><i data-px="p3-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t0" id="ck-p3-t0" aria-label="Done"><span>Functions scaffold, <code>db.js</code> (pooled <code>mssql</code>), <code>auth.js</code> (<code>getPrincipal</code>, <code>requireRole</code>)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t1" id="ck-p3-t1" aria-label="Done"><span>Quotes: create, get, save version, new version, clone, status transitions with history</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t2" id="ck-p3-t2" aria-label="Done"><span>Server-side quote numbering (format in Decisions)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t3" id="ck-p3-t3" aria-label="Done"><span>Cost field stripping for non-Sales roles</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t4" id="ck-p3-t4" aria-label="Done"><span>Checklists: get, save (upsert <code>ChecklistItems</code>), complete</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t5" id="ck-p3-t5" aria-label="Done"><span><code>/api/search</code> with filters and paging</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t6" id="ck-p3-t6" aria-label="Done"><span>Attachment SAS endpoints</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t7" id="ck-p3-t7" aria-label="Done"><span><code>rules.js</code>: build facts, evaluate JSON Logic, apply actions; a handful of quick unit tests on the 5 starter rules (cheap insurance, not a formal test plan)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p3-t8" id="ck-p3-t8" aria-label="Done"><span><code>api/requests.http</code> covering every route</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="3"></span></summary>
+<ol class="steps">
+<li class="step item" data-step="p3-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s1" id="ck-p3-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Install the tooling once (Mac)</span></label></div><div class="step-body"><pre><code class="language-bash">brew install node@20 azure-cli
+npm i -g azure-functions-core-tools@4 @azure/static-web-apps-cli
+cd eled-platform/api
+func init --worker-runtime node --language javascript --model V4
+npm i mssql ajv json-logic-js @azure/storage-blob
+func new --template &quot;HTTP trigger&quot; --name me
+</code></pre></div></li>
+<li class="step item" data-step="p3-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s2" id="ck-p3-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Local settings</span></label></div><div class="step-body"><p><code>api/local.settings.json</code> (already gitignored by <code>func init</code>; keep it that way):</p>
+<pre><code class="language-json">{ &quot;IsEncrypted&quot;: false,
+  &quot;Values&quot;: {
+    &quot;FUNCTIONS_WORKER_RUNTIME&quot;: &quot;node&quot;,
+    &quot;AzureWebJobsStorage&quot;: &quot;&quot;,
+    &quot;SQL_CONNECTION_STRING&quot;: &quot;Server=tcp:sql-eled-platform.database.windows.net,1433;Database=eled-dev;User Id=eled_app;Password=&lt;pw&gt;;Encrypt=true&quot;,
+    &quot;STORAGE_CONNECTION_STRING&quot;: &quot;&lt;from Access keys&gt;&quot; } }
+</code></pre></div></li>
+<li class="step item" data-step="p3-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s3" id="ck-p3-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Run it</span></label></div><div class="step-body"><p>From the repo root: <code>swa start apps --api-location api</code>, then open <code>http://localhost:4280</code>. The SWA CLI emulates sign-in: <code>/.auth/login/aad</code> shows a form where you type any user and roles (<code>sales</code>, <code>install</code>, <code>admin</code>), so you can test every role without touching Entra.</p></div></li>
+<li class="step item" data-step="p3-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s4" id="ck-p3-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">The three shared libs to write first</span></label></div><div class="step-body"><p>(everything else calls them):</p>
+<pre><code class="language-js">// api/src/lib/auth.js
+function getPrincipal(req) {
+  const h = req.headers.get('x-ms-client-principal');
+  return h ? JSON.parse(Buffer.from(h, 'base64').toString('utf8')) : null;
+}
+function requireRole(req, ...roles) {
+  const p = getPrincipal(req);
+  if (!p) throw Object.assign(new Error('unauthenticated'), { status: 401 });
+  if (roles.length &amp;&amp; !roles.some(r =&gt; p.userRoles.includes(r))) throw Object.assign(new Error('forbidden'), { status: 403 });
+  return { id: p.userId, name: p.userDetails, roles: p.userRoles };
+}
+const canSeeCost = u =&gt; u.roles.includes('sales') || u.roles.includes('admin');
+module.exports = { getPrincipal, requireRole, canSeeCost };
+
+// api/src/lib/db.js: one pool per Functions host, reused across calls
+const sql = require('mssql');
+const pool = new sql.ConnectionPool(process.env.SQL_CONNECTION_STRING);
+const ready = pool.connect();
+module.exports = { sql, db: async () =&gt; { await ready; return pool; } };
+
+// api/src/lib/blob.js: 15 minute SAS for one blob path the API chose
+const { BlobServiceClient, generateBlobSASQueryParameters, BlobSASPermissions } = require('@azure/storage-blob');
+const svc = BlobServiceClient.fromConnectionString(process.env.STORAGE_CONNECTION_STRING);
+function sasUrl(blobPath, perms) {
+  const c = svc.getContainerClient('attachments').getBlockBlobClient(blobPath);
+  const q = generateBlobSASQueryParameters({ containerName: 'attachments', blobName: blobPath,
+    permissions: BlobSASPermissions.parse(perms), expiresOn: new Date(Date.now() + 15 * 60e3) }, svc.credential);
+  return `${c.url}?${q}`;
+}
+module.exports = { sasUrl };
+</code></pre>
+<p>The browser then uploads with <code>fetch(url, { method: 'PUT', headers: { 'x-ms-blob-type': 'BlockBlob' }, body: file })</code>, and calls the API to record the <code>Attachments</code> row.</p></div></li>
+<li class="step item" data-step="p3-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s5" id="ck-p3-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Quote numbers</span></label></div><div class="step-body"><p>In a migration: <code>CREATE SEQUENCE dbo.QuoteNo START WITH 1;</code> and in the create endpoint <code>CONCAT('ELED-', YEAR(SYSUTCDATETIME()), '-', FORMAT(NEXT VALUE FOR dbo.QuoteNo, '0000'))</code>.</p></div></li>
+<li class="step item" data-step="p3-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s6" id="ck-p3-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">The approval endpoint</span></label></div><div class="step-body"><p>is the one to get right. Inside one <code>sql.Transaction</code>: update <code>Quotes</code> to Approved only <code>WHERE Status = 'Sent' AND RowVer = @rowver</code> (0 rows affected means someone else changed it, return 409); insert <code>QuoteStatusHistory</code>; build facts; run <code>rules.js</code>; insert <code>Checklists</code> and <code>ChecklistItems</code>; commit. The unique constraint on <code>Checklists.QuoteId</code> is the final guard against a double approval.</p></div></li>
+<li class="step item" data-step="p3-s7"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p3-s7" id="ck-p3-s7" aria-label="Done"><span class="step-n">7</span><span class="step-title">Testing without a browser</span></label></div><div class="step-body"><p>Install the VS Code <strong>REST Client</strong> extension and write <code>api/requests.http</code>. Call the Functions host directly (<code>http://localhost:7071/api/...</code>) with a hand-built header to impersonate any role:</p>
+<pre><code class="language-http">@principal = {{$processEnv PRINCIPAL_INSTALL}}
+GET http://localhost:7071/api/quotes/1
+x-ms-client-principal: {{principal}}
+</code></pre>
+<p>where <code>PRINCIPAL_INSTALL</code> is the base64 of <code>{"userId":"t1","userDetails":"tester","userRoles":["authenticated","install"]}</code>. Check the response has no <code>UnitCost</code>. Never expose port 7071 publicly: in Azure the header can only come from SWA, locally anyone can forge it.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p3-exit" id="ck-p3-exit" aria-label="Done"><span><b>Exit criteria met.</b> Every route works from the requests file; an Install user never receives <code>UnitCost</code>.</span></label></div>
+</section><section class="phase" id="phase-4" data-phase="4">
+<header class="phase-head">
+<div class="phase-num">Phase 4</div>
+<h3>ELEDCalc integration</h3>
+<div class="phase-meta"><span class="budget">6 to 10 hrs</span><span class="count" data-count="4"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p4-t0"></i><i data-px="p4-t1"></i><i data-px="p4-t2"></i><i data-px="p4-t3"></i><i data-px="p4-t4"></i><i data-px="p4-t5"></i><i data-px="p4-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t0" id="ck-p4-t0" aria-label="Done"><span><code>getQuoteState()</code> / <code>setQuoteState()</code> covering all inputs, <code>ST</code>, processor pick, H-series config, checkboxes</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t1" id="ck-p4-t1" aria-label="Done"><span>"Install attributes" card on the Quote tab: environment, mount type, lift type, transparent, delivery date</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t2" id="ck-p4-t2" aria-label="Done"><span>Save bar: Save, New version, status pill, server quote number (make <code>q_num</code> read-only)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t3" id="ck-p4-t3" aria-label="Done"><span>Open by URL <code>?quote={id}&amp;v={n}</code>; show frozen <code>SNAP</code> totals; read-only when not Draft</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t4" id="ck-p4-t4" aria-label="Done"><span><code>CATALOG_VERSION</code> constant, stored on every version; warn when a reopened quote is on an older catalog</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p4-t5" id="ck-p4-t5" aria-label="Done"><span>On Sent, save the printable quote (the HTML buildDoc() renders) to Blob and link it as an attachment</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="4"></span></summary>
+<div class="howto-intro"><p>All work is in <code>apps/calc/index.html</code>. Line numbers below are from the current <code>main</code> (last commit 10 Aug 2026).</p></div>
+<ol class="steps">
+<li class="step item" data-step="p4-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s1" id="ck-p4-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Know where the state lives</span></label></div><div class="step-body"><p>Everything a user sets is either (a) the value of an <code>input</code>, <code>select</code> or <code>textarea</code> with an <code>id</code> (product pickers <code>p_*</code>/<code>q_*</code>, markups <code>mu_*</code>, H-series <code>hs_*</code>, customer <code>q_*</code>, notes <code>t_extra</code>), or (b) the <code>ST</code> object (line 614): overrides typed into BOM and labor cells (<code>f_&lt;key&gt;</code>), H-series card quantities (<code>hs_&lt;card&gt;</code>) and the processor pick (<code>proc_sel</code>). <code>calc()</code> (line 762) turns that into <code>SNAP</code> (built at line 1111), which already has the totals and the customer-facing <code>lines[]</code>.</p></div></li>
+<li class="step item" data-step="p4-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s2" id="ck-p4-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Add the state functions</span></label></div><div class="step-body"><p>just above the <code>/* ---------- init ---------- */</code> block (line 1327):</p>
+<pre><code class="language-js">const CATALOG_VERSION = '2026-08-10';   // bump whenever DATA, ANC, HCARD or LABOR prices change
+const SKIP = id =&gt; id.startsWith('f_') || id === 'proc_select';
+function getQuoteState() {
+  const fields = {};
+  document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el =&gt; {
+    if (SKIP(el.id)) return;
+    fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  calc();
+  return { fields, st: { ...ST }, catalogVersion: CATALOG_VERSION, snap: SNAP };
+}
+function setQuoteState({ fields, st }) {
+  const set = id =&gt; { const el = $(id); if (!el || !(id in fields)) return;
+    if (el.type === 'checkbox') el.checked = fields[id]; else el.value = fields[id]; };
+  // cascading pickers must be set in order, firing each onchange so the next list refills
+  for (const p of ['p', 'q']) for (const s of ['_series', '_bright', '_cab']) { set(p + s); $(p + s).onchange &amp;&amp; $(p + s).onchange(); }
+  set('hs_frame'); set('hs_slots');
+  Object.keys(fields).forEach(set);
+  Object.keys(ST).forEach(k =&gt; delete ST[k]); Object.assign(ST, st);   // ST is const: mutate, don't reassign
+  Object.entries(ST).forEach(([k, v]) =&gt; { const el = $('f_' + k); if (el) el.value = v; });
+  if ($('proc_select') &amp;&amp; 'proc_sel' in ST) $('proc_select').value = ST.proc_sel;
+  $('pt_box').style.display = $('pt_on').checked ? 'block' : 'none';
+  calc();
+}
+</code></pre></div></li>
+<li class="step item" data-step="p4-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s3" id="ck-p4-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Prove the round trip before any UI work</span></label></div><div class="step-body"><p>In the browser console: <code>s = getQuoteState(); location.reload()</code>, then <code>setQuoteState(s); JSON.stringify(SNAP) === JSON.stringify(s.snap)</code>. Fix every <code>false</code> before moving on; this is the check that stops saved quotes from drifting. H-series card inputs (<code>hs_&lt;card&gt;</code>) are worth testing specifically since they live in <code>ST</code>, not in fields.</p></div></li>
+<li class="step item" data-step="p4-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s4" id="ck-p4-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Install attributes card</span></label></div><div class="step-body"><p>Add a <code>&lt;div class="card"&gt;</code> inside the Quote panel (<code>&lt;section class="panel" data-p="quote"&gt;</code>, line 433) with selects <code>ia_env</code>, <code>ia_mount</code>, <code>ia_lift</code>, a checkbox <code>ia_transparent</code> and a date <code>ia_delivery</code>. Because they have ids, <code>getQuoteState()</code> picks them up with no extra code.</p></div></li>
+<li class="step item" data-step="p4-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s5" id="ck-p4-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Save bar</span></label></div><div class="step-body"><p>Put Save, New version and a status pill next to the existing PDF button (<code>#pdfbtn</code>, line 203). Load <code>shared/eled-api.js</code> with a <code>&lt;script src="../shared/eled-api.js"&gt;</code> tag. On load, read <code>?quote=</code> and <code>&amp;v=</code> from <code>location.search</code>; if present, <code>GET /api/quotes/{id}</code>, call <code>setQuoteState(version.inputs)</code>, then show the stored <code>TotalSell</code> beside the live total and warn if <code>catalogVersion</code> differs from <code>CATALOG_VERSION</code>. Make <code>q_num</code> read-only and fill it from the server.</p></div></li>
+<li class="step item" data-step="p4-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p4-s6" id="ck-p4-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Two small changes</span></label></div><div class="step-body"><p><code>resetAll()</code> (line 1322) does <code>location.reload()</code>, which would reopen the saved quote; change it to <code>location.href = location.pathname</code>. And when status moves to Sent, take <code>$('doc').innerHTML</code> right after <code>buildDoc()</code> (line 1128), wrap it with the page's print CSS, and upload it as <code>quotes/{id}/v{n}.html</code>. <code>window.print()</code> can't hand you a PDF file, but that saved HTML reprints the exact quote the customer received.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p4-exit" id="ck-p4-exit" aria-label="Done"><span><b>Exit criteria met.</b> Save, close, reopen gives identical totals and PDF; a Sent quote cannot be edited, only versioned.</span></label></div>
+</section><section class="phase" id="phase-5" data-phase="5">
+<header class="phase-head">
+<div class="phase-num">Phase 5</div>
+<h3>ELEDInstall on the database + quote to checklist</h3>
+<div class="phase-meta"><span class="budget">10 to 16 hrs</span><span class="count" data-count="5"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p5-t0"></i><i data-px="p5-t1"></i><i data-px="p5-t2"></i><i data-px="p5-t3"></i><i data-px="p5-t4"></i><i data-px="p5-t5"></i><i data-px="p5-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t0" id="ck-p5-t0" aria-label="Done"><span>Replace <code>localStorage</code> load/save with the API; open by <code>?checklist={id}</code>; keep local storage only as an unsaved-edits buffer</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t1" id="ck-p5-t1" aria-label="Done"><span>Load the template from the API; render rule-added items and notes</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t2" id="ck-p5-t2" aria-label="Done"><span>Per-item who and when; photo and file attachments on items and sections</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t3" id="ck-p5-t3" aria-label="Done"><span>Header link back to the quote; "Mark install complete" with completion date</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t4" id="ck-p5-t4" aria-label="Done"><span>Approval hook: mapping + rules in one transaction, idempotent via unique <code>QuoteId</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p5-t5" id="ck-p5-t5" aria-label="Done"><span>Seed the starter rules from the workshop</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="5"></span></summary>
+<div class="howto-intro"><p>All work is in <code>apps/install/index.html</code> plus the approval endpoint from Phase 3. Line numbers are from the current <code>main</code>.</p></div>
+<ol class="steps">
+<li class="step item" data-step="p5-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s1" id="ck-p5-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Freeze each checklist's definition</span></label></div><div class="step-body"><p>Add a <code>DefinitionJson</code> column to <code>Checklists</code> (a migration). At approval, the API writes the template plus rule-added items into it, so later template or rule edits never change a checklist that is already in the field. The page just renders whatever <code>DefinitionJson</code> it gets and never needs to know rules exist.</p></div></li>
+<li class="step item" data-step="p5-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s2" id="ck-p5-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Swap the storage</span></label></div><div class="step-body"><p>The whole persistence layer is two functions:</p>
+<ul>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p5-s2-0" id="ck-p5-s2-0" aria-label="Done"><code>load()</code> (line 515) reads <code>localStorage</code> and falls back to the <code>SAMPLE</code> job. Replace it with: read <code>?checklist=</code> from the URL, <code>GET /api/checklists/{id}</code>, set <code>SECTIONS = res.definition.sections</code> (change <code>const SECTIONS</code> on line 300 to <code>let</code>), <code>st = res.state</code>, remember <code>res.rowver</code>. Never fall back to <code>SAMPLE</code> when an id is present.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p5-s2-1" id="ck-p5-s2-1" aria-label="Done"><code>save()</code> (line 520) debounces a <code>localStorage.setItem</code>. Keep the debounce, but <code>PUT /api/checklists/{id}</code> with <code>{ state: st, rowver }</code>. Also write <code>localStorage['eled-install.' + id]</code> as an unsaved-edits buffer, cleared on a successful PUT. On 409, toast "Someone else saved this checklist" and reload.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p5-s2-2" id="ck-p5-s2-2" aria-label="Done">In <code>act()</code> (line 688), hide New and Sample when a checklist id is present, add a <code>complete</code> action that calls <code>POST /api/checklists/{id}/complete</code>, and keep Export/Import for offline hand-offs.</li>
+</ul></div></li>
+<li class="step item" data-step="p5-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s3" id="ck-p5-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Switch to stable keys</span></label></div><div class="step-body"><p><code>checkItem(b, i, text)</code> (line 533) builds state keys from the item index (<code>access.6.s</code>, <code>.o</code>, <code>.n</code> for status, owner, note). Change it to take the item object and use <code>item.key</code> (<code>access.work-zone-barricaded.s</code>). Do the same in the PDF builder (<code>docBlock</code>, around line 742). In the Import handler (after line 704), run old <code>version: 1</code> files through <code>db/seed/keymap_v1.json</code> so crews' saved JSON still loads.</p></div></li>
+<li class="step item" data-step="p5-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s4" id="ck-p5-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Who and when</span></label></div><div class="step-body"><p>Don't send it from the page. The API diffs item status in <code>StateJson</code> against <code>ChecklistItems</code> on each PUT and stamps <code>ChangedBy</code>/<code>ChangedAt</code> from the principal. Render the returned <code>items[key].changedBy</code> as small grey text under each item.</p></div></li>
+<li class="step item" data-step="p5-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s5" id="ck-p5-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Photos</span></label></div><div class="step-body"><p>Add a "Photos" button on each check block: <code>POST /api/attachments/upload-url</code> with <code>{ parentType: 'checklist', parentId, blockId }</code>, <code>PUT</code> the file to the returned SAS URL, then refresh the attachment list. Use <code>&lt;input type="file" accept="image/*" capture="environment"&gt;</code> so phones open the camera.</p></div></li>
+<li class="step item" data-step="p5-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s6" id="ck-p5-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Link the apps</span></label></div><div class="step-body"><p><code>CALC_URL</code> (line 296) points at the public GitHub Pages site. Change it to <code>/calc/</code> and render a header link to <code>/calc/?quote={quoteId}&amp;v={versionNo}</code> (shown only to Sales/Admin; Install users get the portal's read-only quote view).</p></div></li>
+<li class="step item" data-step="p5-s7"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s7" id="ck-p5-s7" aria-label="Done"><span class="step-n">7</span><span class="step-title">The mapping and rules on the API side</span></label></div><div class="step-body"><p>Write <code>api/src/lib/mapQuote.js</code> exporting <code>toChecklistState(snap, fields)</code>, which returns <code>st.v</code> keys like <code>sys.pitch</code>, <code>sys.res</code>, <code>job.cust</code> from the table in the rules engine section, and <code>toFacts(snap, fields)</code> for rules. Keep both pure functions so you can run them in a scratch script against the sample quotes.</p></div></li>
+<li class="step item" data-step="p5-s8"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p5-s8" id="ck-p5-s8" aria-label="Done"><span class="step-n">8</span><span class="step-title">Seed the starter rules</span></label></div><div class="step-body"><p>After the workshop, write <code>db/seed/rules_v1.json</code> and a migration that inserts it. Check the result by approving each sample quote on <code>eled-dev</code> and comparing the generated checklist, item by item, with the real checklist the install team sent you in Phase 0.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p5-exit" id="ck-p5-exit" aria-label="Done"><span><b>Exit criteria met.</b> Approving each sample quote produces the expected checklist; a second approval is blocked; completing sets the date.</span></label></div>
+<div class="exit pilot item"><label><input type="checkbox" class="ck" data-check="pilot-gate" id="ck-pilot-gate" aria-label="Done"><span><b>Pilot gate passed.</b> Add a bare search list (quote no., customer, status) and demo the full flow to one salesperson and the install lead. Collect changes before Phase 6.</span></label></div>
+</section><section class="phase" id="phase-6" data-phase="6">
+<header class="phase-head">
+<div class="phase-num">Phase 6</div>
+<h3>Search and recall UI</h3>
+<div class="phase-meta"><span class="budget">8 to 14 hrs</span><span class="count" data-count="6"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p6-t0"></i><i data-px="p6-t1"></i><i data-px="p6-t2"></i><i data-px="p6-t3"></i><i data-px="p6-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p6-t0" id="ck-p6-t0" aria-label="Done"><span>Portal page: filter bar (customer, product, status, date range, quote no., install state) + free text</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p6-t1" id="ck-p6-t1" aria-label="Done"><span>Results table with quote and checklist rows, sort and paging</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p6-t2" id="ck-p6-t2" aria-label="Done"><span>Quote detail: versions, status history, linked checklist, attachments, clone</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p6-t3" id="ck-p6-t3" aria-label="Done"><span>Admin: rules list, edit JSON with validation, preview against a quote; template version switch</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="6"></span></summary>
+<ol class="steps">
+<li class="step item" data-step="p6-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s1" id="ck-p6-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">One page, hash routes</span></label></div><div class="step-body"><p><code>apps/portal/index.html</code> with three views switched on <code>location.hash</code>: <code>#/</code> search, <code>#/quote/12</code> quote detail, <code>#/admin/rules</code> rules. Hash routing needs no SWA fallback config and keeps the no-build-step setup. Copy the CSS variables and card/table styles from the top of <code>apps/calc/index.html</code> into <code>apps/shared/eled.css</code> so all three pages look like one product.</p></div></li>
+<li class="step item" data-step="p6-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s2" id="ck-p6-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Make checklists searchable too</span></label></div><div class="step-body"><p>Add a <code>SearchText</code> column to <code>Checklists</code> (customer, site, job no., issue notes), refresh it on every checklist PUT, and add it to the full-text index.</p></div></li>
+<li class="step item" data-step="p6-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s3" id="ck-p6-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">The search query</span></label></div><div class="step-body"><p>Build the <code>WHERE</code> clause from only the filters that were sent, always with parameters. Full-text prefix search wants each word quoted with a trailing star:</p>
+<pre><code class="language-js">// api/src/functions/search.js (core of it)
+const where = [], r = (await db()).request();
+if (q) { r.input('ft', q.split(/\s+/).filter(Boolean).map(w =&gt; `&quot;${w.replace(/&quot;/g, '')}*&quot;`).join(' AND '));
+         where.push('(CONTAINS(v.SearchText, @ft) OR CONTAINS(ch.SearchText, @ft))'); }
+if (status) { r.input('status', status); where.push('q.Status = @status'); }
+if (from) { r.input('from', sql.Date, from); where.push('v.CreatedAt &gt;= @from'); }
+if (quoteNo) { r.input('qn', quoteNo + '%'); where.push('q.QuoteNumber LIKE @qn'); }
+// customer, product, install state: same pattern
+r.input('skip', sql.Int, page * 50);
+const rows = (await r.query(`
+  SELECT q.QuoteId, q.QuoteNumber, q.Status, c.Company, v.ProductModel, v.TotalSell, v.CreatedAt,
+         ch.ChecklistId, ch.Status AS InstallStatus
+  FROM dbo.Quotes q
+  JOIN dbo.QuoteVersions v ON v.QuoteId = q.QuoteId AND v.VersionNo = q.CurrentVersionNo
+  JOIN dbo.Projects p ON p.ProjectId = q.ProjectId
+  JOIN dbo.Customers c ON c.CustomerId = p.CustomerId
+  LEFT JOIN dbo.Checklists ch ON ch.QuoteId = q.QuoteId
+  ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
+  ORDER BY v.CreatedAt DESC OFFSET @skip ROWS FETCH NEXT 50 ROWS ONLY`)).recordset;
+</code></pre>
+<p>Strip <code>TotalSell</code> from the rows for Install users, same as the quote endpoint.</p></div></li>
+<li class="step item" data-step="p6-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s4" id="ck-p6-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Quote detail view</span></label></div><div class="step-body"><p>calls <code>GET /api/quotes/{id}</code> once and renders four cards: versions (each with "Open in calculator" linking to <code>/calc/?quote={id}&amp;v={n}</code>, Sales/Admin only), status history, the linked checklist with its progress count, and attachments (each link fetches a read SAS from <code>/api/attachments/{id}</code> at click time, never stored in the page).</p></div></li>
+<li class="step item" data-step="p6-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s5" id="ck-p6-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Admin rules view</span></label></div><div class="step-body"><p>A list of rules with an active toggle, and an edit panel that is a plain <code>&lt;textarea&gt;</code> of the rule JSON. "Preview" posts the draft rule and a chosen quote id to <code>/api/admin/rules/preview</code> and shows the items it would add. "Save" only enables once preview succeeds. Good enough for a handful of rules; a form builder can come later if rules multiply.</p></div></li>
+<li class="step item" data-step="p6-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p6-s6" id="ck-p6-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Check the 2 second target</span></label></div><div class="step-body"><p>in Application Insights, <strong>Performance</strong>, operation <code>search</code>: look at the 95th percentile once the sample import is in.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p6-exit" id="ck-p6-exit" aria-label="Done"><span><b>Exit criteria met.</b> Any sample record is found by each listed field in under 2 seconds.</span></label></div>
+</section><section class="phase" id="phase-7" data-phase="7">
+<header class="phase-head">
+<div class="phase-num">Phase 7</div>
+<h3>Sample import</h3>
+<div class="phase-meta"><span class="budget">budget from Phase 2</span><span class="count" data-count="7"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p7-t0"></i><i data-px="p7-t1"></i><i data-px="p7-t2"></i><i data-px="p7-t3"></i><i data-px="p7-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p7-t0" id="ck-p7-t0" aria-label="Done"><span>Python <code>tools/import</code> with <code>openpyxl</code>: one mapping per spreadsheet layout in the sample</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p7-t1" id="ck-p7-t1" aria-label="Done"><span>Attach source PDF/xlsx to each imported quote; flag <code>IsImported</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p7-t2" id="ck-p7-t2" aria-label="Done"><span>Import any ELEDInstall JSON exports the crew has saved</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p7-t3" id="ck-p7-t3" aria-label="Done"><span>Dry-run report first, then load; spot-check 10 records</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="7"></span></summary>
+<div class="howto-intro"><p>Split it in two so there is still only one way into the database: Python reads the messy files into clean JSON, and a small Node loader (reusing <code>db/migrate.js</code>'s <code>az login</code> connection and the API's <code>mapQuote.js</code>) inserts it.</p></div>
+<ol class="steps">
+<li class="step item" data-step="p7-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p7-s1" id="ck-p7-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Set up</span></label></div><div class="step-body"><pre><code class="language-bash">cd eled-platform/tools/import
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install openpyxl pdfplumber
+mkdir -p in out   # both gitignored: they hold customer pricing
+</code></pre></div></li>
+<li class="step item" data-step="p7-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p7-s2" id="ck-p7-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Fingerprint the layouts first</span></label></div><div class="step-body"><p>Open each sample .xlsx and note 2 or 3 cells that only one layout has (a header label, a sheet name). Then one mapping per layout:</p>
+<pre><code class="language-python">from openpyxl import load_workbook
+LAYOUTS = {
+  'calc_v2': {'match': lambda ws: ws['A1'].value == 'Enlightened LED Quote',
+              'fields': {'quote_no': 'F3', 'customer': 'B6', 'company': 'B7', 'date': 'F4', 'total': 'F40'}},
+  # add one entry per layout you find in the sample
+}
+wb = load_workbook(path, data_only=True)   # data_only: read the numbers Excel last calculated, not formulas
+</code></pre>
+<p>(The cell addresses above are placeholders; read the real ones off your files.)</p></div></li>
+<li class="step item" data-step="p7-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p7-s3" id="ck-p7-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">PDFs</span></label></div><div class="step-body"><p><code>pdfplumber.open(path).pages[0].extract_text()</code>, then a few regexes for quote number, customer and total. Whatever doesn't match still gets imported as an attachment on a stub record rather than guessed.</p></div></li>
+<li class="step item" data-step="p7-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p7-s4" id="ck-p7-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Dry run first</span></label></div><div class="step-body"><p>The script always writes <code>out/report.csv</code> (file, layout, quote no., customer, total, status <code>ok</code> / <code>unmapped</code> / <code>duplicate</code>) and <code>out/quotes/*.json</code>. Review the report, fix mappings, rerun. Only then run <code>node load.js eled-dev</code>, spot-check 10 records in the portal, and run it again against <code>eled-prod</code>.</p></div></li>
+<li class="step item" data-step="p7-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p7-s5" id="ck-p7-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">How imported quotes behave</span></label></div><div class="step-body"><p>Set <code>IsImported = 1</code>, keep the original quote number, store <code>InputsJson = {}</code> and a minimal <code>SnapJson</code> (totals and lines). They open read-only in the portal, never in the calculator, since there are no calculator inputs to restore. Don't fire rules or create checklists for them; import any matching ELEDInstall JSON as their checklist instead.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p7-exit" id="ck-p7-exit" aria-label="Done"><span><b>Exit criteria met.</b> Sample loaded and searchable; anything that could not map is listed, not guessed.</span></label></div>
+</section><section class="phase" id="phase-8" data-phase="8">
+<header class="phase-head">
+<div class="phase-num">Phase 8</div>
+<h3>Power BI</h3>
+<div class="phase-meta"><span class="budget">6 to 10 hrs</span><span class="count" data-count="8"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p8-t0"></i><i data-px="p8-t1"></i><i data-px="p8-t2"></i><i data-px="p8-exit"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p8-t0" id="ck-p8-t0" aria-label="Done"><span><code>.pbip</code> project over <code>rpt</code> views with the <code>eled_bi</code> login; import mode</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p8-t1" id="ck-p8-t1" aria-label="Done"><span>Measures: quotes issued, approval rate, days quote to approval, pipeline value by customer / product / month, installs open / in progress / complete, days approval to install complete</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p8-t2" id="ck-p8-t2" aria-label="Done"><span>Publish to a workspace; scheduled refresh</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="8"></span></summary>
+<div class="howto-intro"><p><strong>Heads-up: Power BI Desktop is Windows only.</strong> Build the report on a Windows machine or a Windows VM on the Mac; everything after publishing happens in the browser.</p></div>
+<ol class="steps">
+<li class="step item" data-step="p8-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s1" id="ck-p8-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Finish the views first</span></label></div><div class="step-body"><p>(<code>003_reporting_views.sql</code>), so the report never has to know the schema. The main one:</p>
+<pre><code class="language-sql">CREATE VIEW rpt.vQuoteFacts AS
+SELECT q.QuoteId, q.QuoteNumber, q.Status, c.Company, v.ProductModel, v.PitchMm, v.TotalSell,
+       CAST(q.CreatedAt AS date) AS CreatedDate,
+       (SELECT MIN(CAST(h.At AS date)) FROM dbo.QuoteStatusHistory h WHERE h.QuoteId = q.QuoteId AND h.ToStatus = 'Sent')     AS SentDate,
+       (SELECT MIN(CAST(h.At AS date)) FROM dbo.QuoteStatusHistory h WHERE h.QuoteId = q.QuoteId AND h.ToStatus = 'Approved') AS ApprovedDate
+FROM dbo.Quotes q
+JOIN dbo.QuoteVersions v ON v.QuoteId = q.QuoteId AND v.VersionNo = q.CurrentVersionNo
+JOIN dbo.Projects p ON p.ProjectId = q.ProjectId
+JOIN dbo.Customers c ON c.CustomerId = p.CustomerId;
+</code></pre>
+<p><code>rpt.vInstallFacts</code> follows the same idea from <code>Checklists</code> (approved date, completed date, status, open issue count). <code>rpt.vDate</code> is a calendar from the first quote date to today plus one year.</p></div></li>
+<li class="step item" data-step="p8-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s2" id="ck-p8-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Connect</span></label></div><div class="step-body"><p>Power BI Desktop, <strong>Home</strong>, <strong>Get data</strong>, <strong>Azure</strong>, <strong>Azure SQL database</strong>. Server <code>sql-eled-platform.database.windows.net</code>, database <code>eled-prod</code>, <strong>Import</strong>. Credentials: <strong>Database</strong> tab, <code>eled_bi</code>. In the Navigator tick only the three <code>rpt</code> views.</p></div></li>
+<li class="step item" data-step="p8-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s3" id="ck-p8-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Model</span></label></div><div class="step-body"><p>Mark <code>vDate</code> as the date table (<strong>Table tools</strong>, <strong>Mark as date table</strong>). Relate <code>vDate[Date]</code> to <code>vQuoteFacts[SentDate]</code> (active) and to <code>ApprovedDate</code> (inactive, used with <code>USERELATIONSHIP</code>). Starter measures:</p>
+<pre><code class="language-dax">Quotes Issued = CALCULATE ( COUNTROWS ( vQuoteFacts ), NOT ISBLANK ( vQuoteFacts[SentDate] ) )
+Approved = CALCULATE ( COUNTROWS ( vQuoteFacts ), vQuoteFacts[Status] = &quot;Approved&quot; )
+Rejected = CALCULATE ( COUNTROWS ( vQuoteFacts ), vQuoteFacts[Status] = &quot;Rejected&quot; )
+Approval Rate = DIVIDE ( [Approved], [Approved] + [Rejected] )
+Avg Days to Approval = AVERAGEX ( FILTER ( vQuoteFacts, NOT ISBLANK ( vQuoteFacts[ApprovedDate] ) ),
+    DATEDIFF ( vQuoteFacts[SentDate], vQuoteFacts[ApprovedDate], DAY ) )
+Pipeline Value = CALCULATE ( SUM ( vQuoteFacts[TotalSell] ), vQuoteFacts[Status] = &quot;Sent&quot; )
+</code></pre></div></li>
+<li class="step item" data-step="p8-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s4" id="ck-p8-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Save as a project</span></label></div><div class="step-body"><p><strong>File</strong>, <strong>Save as</strong>, type <strong>Power BI project (.pbip)</strong> into <code>powerbi/</code> in the repo, so report changes show up as reviewable text diffs. If that type isn't offered, enable it under <strong>Options</strong>, <strong>Preview features</strong>.</p></div></li>
+<li class="step item" data-step="p8-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s5" id="ck-p8-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Publish and schedule</span></label></div><div class="step-body"><p>At app.powerbi.com, <strong>Workspaces</strong>, <strong>New workspace</strong> <code>ELED Reporting</code> (needs the Pro license). Back in Desktop, <strong>Home</strong>, <strong>Publish</strong> to it. In the service: the semantic model, <strong>Settings</strong>, <strong>Data source credentials</strong>, enter <code>eled_bi</code> again (Basic). Then <strong>Refresh</strong>, turn on a schedule (Pro allows up to 8 a day; twice daily is plenty here). No gateway is needed for Azure SQL.</p></div></li>
+<li class="step item" data-step="p8-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p8-s6" id="ck-p8-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Reconcile before anyone sees it</span></label></div><div class="step-body"><p>For each measure, write the matching SQL query in VS Code against <code>eled-prod</code> and confirm the numbers agree for the same date range.</p></div></li>
+</ol></details>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p8-exit" id="ck-p8-exit" aria-label="Done"><span><b>Exit criteria met.</b> Each KPI reconciles to a hand-written SQL query.</span></label></div>
+</section><section class="phase" id="phase-9" data-phase="9">
+<header class="phase-head">
+<div class="phase-num">Phase 9</div>
+<h3>Cutover and hardening</h3>
+<div class="phase-meta"><span class="budget">from the buffer</span><span class="count" data-count="9"></span></div>
+<div class="pixels" aria-hidden="true"><i data-px="p9-t0"></i><i data-px="p9-t1"></i><i data-px="p9-t2"></i><i data-px="p9-t3"></i></div>
+</header>
+<h4 class="label">Tasks</h4><ul class="tasks">
+<li class="item"><label><input type="checkbox" class="ck" data-check="p9-t0" id="ck-p9-t0" aria-label="Done"><span>Turn off GitHub Pages for ELEDCalc; archive the old repos with a README pointing to the new app</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p9-t1" id="ck-p9-t1" aria-label="Done"><span>Ask crews to export open checklists from the old app and import them</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p9-t2" id="ck-p9-t2" aria-label="Done"><span>Confirm SQL point-in-time restore window; test one restore to dev</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p9-t3" id="ck-p9-t3" aria-label="Done"><span>App Insights alert on API failures; one page runbook (deploy, restore, add user, add rule)</span></label></li>
+</ul>
+<details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="9"></span></summary>
+<ol class="steps">
+<li class="step item" data-step="p9-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s1" id="ck-p9-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Take the public pricing offline</span></label></div><div class="step-body"><p>(do this the same day the new app goes live):</p>
+<ul>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-0" id="ck-p9-s1-0" aria-label="Done"><code>vondraak/eledcalc</code> on GitHub, <strong>Settings</strong>, <strong>Pages</strong>, set the source branch to <strong>None</strong>, <strong>Save</strong>. Confirm <code>vondraak.github.io/ELEDCalc/</code> returns 404.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-1" id="ck-p9-s1-1" aria-label="Done">Both old repos: add a one-line README pointing to the new app, then <strong>Settings</strong>, <strong>General</strong>, <strong>Danger Zone</strong>, <strong>Change visibility</strong> to Private, then <strong>Archive this repository</strong>.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-2" id="ck-p9-s1-2" aria-label="Done">Assume the old page was copied or cached somewhere. If any pricing in it is sensitive, treat the catalog as already public and plan pricing changes accordingly.</li>
+</ul></div></li>
+<li class="step item" data-step="p9-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s2" id="ck-p9-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Move crews' in-progress work</span></label></div><div class="step-body"><p>Before switching, ask anyone mid-job to click <strong>Export</strong> in the old ELEDInstall. Import each file into its matching checklist in the new app (the keymap from Phase 2 converts the old item keys).</p></div></li>
+<li class="step item" data-step="p9-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s3" id="ck-p9-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Test a restore once</span></label></div><div class="step-body"><p>Azure portal, <code>eled-prod</code>, <strong>Restore</strong>, <strong>Point-in-time</strong>, pick a time from yesterday, new database name <code>eled-restore-test</code>. Point a VS Code connection at it, spot-check a few quotes, then delete it. CLI equivalent:</p>
+<pre><code class="language-bash">az sql db restore -g rg-eled-platform -s sql-eled-platform -n eled-prod \
+  --dest-name eled-restore-test --time &quot;2026-10-20T15:00:00Z&quot;
+az sql db delete  -g rg-eled-platform -s sql-eled-platform -n eled-restore-test --yes
+</code></pre></div></li>
+<li class="step item" data-step="p9-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s4" id="ck-p9-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Alerts</span></label></div><div class="step-body"><p>Application Insights resource, <strong>Alerts</strong>, <strong>Create</strong>, <strong>Alert rule</strong>: signal <strong>Failed requests</strong>, greater than 5 in 5 minutes, action group that emails you. While you're there, <strong>Cost Management</strong>, <strong>Budgets</strong> on <code>rg-eled-platform</code> at $60/month with an 80% email alert, so a misconfigured tier gets noticed within days.</p></div></li>
+<li class="step item" data-step="p9-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s5" id="ck-p9-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Runbook</span></label></div><div class="step-body"><p><code>docs/RUNBOOK.md</code> in the repo, one page: how to deploy, run a migration, restore, add a user to a role (Enterprise application, <strong>Users and groups</strong>), add or disable a rule, rotate the Entra client secret (and its expiry date).</p></div></li>
+</ol></details>
+</section></section>
+<section class="block" id="decisions"><h2>Decisions needed <span class="count" data-dec></span></h2><div class="tablewrap"><table class="decisions"><thead><tr><th class="c-ck">Decided</th><th>Decision</th><th>Recommendation</th><th>Needed by</th></tr></thead><tbody>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-0" id="ck-dec-0" aria-label="Done"></td><td>Where the code lives</td><td>New Enlightened LED GitHub org, private monorepo</td><td>Before Phase 1</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-1" id="ck-dec-1" aria-label="Done"></td><td>Quote number format</td><td>Server-assigned <code>ELED-YYYY-NNNN</code>; keep imported numbers as-is</td><td>Before Phase 3</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-2" id="ck-dec-2" aria-label="Done"></td><td>Who can see cost and margin</td><td>Sales and Admin only; Install sees sell price or nothing</td><td>Before Phase 3</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-3" id="ck-dec-3" aria-label="Done"></td><td>Can an Approved quote change</td><td>No. Changes create a new version, which returns to Draft; checklist stays linked to the approved version with a "quote revised" banner</td><td>Before Phase 3</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-4" id="ck-dec-4" aria-label="Done"></td><td>Should the product catalog move to SQL</td><td>Not in this scope. Keep <code>DATA</code> in the page, protected by SSO, versioned by <code>CATALOG_VERSION</code></td><td>Before Phase 4</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-5" id="ck-dec-5" aria-label="Done"></td><td>Install attribute values</td><td>Environment (Indoor, Outdoor, Semi-outdoor), Mount (Wall, Ground, Flown, Custom), Lift (None, Foldable, Hydraulic), Transparent (Y/N)</td><td>Rules workshop</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-6" id="ck-dec-6" aria-label="Done"></td><td>Large cabinet count threshold</td><td>Install team to set</td><td>Rules workshop</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-7" id="ck-dec-7" aria-label="Done"></td><td>Dev database</td><td>Add Basic tier dev DB (about $5/month)</td><td>Phase 1</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-8" id="ck-dec-8" aria-label="Done"></td><td>Region</td><td>Central US, one region, no geo-redundancy at this size</td><td>Phase 1</td></tr>
+</tbody></table></div></section>
+<section class="block" id="risks"><h2>Technical risks</h2><div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rules take longer to define than to build</td>
+<td>Ship the pilot with 5 starter rules; rules are data, so more can follow without a release</td>
+</tr>
+<tr>
+<td><code>ELEDCalc</code> state capture misses an input and a reloaded quote drifts</td>
+<td>Round-trip check in Phase 4 exit: save, reload, compare <code>SNAP</code> JSON field by field</td>
+</tr>
+<tr>
+<td>Positional checklist keys corrupt data when the template changes</td>
+<td>Stable item keys in Phase 2, before any checklist reaches SQL</td>
+</tr>
+<tr>
+<td>Old quotes reprice on reopen</td>
+<td>Frozen <code>SnapJson</code> + <code>CatalogVersion</code> per version</td>
+</tr>
+<tr>
+<td>Two people edit the same quote or checklist</td>
+<td><code>rowversion</code> check on every PUT; 409 prompts a reload</td>
+</tr>
+<tr>
+<td>Import layouts vary more than expected</td>
+<td>Sample only, dry-run report, unmapped files attached rather than guessed</td>
+</tr>
+<tr>
+<td>No formal testing</td>
+<td>Requests file for the API, rules unit tests, pilot gate demo, and budget a few hours of post go-live fixes</td>
+</tr>
+<tr>
+<td>Public pricing stays exposed after launch</td>
+<td>Cutover task: disable GitHub Pages and make old repos private</td>
+</tr>
+<tr>
+<td>Standard plan or tenant features differ from assumptions</td>
+<td>Verify custom auth and <code>rolesSource</code> against current SWA docs during Phase 1 before building on them</td>
+</tr>
+</tbody>
+</table></div></section>
+<section class="block" id="sources"><h2>Sources</h2><ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/authentication-custom">Custom authentication in Azure Static Web Apps</a>: Entra config block, Standard plan requirement, callback URLs</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/assign-roles-microsoft-graph">Assign roles with a function and Microsoft Graph</a>: <code>rolesSource</code> and <code>GetRoles</code></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/apis-functions">API support in Azure Static Web Apps with Azure Functions</a>: managed Functions limits (no managed identity, no Key Vault references), reserved setting prefixes</li>
+<li><a href="https://dev.to/johnnyreilly/azure-ad-claims-with-static-web-apps-and-azure-functions-jd8">Azure AD claims with Static Web Apps and Azure Functions</a>: app-role claims do not reach the Functions header</li>
+<li><code>vondraak/eledcalc</code> and <code>vondraak/eledinstall</code>, <code>main</code> as of 30 Sep 2026: line numbers and field names</li>
+</ul></section>
+  <p class="footnote">Each lit pixel is one finished task or exit check. How-to steps and sub-steps have their own checkboxes and count separately.</p>
+</main>
+</div>
+
+<script>
+(function(){
+  var PHASES = {"0": ["p0-t0", "p0-t1", "p0-t2", "p0-t3", "p0-t4", "p0-t5", "p0-exit"], "1": ["p1-t0", "p1-t1", "p1-t2", "p1-t3", "p1-t4", "p1-t5", "p1-t6", "p1-t7", "p1-exit"], "2": ["p2-t0", "p2-t1", "p2-t2", "p2-t3", "p2-t4", "p2-t5", "p2-exit"], "3": ["p3-t0", "p3-t1", "p3-t2", "p3-t3", "p3-t4", "p3-t5", "p3-t6", "p3-t7", "p3-t8", "p3-exit"], "4": ["p4-t0", "p4-t1", "p4-t2", "p4-t3", "p4-t4", "p4-t5", "p4-exit"], "5": ["p5-t0", "p5-t1", "p5-t2", "p5-t3", "p5-t4", "p5-t5", "p5-exit"], "6": ["p6-t0", "p6-t1", "p6-t2", "p6-t3", "p6-exit"], "7": ["p7-t0", "p7-t1", "p7-t2", "p7-t3", "p7-exit"], "8": ["p8-t0", "p8-t1", "p8-t2", "p8-exit"], "9": ["p9-t0", "p9-t1", "p9-t2", "p9-t3"]};
+  var KEY = 'eled-roadmap-checks-v1', UI_KEY = 'eled-roadmap-ui-v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[data-check]'));
+  var byId = {}; boxes.forEach(function(b){ byId[b.dataset.check] = true; });
+  var col = null, readOnly = false, pending = new Set(), writes = {};
+  var syncEl = document.getElementById('sync');
+  var SYNC_TEXT = { local: 'Saved in this browser', synced: 'Synced to this page', readonly: 'View only', error: 'Sync failed, saved in this browser', nostore: 'Not saving: this browser blocks storage' };
+  function setSync(s){ syncEl.dataset.s = s; syncEl.textContent = SYNC_TEXT[s]; }
+  var storageOk = (function(){ try { localStorage.setItem(KEY + '.t', '1'); localStorage.removeItem(KEY + '.t'); return true; } catch (e) { return false; } })();
+  var framed = true; try { framed = window.self !== window.top; } catch (e) { framed = true; }
+  function localMode(){
+    setSync(storageOk ? 'local' : 'nostore');
+    // A copy hosted on its own (GitHub Pages, a file on disk) keeps progress in this browser: offer backup and move.
+    if (!framed) document.getElementById('backup').hidden = false;
+  }
+  function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function fmt(iso){ try { return iso ? new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''; } catch (e) { return ''; } }
+
+  function apply(){
+    boxes.forEach(function(b){
+      var v = state[b.dataset.check];
+      b.checked = !!v;
+      var it = b.closest('.item'); if (it) it.classList.toggle('done', !!v);
+      b.title = v ? ('Done ' + fmt(v.at)).trim() : '';
+      b.disabled = readOnly;
+    });
+    var tot = 0, dn = 0;
+    Object.keys(PHASES).forEach(function(n){
+      var ids = PHASES[n], d = ids.filter(function(i){ return state[i]; }).length;
+      tot += ids.length; dn += d;
+      document.querySelectorAll('[data-count="' + n + '"]').forEach(function(el){ el.textContent = d + '/' + ids.length; });
+      document.querySelectorAll('[data-tile="' + n + '"]').forEach(function(el){ el.classList.toggle('complete', d === ids.length); });
+    });
+    document.querySelectorAll('[data-px]').forEach(function(el){ el.classList.toggle('on', !!state[el.dataset.px]); });
+    document.querySelectorAll('[data-howto]').forEach(function(el){
+      var cbs = el.closest('details').querySelectorAll('input[data-check]'), d = 0;
+      cbs.forEach(function(c){ if (c.checked) d++; });
+      el.textContent = d + ' of ' + cbs.length + ' checked';
+    });
+    var dec = document.querySelectorAll('input[data-check^="dec-"]'), dd = 0;
+    dec.forEach(function(c){ if (c.checked) dd++; });
+    var decEl = document.querySelector('[data-dec]'); if (decEl) decEl.textContent = dd + ' of ' + dec.length + ' decided';
+    document.getElementById('overall').textContent = dn + ' of ' + tot + ' tasks';
+    var pct = tot ? Math.round(dn / tot * 100) : 0;
+    document.querySelector('.meter-fill').style.width = pct + '%';
+    document.querySelector('.meter').setAttribute('aria-valuenow', pct);
+    var g = document.querySelector('[data-gate]'); if (g) g.classList.toggle('on', !!state['pilot-gate']);
+  }
+
+  function doWrite(id, done, at){
+    var ref = col.doc(id);
+    return done ? ref.set({ done: true, at: at }) : ref.delete();
+  }
+  function write(id, done, at){
+    if (!col || readOnly) return;
+    writes[id] = (writes[id] || Promise.resolve()).then(function(){
+      return doWrite(id, done, at).catch(function(err){
+        var code = err && err.code;
+        if (code === 'invalid_argument') { readOnly = true; setSync('readonly'); apply(); return; }
+        if (code === 'unavailable') {
+          return new Promise(function(r){ setTimeout(r, 400 + Math.random() * 600); })
+            .then(function(){ return doWrite(id, done, at); })
+            .catch(function(){ setSync('error'); });
+        }
+        setSync('error');
+      });
+    });
+  }
+
+  document.addEventListener('change', function(e){
+    var b = e.target;
+    if (!b.matches || !b.matches('input[data-check]')) return;
+    var id = b.dataset.check;
+    if (b.checked) state[id] = { done: true, at: new Date().toISOString() }; else delete state[id];
+    saveLocal(); apply();
+    if (col) write(id, b.checked, state[id] ? state[id].at : null); else pending.add(id);
+  });
+
+  apply();
+
+  function initDb(){
+    var c = window.claude;
+    if (!c || typeof c.use !== 'function') { localMode(); return; }
+    Promise.resolve().then(function(){ return c.use('db'); }).catch(function(){ return null; }).then(function(db){
+      if (!db) { localMode(); return; }
+      col = db.collection('checks');
+      var first = true;
+      col.onSnapshot(function(snap){
+        var next = {};
+        snap.docs.forEach(function(doc){ var v = doc.data(); if (v && v.done) next[doc.id] = { done: true, at: v.at || null }; });
+        if (first) {
+          first = false;
+          // Carry over ticks made before sync was ready, or all local ticks the first time the page has a store.
+          var carry = snap.empty ? Object.keys(state) : Array.from(pending);
+          carry.forEach(function(id){
+            var want = !!state[id], have = !!next[id];
+            if (want === have) return;
+            if (want) next[id] = state[id]; else delete next[id];
+            write(id, want, want ? state[id].at : null);
+          });
+          pending.clear();
+        }
+        state = next; saveLocal(); apply();
+        if (!readOnly) setSync('synced');
+      }, function(){ setSync('error'); });
+    });
+  }
+  initDb();
+
+  /* ---- other tabs of this page in the same browser stay in step ---- */
+  window.addEventListener('storage', function(e){
+    if (e.key !== KEY || col) return;
+    try { state = JSON.parse(e.newValue || '{}') || {}; } catch (x) { state = {}; }
+    apply();
+  });
+
+  /* ---- export / import progress (local mode) ---- */
+  var importBar = document.getElementById('import-bar'), importMsg = document.getElementById('import-msg');
+  var importFile = document.getElementById('import-file'), incoming = null;
+  function countDone(s){ return Object.keys(s).filter(function(k){ return s[k]; }).length; }
+  document.getElementById('export-progress').addEventListener('click', function(){
+    var payload = { app: 'eled-roadmap', version: 1, exported: new Date().toISOString(), checks: state };
+    var blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'eled-roadmap-progress-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  });
+  document.getElementById('import-progress').addEventListener('click', function(){ importFile.click(); });
+  importFile.addEventListener('change', function(){
+    var f = importFile.files[0]; importFile.value = '';
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var o = null;
+      try { o = JSON.parse(r.result); } catch (x) { o = null; }
+      if (!o || o.app !== 'eled-roadmap' || typeof o.checks !== 'object' || !o.checks) {
+        incoming = null;
+        importMsg.textContent = 'That file is not an ELED roadmap progress export. Choose a file saved with Export progress.';
+        document.getElementById('import-yes').hidden = true;
+        importBar.hidden = false; return;
+      }
+      // keep only checkboxes that exist on this version of the page
+      incoming = {};
+      Object.keys(o.checks).forEach(function(id){
+        var v = o.checks[id];
+        if (v && byId[id]) incoming[id] = { done: true, at: typeof v.at === 'string' ? v.at : null };
+      });
+      importMsg.textContent = 'Replace your current progress (' + countDone(state) + ' checked) with this file (' +
+        countDone(incoming) + ' checked, exported ' + (o.exported ? fmt(o.exported) : 'on an unknown date') + ')?';
+      document.getElementById('import-yes').hidden = false;
+      importBar.hidden = false;
+    };
+    r.readAsText(f);
+  });
+  document.getElementById('import-yes').addEventListener('click', function(){
+    if (!incoming) return;
+    state = incoming; incoming = null;
+    saveLocal(); apply();
+    importMsg.textContent = 'Progress imported.';
+    document.getElementById('import-yes').hidden = true;
+    setTimeout(function(){ importBar.hidden = true; }, 2500);
+  });
+  document.getElementById('import-no').addEventListener('click', function(){ incoming = null; importBar.hidden = true; });
+
+  /* ---- copy buttons on code blocks ---- */
+  document.querySelectorAll('pre > code').forEach(function(code){
+    var pre = code.parentElement, wrap = document.createElement('div'), bar = document.createElement('div');
+    var m = (code.className || '').match(/language-(\w+)/), lang = m ? m[1] : 'text';
+    wrap.className = 'code'; bar.className = 'code-bar';
+    var tag = document.createElement('span'); tag.textContent = lang;
+    var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'copy'; btn.textContent = 'Copy';
+    bar.appendChild(tag); bar.appendChild(btn);
+    pre.parentNode.insertBefore(wrap, pre); wrap.appendChild(bar); wrap.appendChild(pre);
+    btn.addEventListener('click', function(){
+      var reset = function(t){ setTimeout(function(){ btn.textContent = 'Copy'; }, t); };
+      var fallback = function(){
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Selected, press Ctrl+C'; reset(2500);
+      };
+      try { navigator.clipboard.writeText(code.textContent).then(function(){ btn.textContent = 'Copied'; reset(1500); }, fallback); }
+      catch (e) { fallback(); }
+    });
+  });
+
+  /* ---- view controls, remembered per browser ---- */
+  var ui = {};
+  try { ui = JSON.parse(localStorage.getItem(UI_KEY) || '{}') || {}; } catch (e) { ui = {}; }
+  function saveUi(){ try { localStorage.setItem(UI_KEY, JSON.stringify(ui)); } catch (e) {} }
+  var hide = document.getElementById('hide-done'), toggle = document.getElementById('toggle-howto');
+  var details = document.querySelectorAll('details.howto');
+  function applyUi(){
+    document.body.classList.toggle('hide-done', !!ui.hide);
+    hide.checked = !!ui.hide;
+    details.forEach(function(d){ d.open = !ui.collapsed; });
+    toggle.textContent = ui.collapsed ? 'Expand all how-tos' : 'Collapse all how-tos';
+  }
+  hide.addEventListener('change', function(){ ui.hide = hide.checked; saveUi(); applyUi(); });
+  toggle.addEventListener('click', function(){ ui.collapsed = !ui.collapsed; saveUi(); applyUi(); });
+  applyUi();
+
+  var jump = document.getElementById('jump');
+  if (jump) jump.addEventListener('change', function(){
+    var t = jump.value && document.getElementById(jump.value);
+    if (t) t.scrollIntoView({ block: 'start' });
+    jump.value = '';
+  });
+
+  /* ---- highlight the phase in view ---- */
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('.nav-phases a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting && links[en.target.id]) {
+          Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+          links[en.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    document.querySelectorAll('.phase').forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
