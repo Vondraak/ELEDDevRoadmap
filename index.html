@@ -226,7 +226,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
   <div class="meter" role="progressbar" aria-label="Tasks complete" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="meter-fill"></span></div>
   <span class="tb-count" id="overall">0 of 0 tasks</span>
   <span class="sync" id="sync" data-s="local">Saved in this browser</span>
-  <select id="jump" aria-label="Jump to section"><option value="">Jump to…</option><option value="phase-0">Phase 0: Prereqs</option><option value="phase-1">Phase 1: Azure setup</option><option value="phase-2">Phase 2: Data model</option><option value="phase-3">Phase 3: API</option><option value="phase-4">Phase 4: ELEDCalc</option><option value="phase-5">Phase 5: ELEDInstall</option><option value="phase-6">Phase 6: Search UI</option><option value="phase-7">Phase 7: Sample import</option><option value="phase-8">Phase 8: Power BI</option><option value="phase-9">Phase 9: Cutover</option><option value="current-state">Current state</option><option value="architecture">Architecture</option><option value="repo-and-ci-cd">Repo and CI/CD</option><option value="data-model">Data model</option><option value="api-and-auth">API and auth</option><option value="rules-engine">Rules engine</option><option value="decisions">Decisions</option><option value="risks">Risks</option><option value="sources">Sources</option></select>
+  <select id="jump" aria-label="Jump to section"><option value="">Jump to…</option><option value="phase-0">Phase 0: Prereqs</option><option value="phase-1">Phase 1: Azure setup</option><option value="phase-2">Phase 2: Data model</option><option value="phase-3">Phase 3: API</option><option value="phase-4">Phase 4: ELEDCalc</option><option value="phase-5">Phase 5: ELEDInstall</option><option value="phase-6">Phase 6: Search UI</option><option value="phase-7">Phase 7: Sample import</option><option value="phase-8">Phase 8: Power BI</option><option value="phase-9">Phase 9: Cutover</option><option value="current-state">Current state</option><option value="architecture">Architecture</option><option value="repo-layout-environments-and-ci-cd-azure">Repo layout, environments and CI/CD (Azure DevOps)</option><option value="data-model">Data model</option><option value="api-and-auth">API and auth</option><option value="rules-engine">Rules engine</option><option value="decisions">Decisions</option><option value="risks">Risks</option><option value="sources">Sources</option></select>
 </div></div>
 
 <div class="layout">
@@ -245,7 +245,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
 </ol><div class="side-label">Reference</div><ul class="nav-ref">
 <li><a href="#current-state">Current state</a></li>
 <li><a href="#architecture">Architecture</a></li>
-<li><a href="#repo-and-ci-cd">Repo and CI/CD</a></li>
+<li><a href="#repo-layout-environments-and-ci-cd-azure">Repo layout, environments and CI/CD (Azure DevOps)</a></li>
 <li><a href="#data-model">Data model</a></li>
 <li><a href="#api-and-auth">API and auth</a></li>
 <li><a href="#rules-engine">Rules engine</a></li>
@@ -258,7 +258,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
     <div class="eyebrow">Enlightened LED · Quote and Install Platform</div>
     <h1>Dev roadmap</h1>
     <p class="byline">Prepared 30 Sep 2026 against the scope of work dated 29 Sep 2026 · RFP estimate 50 to 86 build hours, plan for 65 to 70</p>
-    <div class="summary"><p>Build one Azure Static Web App that hosts ELEDCalc, ELEDInstall and a new search portal behind Entra SSO, backed by one Azure SQL database and one Blob container. Keep both apps as plain HTML/JS (no framework rewrite) and add a thin shared <code>eled-api.js</code> client. That is what keeps the build inside the RFP's 65 to 70 hour plan.</p>
+    <div class="summary"><p>Build one Azure Static Web App that hosts ELEDCalc, ELEDInstall and a new search portal behind Entra SSO, backed by one Azure SQL database and one Blob container. Keep both apps as plain HTML/JS (no framework rewrite) and add a thin shared <code>eled-api.js</code> client. That is what keeps the build inside the RFP's 65 to 70 hour plan. Code, builds and deploys all stay in Microsoft (Azure DevOps Repos and Pipelines); nothing in the running system depends on GitHub.</p>
 <ul>
 <li><strong>Pilot milestone (about 40 to 60 hrs):</strong> save a quote from ELEDCalc, approve it, get an auto-built checklist in ELEDInstall, find both in basic search. Phases 0 to 5 below, with search trimmed to a list view.</li>
 <li><strong>Full scope:</strong> add the search UI, sample import, Power BI and cutover (Phases 6 to 9).</li>
@@ -279,7 +279,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
       <button type="button" class="btn" id="import-no">Cancel</button>
     </div>
     <div class="board">
-<div class="row"><a class="tile" href="#phase-0" data-tile="0"><span class="t-n">Phase 0</span><span class="t-name">Prereqs</span><span class="t-h">setup only</span><span class="pixels"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-exit"></i></span><span class="t-c" data-count="0"></span></a><a class="tile" href="#phase-1" data-tile="1"><span class="t-n">Phase 1</span><span class="t-name">Azure setup</span><span class="t-h">4 to 8 h</span><span class="pixels"><i data-px="p1-t0"></i><i data-px="p1-t1"></i><i data-px="p1-t2"></i><i data-px="p1-t3"></i><i data-px="p1-t4"></i><i data-px="p1-t5"></i><i data-px="p1-t6"></i><i data-px="p1-t7"></i><i data-px="p1-exit"></i></span><span class="t-c" data-count="1"></span></a><a class="tile" href="#phase-2" data-tile="2"><span class="t-n">Phase 2</span><span class="t-name">Data model</span><span class="t-h">8 to 12 h</span><span class="pixels"><i data-px="p2-t0"></i><i data-px="p2-t1"></i><i data-px="p2-t2"></i><i data-px="p2-t3"></i><i data-px="p2-t4"></i><i data-px="p2-t5"></i><i data-px="p2-exit"></i></span><span class="t-c" data-count="2"></span></a><a class="tile" href="#phase-3" data-tile="3"><span class="t-n">Phase 3</span><span class="t-name">API</span><span class="t-h">8 to 16 h</span><span class="pixels"><i data-px="p3-t0"></i><i data-px="p3-t1"></i><i data-px="p3-t2"></i><i data-px="p3-t3"></i><i data-px="p3-t4"></i><i data-px="p3-t5"></i><i data-px="p3-t6"></i><i data-px="p3-t7"></i><i data-px="p3-t8"></i><i data-px="p3-exit"></i></span><span class="t-c" data-count="3"></span></a><a class="tile" href="#phase-4" data-tile="4"><span class="t-n">Phase 4</span><span class="t-name">ELEDCalc</span><span class="t-h">6 to 10 h</span><span class="pixels"><i data-px="p4-t0"></i><i data-px="p4-t1"></i><i data-px="p4-t2"></i><i data-px="p4-t3"></i><i data-px="p4-t4"></i><i data-px="p4-t5"></i><i data-px="p4-exit"></i></span><span class="t-c" data-count="4"></span></a><a class="tile" href="#phase-5" data-tile="5"><span class="t-n">Phase 5</span><span class="t-name">ELEDInstall</span><span class="t-h">10 to 16 h</span><span class="pixels"><i data-px="p5-t0"></i><i data-px="p5-t1"></i><i data-px="p5-t2"></i><i data-px="p5-t3"></i><i data-px="p5-t4"></i><i data-px="p5-t5"></i><i data-px="p5-exit"></i></span><span class="t-c" data-count="5"></span></a><a class="gate" href="#phase-5" data-gate><span class="diamond"></span><span class="g-t">Pilot gate</span><span class="g-s">demo the full flow</span></a></div>
+<div class="row"><a class="tile" href="#phase-0" data-tile="0"><span class="t-n">Phase 0</span><span class="t-name">Prereqs</span><span class="t-h">setup only</span><span class="pixels"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-t6"></i><i data-px="p0-t7"></i><i data-px="p0-exit"></i></span><span class="t-c" data-count="0"></span></a><a class="tile" href="#phase-1" data-tile="1"><span class="t-n">Phase 1</span><span class="t-name">Azure setup</span><span class="t-h">4 to 8 h</span><span class="pixels"><i data-px="p1-t0"></i><i data-px="p1-t1"></i><i data-px="p1-t2"></i><i data-px="p1-t3"></i><i data-px="p1-t4"></i><i data-px="p1-t5"></i><i data-px="p1-t6"></i><i data-px="p1-t7"></i><i data-px="p1-exit"></i></span><span class="t-c" data-count="1"></span></a><a class="tile" href="#phase-2" data-tile="2"><span class="t-n">Phase 2</span><span class="t-name">Data model</span><span class="t-h">8 to 12 h</span><span class="pixels"><i data-px="p2-t0"></i><i data-px="p2-t1"></i><i data-px="p2-t2"></i><i data-px="p2-t3"></i><i data-px="p2-t4"></i><i data-px="p2-t5"></i><i data-px="p2-exit"></i></span><span class="t-c" data-count="2"></span></a><a class="tile" href="#phase-3" data-tile="3"><span class="t-n">Phase 3</span><span class="t-name">API</span><span class="t-h">8 to 16 h</span><span class="pixels"><i data-px="p3-t0"></i><i data-px="p3-t1"></i><i data-px="p3-t2"></i><i data-px="p3-t3"></i><i data-px="p3-t4"></i><i data-px="p3-t5"></i><i data-px="p3-t6"></i><i data-px="p3-t7"></i><i data-px="p3-t8"></i><i data-px="p3-exit"></i></span><span class="t-c" data-count="3"></span></a><a class="tile" href="#phase-4" data-tile="4"><span class="t-n">Phase 4</span><span class="t-name">ELEDCalc</span><span class="t-h">6 to 10 h</span><span class="pixels"><i data-px="p4-t0"></i><i data-px="p4-t1"></i><i data-px="p4-t2"></i><i data-px="p4-t3"></i><i data-px="p4-t4"></i><i data-px="p4-t5"></i><i data-px="p4-exit"></i></span><span class="t-c" data-count="4"></span></a><a class="tile" href="#phase-5" data-tile="5"><span class="t-n">Phase 5</span><span class="t-name">ELEDInstall</span><span class="t-h">10 to 16 h</span><span class="pixels"><i data-px="p5-t0"></i><i data-px="p5-t1"></i><i data-px="p5-t2"></i><i data-px="p5-t3"></i><i data-px="p5-t4"></i><i data-px="p5-t5"></i><i data-px="p5-exit"></i></span><span class="t-c" data-count="5"></span></a><a class="gate" href="#phase-5" data-gate><span class="diamond"></span><span class="g-t">Pilot gate</span><span class="g-s">demo the full flow</span></a></div>
 <div class="row row-b"><a class="tile" href="#phase-6" data-tile="6"><span class="t-n">Phase 6</span><span class="t-name">Search UI</span><span class="t-h">8 to 14 h</span><span class="pixels"><i data-px="p6-t0"></i><i data-px="p6-t1"></i><i data-px="p6-t2"></i><i data-px="p6-t3"></i><i data-px="p6-exit"></i></span><span class="t-c" data-count="6"></span></a><a class="tile" href="#phase-7" data-tile="7"><span class="t-n">Phase 7</span><span class="t-name">Sample import</span><span class="t-h">in Phase 2 hours</span><span class="pixels"><i data-px="p7-t0"></i><i data-px="p7-t1"></i><i data-px="p7-t2"></i><i data-px="p7-t3"></i><i data-px="p7-exit"></i></span><span class="t-c" data-count="7"></span></a><a class="tile" href="#phase-8" data-tile="8"><span class="t-n">Phase 8</span><span class="t-name">Power BI</span><span class="t-h">6 to 10 h</span><span class="pixels"><i data-px="p8-t0"></i><i data-px="p8-t1"></i><i data-px="p8-t2"></i><i data-px="p8-exit"></i></span><span class="t-c" data-count="8"></span></a><a class="tile" href="#phase-9" data-tile="9"><span class="t-n">Phase 9</span><span class="t-name">Cutover</span><span class="t-h">from buffer</span><span class="pixels"><i data-px="p9-t0"></i><i data-px="p9-t1"></i><i data-px="p9-t2"></i><i data-px="p9-t3"></i></span><span class="t-c" data-count="9"></span></a></div>
 </div>
   </header>
@@ -382,12 +382,12 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
 <text class="el" x="423" y="476" text-anchor="middle">scheduled refresh, read-only login</text>
 </svg><figcaption>Target architecture: one Static Web App, one API, SQL and Blob behind it, Power BI reading SQL.</figcaption></figure>
 <p>The three pages are static files; the API is the only thing that touches SQL or issues Blob links, so role checks and cost stripping live in one place. Browsers upload photos straight to Blob with a short-lived SAS the API hands out.</p></section>
-<section class="block" id="repo-and-ci-cd"><h2>Repo layout, environments and CI/CD</h2><p>Move to one private monorepo in an Enlightened LED GitHub org so the company, not a personal account, owns the code and the deploy pipeline.</p>
-<pre><code>eled-platform/
+<section class="block" id="repo-layout-environments-and-ci-cd-azure"><h2>Repo layout, environments and CI/CD (Azure DevOps)</h2><p>Keep the code in Azure Repos inside an Azure DevOps project signed in with the company Entra tenant, and deploy with Azure Pipelines to the Static Web App. The existing GitHub repos are read once during the import (Phase 0) and retired at cutover (Phase 9); nothing in the build, the deploy or the running system depends on GitHub.</p>
+<pre><code>eled-platform/              &lt;- Azure Repos, project &quot;ELED Platform&quot;
   apps/                      &lt;- SWA app_location
     staticwebapp.config.json &lt;- routes, roles, auth provider (must live here)
-    calc/index.html          &lt;- from vondraak/eledcalc (git subtree keeps history)
-    install/index.html       &lt;- from vondraak/eledinstall
+    calc/index.html          &lt;- imported from GitHub once, history kept
+    install/index.html       &lt;- imported from GitHub once, history kept
     portal/index.html        &lt;- new: search, recall, quote detail, admin (rules)
     shared/eled-api.js       &lt;- fetch wrapper, auth check, save/load helpers
     shared/eled.css
@@ -400,7 +400,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
     seed/checklist_template_v1.json  rules_v1.json
   tools/import/              &lt;- Python: sample xlsx/pdf quote import
   powerbi/                   &lt;- .pbip project (text format, diffable)
-  .github/workflows/deploy.yml  db-migrate.yml
+  pipelines/deploy.yml  db-migrate.yml   &lt;- Azure Pipelines YAML
 </code></pre>
 <div class="tablewrap"><table>
 <thead>
@@ -418,21 +418,22 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
 </tr>
 <tr>
 <td>Preview</td>
-<td>SWA staging environment per pull request</td>
+<td>SWA preview environment, deployed by the pipeline for any branch other than <code>main</code></td>
 <td>Dev DB</td>
 </tr>
 <tr>
 <td>Production</td>
-<td>SWA production, custom domain optional</td>
+<td>SWA production, deployed by the pipeline on <code>main</code></td>
 <td>Prod DB (S0)</td>
 </tr>
 </tbody>
 </table></div>
 <ul>
-<li>A dev database (Basic tier, roughly $5/month) is not in the RFP cost table. Recommend it so PR previews never write to production. Confirm in the Azure pricing calculator.</li>
-<li><strong>Deploy:</strong> <code>Azure/static-web-apps-deploy</code> action on push to <code>main</code>, app location <code>apps</code>, API location <code>api</code>, no build step for the front end.</li>
-<li><strong>Migrations:</strong> numbered, forward-only <code>.sql</code> files applied by a <code>db-migrate</code> workflow using GitHub OIDC to Azure (no stored passwords), tracked in a <code>SchemaVersion</code> table.</li>
-<li><strong>Branching:</strong> trunk-based. Every change on a short branch, PR opens a preview URL, merge deploys.</li>
+<li>A dev database (Basic tier, roughly $5/month) is not in the RFP cost table. Recommend it so preview deploys never write to production. Confirm in the Azure pricing calculator.</li>
+<li><strong>Deploy:</strong> <code>pipelines/deploy.yml</code> runs the <code>AzureStaticWebApp@0</code> task (Linux agents only) with <code>app_location: apps</code>, <code>api_location: api</code>, no front-end build, and <code>production_branch: main</code>, so every other branch lands in a preview environment. The SWA deployment token lives in a secret pipeline variable group.</li>
+<li><strong>Build agent:</strong> new Azure DevOps organizations no longer get the free Microsoft-hosted job automatically; you request it, and requests have taken weeks. Request it in Phase 0. Until it lands, run a free self-hosted Linux agent, deploy from your Mac with the SWA CLI (<code>swa deploy</code>), or buy one hosted job (about $40/month).</li>
+<li><strong>Migrations:</strong> numbered, forward-only <code>.sql</code> files applied by <code>pipelines/db-migrate.yml</code> through an Azure Resource Manager service connection using workload identity federation (no stored passwords), tracked in a <code>SchemaVersion</code> table.</li>
+<li><strong>Branching:</strong> trunk-based. Azure Repos ignores the YAML <code>pr:</code> trigger, so protect <code>main</code> with a branch policy: pull request required, <code>deploy.yml</code> as build validation. Each branch gets a preview URL; merge deploys to production.</li>
 </ul></section>
 <section class="block" id="data-model"><h2>Data model</h2><p>Normalize what gets searched and reported on; keep each app's full state as JSON so the pages reload exactly as saved. Every table carries <code>CreatedAt</code>, <code>CreatedBy</code>, <code>UpdatedAt</code>, <code>UpdatedBy</code> (Entra object id + UPN) and a <code>rowversion</code> for optimistic concurrency.</p>
 <div class="tablewrap"><table>
@@ -718,32 +719,36 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
 <div class="phase-num">Phase 0</div>
 <h3>Prerequisites</h3>
 <div class="phase-meta"><span class="budget">no build hours</span><span class="count" data-count="0"></span></div>
-<div class="pixels" aria-hidden="true"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-exit"></i></div>
+<div class="pixels" aria-hidden="true"><i data-px="p0-t0"></i><i data-px="p0-t1"></i><i data-px="p0-t2"></i><i data-px="p0-t3"></i><i data-px="p0-t4"></i><i data-px="p0-t5"></i><i data-px="p0-t6"></i><i data-px="p0-t7"></i><i data-px="p0-exit"></i></div>
 </header>
 <h4 class="label">Tasks</h4><ul class="tasks">
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t0" id="ck-p0-t0" aria-label="Done"><span>Create an Enlightened LED GitHub org; transfer or subtree both repos into private <code>eled-platform</code></span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t1" id="ck-p0-t1" aria-label="Done"><span>Confirm Azure subscription and who can create resources and Entra app registrations (RFP next step 1)</span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t2" id="ck-p0-t2" aria-label="Done"><span>Confirm Power BI Pro licensing for the dashboard user (RFP next step 2)</span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t3" id="ck-p0-t3" aria-label="Done"><span>Collect 3 to 5 example quotes with their matching install checklists (RFP next step 3)</span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t4" id="ck-p0-t4" aria-label="Done"><span>Book a 60 minute rules workshop with the install lead</span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t5" id="ck-p0-t5" aria-label="Done"><span>Decide the items in "Decisions needed" below marked Before Phase 1</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t0" id="ck-p0-t0" aria-label="Done"><span>Create an Azure DevOps organization in the company Entra tenant and a private project <code>ELED Platform</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t1" id="ck-p0-t1" aria-label="Done"><span>Import both apps, with history, into one Azure Repos repo <code>eled-platform</code>; freeze changes on the GitHub copies</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t2" id="ck-p0-t2" aria-label="Done"><span>Request the free Microsoft-hosted build agent for the new organization (can take days or weeks)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t3" id="ck-p0-t3" aria-label="Done"><span>Confirm Azure subscription and who can create resources and Entra app registrations (RFP next step 1)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t4" id="ck-p0-t4" aria-label="Done"><span>Confirm Power BI Pro licensing for the dashboard user (RFP next step 2)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t5" id="ck-p0-t5" aria-label="Done"><span>Collect 3 to 5 example quotes with their matching install checklists (RFP next step 3)</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t6" id="ck-p0-t6" aria-label="Done"><span>Book a 60 minute rules workshop with the install lead</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p0-t7" id="ck-p0-t7" aria-label="Done"><span>Decide the items in "Decisions needed" below marked Before Phase 1</span></label></li>
 </ul>
 <details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="0"></span></summary>
 <ol class="steps">
-<li class="step item" data-step="p0-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s1" id="ck-p0-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">GitHub org</span></label></div><div class="step-body"><p>github.com, the <strong>+</strong> menu (top right), <strong>New organization</strong>, Free plan. Name it for the company (e.g. <code>enlightened-led</code>) and add a second owner so the company is never locked out.</p></div></li>
-<li class="step item" data-step="p0-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s2" id="ck-p0-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Monorepo with history</span></label></div><div class="step-body"><p>both repos use <code>main</code>. From your Mac:</p>
+<li class="step item" data-step="p0-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s1" id="ck-p0-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Azure DevOps organization</span></label></div><div class="step-body"><p>go to dev.azure.com, sign in with your Enlightened LED account and choose <strong>New organization</strong>; signing in with the company account creates it inside that Entra tenant (confirm under <strong>Organization settings</strong>, <strong>Microsoft Entra</strong>). Create a private project <code>ELED Platform</code>. Basic access is free for the first 5 users. The same day, request the free Microsoft-hosted build agent at aka.ms/azpipelines-parallelism-request, and link billing (<strong>Organization settings</strong>, <strong>Billing</strong>, your Azure subscription) so you can buy one hosted job if the request stalls.</p></div></li>
+<li class="step item" data-step="p0-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s2" id="ck-p0-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">One repo with history</span></label></div><div class="step-body"><p>in the project, <strong>Repos</strong>, create an empty repo <code>eled-platform</code> (no README). From your Mac, pull both GitHub repos in once (they are public, so no GitHub account is needed) and push to Azure Repos. Install Git Credential Manager first (<code>brew install --cask git-credential-manager</code>) so the push signs in with your Entra account.</p>
 <pre><code class="language-bash">mkdir eled-platform &amp;&amp; cd eled-platform &amp;&amp; git init -b main
 git commit --allow-empty -m &quot;init&quot;
 git subtree add --prefix=apps/calc https://github.com/vondraak/eledcalc main
 git subtree add --prefix=apps/install https://github.com/vondraak/eledinstall main
-gh repo create enlightened-led/eled-platform --private --source . --push
-</code></pre></div></li>
+git remote add origin https://dev.azure.com/&lt;org&gt;/ELED%20Platform/_git/eled-platform
+git push -u origin main
+</code></pre>
+<p>From this point every change goes to Azure Repos. Leave the GitHub copies untouched; Phase 9 turns off the public calculator and retires them.</p></div></li>
 <li class="step item" data-step="p0-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s3" id="ck-p0-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Azure rights</span></label></div><div class="step-body"><p>portal.azure.com, <strong>Subscriptions</strong>, pick the subscription, <strong>Access control (IAM)</strong>, <strong>Check access</strong>, <strong>View my access</strong>. You need <strong>Owner</strong> (or Contributor plus User Access Administrator), because Phase 1 creates role assignments for GitHub deploys and the SQL admin group.</p></div></li>
 <li class="step item" data-step="p0-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s4" id="ck-p0-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Entra rights</span></label></div><div class="step-body"><p>entra.microsoft.com, <strong>Users</strong>, your account, <strong>Assigned roles</strong>. <strong>Application Administrator</strong> or <strong>Cloud Application Administrator</strong> covers the app registration and role assignments. If you have neither, check <strong>Users</strong>, <strong>User settings</strong>, "Users can register applications"; that lets you create the registration but not grant tenant-wide consent.</p></div></li>
 <li class="step item" data-step="p0-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s5" id="ck-p0-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">Licensing check</span></label></div><div class="step-body"><p>admin.microsoft.com, <strong>Billing</strong>, <strong>Licenses</strong>. Look for Power BI Pro (included in E5) and Entra ID P1 (included in Business Premium, E3, E5). <strong>P1 matters:</strong> assigning <em>groups</em> to app roles needs it. Without P1, assign individual users to roles instead; everything else in this plan still works.</p></div></li>
 <li class="step item" data-step="p0-s6"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p0-s6" id="ck-p0-s6" aria-label="Done"><span class="step-n">6</span><span class="step-title">Sample data</span></label></div><div class="step-body"><p>ask for 3 to 5 quotes as the original .xlsx and PDF, plus the finished checklist (or ELEDInstall JSON export) for each. Put them in <code>samples/</code> in the repo, but add <code>samples/</code> to <code>.gitignore</code> if they contain customer pricing.</p></div></li>
 </ol></details>
-<div class="exit item"><label><input type="checkbox" class="ck" data-check="p0-exit" id="ck-p0-exit" aria-label="Done"><span><b>Exit criteria met.</b> Repo exists, subscription access confirmed, sample quotes in hand.</span></label></div>
+<div class="exit item"><label><input type="checkbox" class="ck" data-check="p0-exit" id="ck-p0-exit" aria-label="Done"><span><b>Exit criteria met.</b> Azure Repos holds both apps with their history, build agent requested, subscription access confirmed, sample quotes in hand.</span></label></div>
 </section><section class="phase" id="phase-1" data-phase="1">
 <header class="phase-head">
 <div class="phase-num">Phase 1</div>
@@ -755,10 +760,10 @@ gh repo create enlightened-led/eled-platform --private --source . --push
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t0" id="ck-p1-t0" aria-label="Done"><span>Resource group <code>rg-eled-platform</code> in one region (e.g. Central US); tag owner and cost center</span></label></li>
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t1" id="ck-p1-t1" aria-label="Done"><span>Azure SQL logical server (Entra admin = an admin group), <code>eled-prod</code> S0, <code>eled-dev</code> Basic</span></label></li>
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t2" id="ck-p1-t2" aria-label="Done"><span>Storage account, private container <code>attachments</code>, soft delete on (7 days)</span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t3" id="ck-p1-t3" aria-label="Done"><span>Static Web App, Standard plan, linked to <code>eled-platform</code> <code>main</code></span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t3" id="ck-p1-t3" aria-label="Done"><span>Static Web App, Standard plan, deployment source Other (deployed by Azure Pipelines)</span></label></li>
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t4" id="ck-p1-t4" aria-label="Done"><span>Entra app registration, app roles Sales / Install / Admin, groups assigned</span></label></li>
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t5" id="ck-p1-t5" aria-label="Done"><span><code>staticwebapp.config.json</code> with custom provider, route rules, <code>rolesSource</code></span></label></li>
-<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t6" id="ck-p1-t6" aria-label="Done"><span>GitHub OIDC federated credential; <code>deploy.yml</code> and <code>db-migrate.yml</code> workflows</span></label></li>
+<li class="item"><label><input type="checkbox" class="ck" data-check="p1-t6" id="ck-p1-t6" aria-label="Done"><span>Azure DevOps service connection (workload identity federation); <code>deploy.yml</code> pipeline and <code>main</code> branch policy</span></label></li>
 <li class="item"><label><input type="checkbox" class="ck" data-check="p1-t7" id="ck-p1-t7" aria-label="Done"><span>Application Insights attached to the API</span></label></li>
 </ul>
 <details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="1"></span></summary>
@@ -788,8 +793,27 @@ az storage container create --account-name $ST -n attachments --auth-mode login
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s1-0" id="ck-p1-s1-0" aria-label="Done"><strong>Blob CORS</strong> (browsers upload photos straight to Blob): storage account, <strong>Settings</strong>, <strong>Resource sharing (CORS)</strong>, <strong>Blob service</strong> tab: origin = your SWA URL (and <code>http://localhost:4280</code> for local), methods GET, PUT, HEAD, allowed and exposed headers <code>*</code>, max age 3600.</li>
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s1-1" id="ck-p1-s1-1" aria-label="Done"><strong>Keys for the API:</strong> storage account, <strong>Security + networking</strong>, <strong>Access keys</strong>, copy a connection string. It goes into SWA settings in step 4.</li>
 </ul></div></li>
-<li class="step item" data-step="p1-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s2" id="ck-p1-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Static Web App</span></label></div><div class="step-body"><p>Portal: <strong>Static Web Apps</strong>, <strong>Create</strong>. Resource group <code>rg-eled-platform</code>, name <code>swa-eled-platform</code>, <strong>Plan type: Standard</strong>. Source <strong>GitHub</strong>, sign in, org <code>enlightened-led</code>, repo <code>eled-platform</code>, branch <code>main</code>. Build preset <strong>Custom</strong>: App location <code>/apps</code>, Api location <code>/api</code>, Output location blank. Region for the API: Central US.</p>
-<p>Azure commits a workflow to <code>.github/workflows/</code> and stores the deploy token as a repo secret. Keep that file, just rename it <code>deploy.yml</code>. Copy the default hostname (<code>https://&lt;name&gt;.azurestaticapps.net</code>) from <strong>Overview</strong>.</p></div></li>
+<li class="step item" data-step="p1-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s2" id="ck-p1-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Static Web App</span></label></div><div class="step-body"><p>Portal: <strong>Static Web Apps</strong>, <strong>Create</strong>. Resource group <code>rg-eled-platform</code>, name <code>swa-eled-platform</code>, <strong>Plan type: Standard</strong>. Deployment source <strong>Other</strong>, so the only deploy path is your own pipeline. Region for the API: Central US. Then from <strong>Overview</strong>, copy the default hostname (<code>https://&lt;name&gt;.azurestaticapps.net</code>) and open <strong>Manage deployment token</strong> to copy the token.</p>
+<p>In Azure DevOps: <strong>Pipelines</strong>, <strong>Library</strong>, new variable group <code>swa-deploy</code> with secret <code>SWA_DEPLOYMENT_TOKEN</code>. Commit <code>pipelines/deploy.yml</code>:</p>
+<pre><code class="language-yaml">trigger:
+  branches: { include: ['*'] }
+pool:
+  vmImage: ubuntu-latest          # or your self-hosted Linux pool until the free grant lands
+variables:
+  - group: swa-deploy
+steps:
+  - checkout: self
+  - task: AzureStaticWebApp@0     # runs on Linux agents only
+    inputs:
+      app_location: 'apps'
+      api_location: 'api'
+      output_location: ''
+      skip_app_build: true        # plain HTML, nothing to build
+      production_branch: 'main'   # other branches deploy to preview environments
+      azure_static_web_apps_api_token: $(SWA_DEPLOYMENT_TOKEN)
+</code></pre>
+<p>Then <strong>Pipelines</strong>, <strong>New pipeline</strong>, <strong>Azure Repos Git</strong>, <code>eled-platform</code>, <strong>Existing Azure Pipelines YAML file</strong>, <code>/pipelines/deploy.yml</code>. Protect <code>main</code>: <strong>Repos</strong>, <strong>Branches</strong>, <code>main</code>, <strong>Branch policies</strong>, require a pull request (allow approving your own while you work solo) and add <strong>Build validation</strong> with this pipeline.</p>
+<p><strong>No hosted agent yet?</strong> Either register a self-hosted agent on any Linux box (<strong>Organization settings</strong>, <strong>Agent pools</strong>, <strong>Default</strong>, <strong>New agent</strong>, follow the Linux steps) and set <code>pool: { name: Default }</code>, or deploy straight from your Mac: <code>swa deploy ./apps --api-location ./api --api-language node --api-version 20 --deployment-token $SWA_DEPLOYMENT_TOKEN --env production</code>.</p></div></li>
 <li class="step item" data-step="p1-s3"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s3" id="ck-p1-s3" aria-label="Done"><span class="step-n">3</span><span class="step-title">Entra app registration (entra.microsoft.com)</span></label></div><div class="step-body"><ol>
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-0" id="ck-p1-s3-0" aria-label="Done"><strong>App registrations</strong>, <strong>New registration</strong>: name <code>ELED Platform</code>, <strong>Accounts in this organizational directory only</strong>, redirect URI type <strong>Web</strong>: <code>https://&lt;swa-host&gt;/.auth/login/aad/callback</code>. Copy the <strong>Tenant ID</strong> and <strong>Application (client) ID</strong> from Overview.</li>
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s3-1" id="ck-p1-s3-1" aria-label="Done"><strong>Authentication</strong>: add the logout URL <code>https://&lt;swa-host&gt;/.auth/logout/aad/callback</code>. Under implicit grant, tick <strong>ID tokens</strong>.</li>
@@ -838,11 +862,11 @@ app.http('GetRoles', { methods: ['POST'], authLevel: 'anonymous', handler: async
   return { jsonBody: { roles } };
 }});
 </code></pre></div></li>
-<li class="step item" data-step="p1-s7"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s7" id="ck-p1-s7" aria-label="Done"><span class="step-n">7</span><span class="step-title">GitHub to Azure for migrations (OIDC, no stored password)</span></label></div><div class="step-body"><ul>
-<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-0" id="ck-p1-s7-0" aria-label="Done">Entra, <strong>App registrations</strong>, <strong>New registration</strong> <code>eled-github-deploy</code>. <strong>Certificates &amp; secrets</strong>, <strong>Federated credentials</strong>, <strong>Add</strong>, scenario <strong>GitHub Actions deploying Azure resources</strong>, org <code>enlightened-led</code>, repo <code>eled-platform</code>, entity <strong>Branch</strong> <code>main</code>.</li>
-<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-1" id="ck-p1-s7-1" aria-label="Done">Give it <strong>SQL Server Contributor</strong> on <code>sql-eled-platform</code> (IAM blade) so the workflow can open a temporary firewall rule for the runner.</li>
-<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-2" id="ck-p1-s7-2" aria-label="Done">In each database, as the Entra admin: <code>CREATE USER [eled-github-deploy] FROM EXTERNAL PROVIDER; ALTER ROLE db_owner ADD MEMBER [eled-github-deploy];</code></li>
-<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-3" id="ck-p1-s7-3" aria-label="Done">Repo <strong>Settings</strong>, <strong>Secrets and variables</strong>, <strong>Actions</strong>: <code>AZURE_CLIENT_ID</code> (of this deploy app), <code>AZURE_TENANT_ID</code>, <code>AZURE_SUBSCRIPTION_ID</code>. The workflow itself is written in Phase 2.</li>
+<li class="step item" data-step="p1-s7"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s7" id="ck-p1-s7" aria-label="Done"><span class="step-n">7</span><span class="step-title">Azure DevOps to Azure for migrations (workload identity federation, no stored password)</span></label></div><div class="step-body"><ul>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-0" id="ck-p1-s7-0" aria-label="Done"><strong>Project settings</strong>, <strong>Service connections</strong>, <strong>New service connection</strong>, <strong>Azure Resource Manager</strong>, workload identity federation (automatic), scoped to your subscription and resource group <code>rg-eled-platform</code>. Name it <code>eled-azure</code>. Its details page links to the Entra identity it created; note that identity's display name.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-1" id="ck-p1-s7-1" aria-label="Done">Give that identity <strong>SQL Server Contributor</strong> on <code>sql-eled-platform</code> (IAM blade) so the pipeline can open a temporary firewall rule for its agent.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-2" id="ck-p1-s7-2" aria-label="Done">In each database, as the Entra admin: <code>CREATE USER [&lt;identity display name&gt;] FROM EXTERNAL PROVIDER; ALTER ROLE db_owner ADD MEMBER [&lt;identity display name&gt;];</code></li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p1-s7-3" id="ck-p1-s7-3" aria-label="Done">The migration pipeline itself is written in Phase 2.</li>
 </ul></div></li>
 <li class="step item" data-step="p1-s8"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s8" id="ck-p1-s8" aria-label="Done"><span class="step-n">8</span><span class="step-title">Monitoring</span></label></div><div class="step-body"><p>SWA, <strong>Settings</strong>, <strong>Application Insights</strong>, enable and create a new resource in the same group.</p></div></li>
 <li class="step item" data-step="p1-s9"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p1-s9" id="ck-p1-s9" aria-label="Done"><span class="step-n">9</span><span class="step-title">Smoke test</span></label></div><div class="step-body"><p>commit a one-line <code>apps/portal/index.html</code> and a <code>/api/me</code> function that echoes the decoded <code>x-ms-client-principal</code>. Sign in as yourself (expect your role), then as an unassigned user (expect the Entra "not assigned" error).</p></div></li>
@@ -866,7 +890,7 @@ app.http('GetRoles', { methods: ['POST'], authLevel: 'anonymous', handler: async
 <details class="howto" open><summary><span class="label">How to start</span><span class="count howto-count" data-howto="2"></span></summary>
 <div class="howto-intro"><p><strong>Tools:</strong> VS Code with the <strong>SQL Server (mssql)</strong> extension (Azure Data Studio is retired). New connection, server <code>sql-eled-platform.database.windows.net</code>, database <code>eled-dev</code>, auth <strong>Microsoft Entra ID, Universal with MFA</strong>. Always build against <code>eled-dev</code> first.</p></div>
 <ol class="steps">
-<li class="step item" data-step="p2-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s1" id="ck-p2-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Migration runner</span></label></div><div class="step-body"><p><code>db/migrate.js</code> (Node, <code>mssql</code> + <code>@azure/identity</code>) signs in with whatever <code>az login</code> or the GitHub OIDC step provides, so the same command works on your Mac and in CI:</p>
+<li class="step item" data-step="p2-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s1" id="ck-p2-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Migration runner</span></label></div><div class="step-body"><p><code>db/migrate.js</code> (Node, <code>mssql</code> + <code>@azure/identity</code>) signs in with whatever <code>az login</code> or the pipeline's Azure CLI step provides, so the same command works on your Mac and in CI:</p>
 <pre><code class="language-js">// node db/migrate.js eled-dev
 const sql = require('mssql'); const fs = require('fs'); const path = require('path');
 const db = process.argv[2];
@@ -926,18 +950,26 @@ CREATE USER eled_bi WITH PASSWORD = '&lt;pw&gt;';
 GRANT SELECT ON SCHEMA::rpt TO eled_bi;
 </code></pre></div></li>
 <li class="step item" data-step="p2-s4"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s4" id="ck-p2-s4" aria-label="Done"><span class="step-n">4</span><span class="step-title">Stable checklist keys</span></label></div><div class="step-body"><p>Write <code>tools/extract-template.js</code>: read <code>apps/install/index.html</code>, slice the text from <code>const SECTIONS = [</code> to the <code>];</code> before the sample-job comment, evaluate it with <code>new Function('return ' + text)()</code>, and for every <code>check</code> block turn each item string into <code>{ key, text }</code>. Generate keys as <code>blockId.slug</code> from the first three words (<code>access.delivery-appointment-dock</code>), then hand-review. Write two files: <code>db/seed/checklist_template_v1.json</code> and <code>db/seed/keymap_v1.json</code> (<code>"access.6": "access.work-zone-barricaded"</code>). The keymap is what migrates existing <code>localStorage</code> and exported JSON later. Fixed table rows (gates, roles, crew) can stay positional for now since their row labels are fixed.</p></div></li>
-<li class="step item" data-step="p2-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s5" id="ck-p2-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">CI</span></label></div><div class="step-body"><p><code>.github/workflows/db-migrate.yml</code>, run manually or on changes to <code>db/**</code>:</p>
-<pre><code class="language-yaml">permissions: { id-token: write, contents: read }
+<li class="step item" data-step="p2-s5"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p2-s5" id="ck-p2-s5" aria-label="Done"><span class="step-n">5</span><span class="step-title">CI</span></label></div><div class="step-body"><p><code>pipelines/db-migrate.yml</code>, run manually or on changes under <code>db/</code>. The Azure CLI task signs in through the <code>eled-azure</code> service connection, and <code>migrate.js</code> picks up that sign-in. Register it the same way as <code>deploy.yml</code> (<strong>Pipelines</strong>, <strong>New pipeline</strong>, existing YAML file).</p>
+<pre><code class="language-yaml">trigger:
+  branches: { include: [main] }
+  paths: { include: [db] }
+pool:
+  vmImage: ubuntu-latest          # or pool: { name: Default } for a self-hosted agent
 steps:
-  - uses: actions/checkout@v4
-  - uses: azure/login@v2
-    with: { client-id: '${{ secrets.AZURE_CLIENT_ID }}', tenant-id: '${{ secrets.AZURE_TENANT_ID }}', subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}' }
-  - run: |
-      IP=$(curl -s https://api.ipify.org)
-      az sql server firewall-rule create -g rg-eled-platform -s sql-eled-platform -n gh-runner --start-ip-address $IP --end-ip-address $IP
-  - run: npm ci --prefix db &amp;&amp; node db/migrate.js eled-prod
-  - if: always()
-    run: az sql server firewall-rule delete -g rg-eled-platform -s sql-eled-platform -n gh-runner
+  - checkout: self
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: eled-azure
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        set -e
+        IP=$(curl -s https://api.ipify.org)
+        az sql server firewall-rule create -g rg-eled-platform -s sql-eled-platform -n pipeline-agent --start-ip-address $IP --end-ip-address $IP
+        trap 'az sql server firewall-rule delete -g rg-eled-platform -s sql-eled-platform -n pipeline-agent' EXIT
+        npm ci --prefix db
+        node db/migrate.js eled-prod
 </code></pre></div></li>
 </ol></details>
 <div class="exit item"><label><input type="checkbox" class="ck" data-check="p2-exit" id="ck-p2-exit" aria-label="Done"><span><b>Exit criteria met.</b> Migrations apply cleanly to dev and prod from CI; template v1 loads.</span></label></div>
@@ -1245,7 +1277,7 @@ Pipeline Value = CALCULATE ( SUM ( vQuoteFacts[TotalSell] ), vQuoteFacts[Status]
 <li class="step item" data-step="p9-s1"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s1" id="ck-p9-s1" aria-label="Done"><span class="step-n">1</span><span class="step-title">Take the public pricing offline</span></label></div><div class="step-body"><p>(do this the same day the new app goes live):</p>
 <ul>
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-0" id="ck-p9-s1-0" aria-label="Done"><code>vondraak/eledcalc</code> on GitHub, <strong>Settings</strong>, <strong>Pages</strong>, set the source branch to <strong>None</strong>, <strong>Save</strong>. Confirm <code>vondraak.github.io/ELEDCalc/</code> returns 404.</li>
-<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-1" id="ck-p9-s1-1" aria-label="Done">Both old repos: add a one-line README pointing to the new app, then <strong>Settings</strong>, <strong>General</strong>, <strong>Danger Zone</strong>, <strong>Change visibility</strong> to Private, then <strong>Archive this repository</strong>.</li>
+<li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-1" id="ck-p9-s1-1" aria-label="Done">Both old GitHub repos: add a one-line README pointing to the new app, then <strong>Settings</strong>, <strong>General</strong>, <strong>Danger Zone</strong>, <strong>Change visibility</strong> to Private and <strong>Archive this repository</strong>. Once you have confirmed Azure Repos has the full history, you can delete them; nothing in the platform reads from GitHub.</li>
 <li class="item subitem"><input type="checkbox" class="ck sub" data-check="p9-s1-2" id="ck-p9-s1-2" aria-label="Done">Assume the old page was copied or cached somewhere. If any pricing in it is sensitive, treat the catalog as already public and plan pricing changes accordingly.</li>
 </ul></div></li>
 <li class="step item" data-step="p9-s2"><div class="step-head"><label><input type="checkbox" class="ck" data-check="p9-s2" id="ck-p9-s2" aria-label="Done"><span class="step-n">2</span><span class="step-title">Move crews' in-progress work</span></label></div><div class="step-body"><p>Before switching, ask anyone mid-job to click <strong>Export</strong> in the old ELEDInstall. Import each file into its matching checklist in the new app (the keymap from Phase 2 converts the old item keys).</p></div></li>
@@ -1259,7 +1291,7 @@ az sql db delete  -g rg-eled-platform -s sql-eled-platform -n eled-restore-test 
 </ol></details>
 </section></section>
 <section class="block" id="decisions"><h2>Decisions needed <span class="count" data-dec></span></h2><div class="tablewrap"><table class="decisions"><thead><tr><th class="c-ck">Decided</th><th>Decision</th><th>Recommendation</th><th>Needed by</th></tr></thead><tbody>
-<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-0" id="ck-dec-0" aria-label="Done"></td><td>Where the code lives</td><td>New Enlightened LED GitHub org, private monorepo</td><td>Before Phase 1</td></tr>
+<tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-0" id="ck-dec-0" aria-label="Done"></td><td>Where the code lives</td><td>Azure DevOps project in the company tenant: Azure Repos for code, Azure Pipelines for deploys. GitHub only as the one-time import source</td><td>Before Phase 1</td></tr>
 <tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-1" id="ck-dec-1" aria-label="Done"></td><td>Quote number format</td><td>Server-assigned <code>ELED-YYYY-NNNN</code>; keep imported numbers as-is</td><td>Before Phase 3</td></tr>
 <tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-2" id="ck-dec-2" aria-label="Done"></td><td>Who can see cost and margin</td><td>Sales and Admin only; Install sees sell price or nothing</td><td>Before Phase 3</td></tr>
 <tr class="item"><td class="c-ck"><input type="checkbox" class="ck" data-check="dec-3" id="ck-dec-3" aria-label="Done"></td><td>Can an Approved quote change</td><td>No. Changes create a new version, which returns to Draft; checklist stays linked to the approved version with a "quote revised" banner</td><td>Before Phase 3</td></tr>
@@ -1313,6 +1345,10 @@ az sql db delete  -g rg-eled-platform -s sql-eled-platform -n eled-restore-test 
 <td>Standard plan or tenant features differ from assumptions</td>
 <td>Verify custom auth and <code>rolesSource</code> against current SWA docs during Phase 1 before building on them</td>
 </tr>
+<tr>
+<td>The new Azure DevOps organization waits weeks for its free hosted build agent</td>
+<td>Request it in Phase 0; a self-hosted Linux agent or <code>swa deploy</code> from your Mac keeps deploys moving meanwhile, or buy one hosted job (about $40/month)</td>
+</tr>
 </tbody>
 </table></div></section>
 <section class="block" id="sources"><h2>Sources</h2><ul>
@@ -1320,6 +1356,10 @@ az sql db delete  -g rg-eled-platform -s sql-eled-platform -n eled-restore-test 
 <li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/assign-roles-microsoft-graph">Assign roles with a function and Microsoft Graph</a>: <code>rolesSource</code> and <code>GetRoles</code></li>
 <li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/apis-functions">API support in Azure Static Web Apps with Azure Functions</a>: managed Functions limits (no managed identity, no Key Vault references), reserved setting prefixes</li>
 <li><a href="https://dev.to/johnnyreilly/azure-ad-claims-with-static-web-apps-and-azure-functions-jd8">Azure AD claims with Static Web Apps and Azure Functions</a>: app-role claims do not reach the Functions header</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-static-web-app-v0?view=azure-pipelines">AzureStaticWebApp@0 task reference</a>: task inputs, <code>production_branch</code>, Linux agents only</li>
+<li><a href="https://learn.microsoft.com/en-us/azure/static-web-apps/named-environments">Named preview environments in Azure Static Web Apps</a>: preview deploys from Azure Pipelines</li>
+<li><a href="https://learn.microsoft.com/en-ca/answers/questions/5894084/no-response-to-azure-devops-parallelism-grant-requ">No response to Azure DevOps parallelism grant request</a> (Microsoft Q&amp;A, May 2026): free hosted job still needs a request; workarounds</li>
+<li><a href="https://cicdcalculator.com/azure-pipelines-pricing">Azure Pipelines pricing breakdown</a>: paid hosted job about $40/month (third-party summary; confirm on the Azure DevOps pricing page)</li>
 <li><code>vondraak/eledcalc</code> and <code>vondraak/eledinstall</code>, <code>main</code> as of 30 Sep 2026: line numbers and field names</li>
 </ul></section>
   <p class="footnote">Each lit pixel is one finished task or exit check. How-to steps and sub-steps have their own checkboxes and count separately.</p>
@@ -1328,7 +1368,7 @@ az sql db delete  -g rg-eled-platform -s sql-eled-platform -n eled-restore-test 
 
 <script>
 (function(){
-  var PHASES = {"0": ["p0-t0", "p0-t1", "p0-t2", "p0-t3", "p0-t4", "p0-t5", "p0-exit"], "1": ["p1-t0", "p1-t1", "p1-t2", "p1-t3", "p1-t4", "p1-t5", "p1-t6", "p1-t7", "p1-exit"], "2": ["p2-t0", "p2-t1", "p2-t2", "p2-t3", "p2-t4", "p2-t5", "p2-exit"], "3": ["p3-t0", "p3-t1", "p3-t2", "p3-t3", "p3-t4", "p3-t5", "p3-t6", "p3-t7", "p3-t8", "p3-exit"], "4": ["p4-t0", "p4-t1", "p4-t2", "p4-t3", "p4-t4", "p4-t5", "p4-exit"], "5": ["p5-t0", "p5-t1", "p5-t2", "p5-t3", "p5-t4", "p5-t5", "p5-exit"], "6": ["p6-t0", "p6-t1", "p6-t2", "p6-t3", "p6-exit"], "7": ["p7-t0", "p7-t1", "p7-t2", "p7-t3", "p7-exit"], "8": ["p8-t0", "p8-t1", "p8-t2", "p8-exit"], "9": ["p9-t0", "p9-t1", "p9-t2", "p9-t3"]};
+  var PHASES = {"0": ["p0-t0", "p0-t1", "p0-t2", "p0-t3", "p0-t4", "p0-t5", "p0-t6", "p0-t7", "p0-exit"], "1": ["p1-t0", "p1-t1", "p1-t2", "p1-t3", "p1-t4", "p1-t5", "p1-t6", "p1-t7", "p1-exit"], "2": ["p2-t0", "p2-t1", "p2-t2", "p2-t3", "p2-t4", "p2-t5", "p2-exit"], "3": ["p3-t0", "p3-t1", "p3-t2", "p3-t3", "p3-t4", "p3-t5", "p3-t6", "p3-t7", "p3-t8", "p3-exit"], "4": ["p4-t0", "p4-t1", "p4-t2", "p4-t3", "p4-t4", "p4-t5", "p4-exit"], "5": ["p5-t0", "p5-t1", "p5-t2", "p5-t3", "p5-t4", "p5-t5", "p5-exit"], "6": ["p6-t0", "p6-t1", "p6-t2", "p6-t3", "p6-exit"], "7": ["p7-t0", "p7-t1", "p7-t2", "p7-t3", "p7-exit"], "8": ["p8-t0", "p8-t1", "p8-t2", "p8-exit"], "9": ["p9-t0", "p9-t1", "p9-t2", "p9-t3"]};
   var KEY = 'eled-roadmap-checks-v1', UI_KEY = 'eled-roadmap-ui-v1';
   var state = {};
   try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
