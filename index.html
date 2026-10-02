@@ -91,6 +91,7 @@ h1{font-size:clamp(2rem,4.4vw,2.8rem); font-weight:800; font-stretch:78%}
 .gh-form label{display:grid; gap:4px; font-size:13px; color:var(--muted); min-width:0}
 .gh-form input{font:inherit; font-size:15px; padding:8px 10px; border:1px solid var(--line-strong); border-radius:6px; background:var(--bg); color:var(--ink); min-width:0; width:100%}
 .gh-actions{display:flex; gap:8px; flex-wrap:wrap}
+.gh-link{font-family:var(--f-mono); font-size:12.5px; padding:8px 10px; border:1px solid var(--line-strong); border-radius:6px; background:var(--bg); color:var(--ink); width:100%; min-width:0}
 .gh-panel .primary{background:var(--px-on); border-color:var(--px-on); color:#1B1204; font-weight:600}
 .gh-panel .gh-msg{min-height:1.4em; color:var(--ink)}
 .gh-panel .gh-msg[data-bad="1"]{color:var(--accent-ink); font-weight:600}
@@ -244,9 +245,11 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
       <div class="gh-actions">
         <button type="button" class="btn primary" id="gh-connect">Connect and sync</button>
         <button type="button" class="btn" id="gh-now" hidden>Sync now</button>
+        <button type="button" class="btn" id="gh-link-btn" hidden title="Builds a link that connects another browser in one click. Treat it like a password.">Copy setup link</button>
         <button type="button" class="btn" id="gh-off" hidden>Disconnect</button>
         <button type="button" class="btn" id="gh-close">Close</button>
       </div>
+      <input class="gh-link" id="gh-link" readonly hidden aria-label="Setup link, select and copy">
       <p class="gh-msg" id="gh-msg" role="status"></p>
       <details class="gh-how"><summary>How to create the token</summary>
         <ol>
@@ -1327,6 +1330,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
   var ghPanel = document.getElementById('gh-panel'), ghRepoEl = document.getElementById('gh-repo'), ghBranchEl = document.getElementById('gh-branch');
   var ghTokenEl = document.getElementById('gh-token'), ghMsgEl = document.getElementById('gh-msg');
   var ghConnectBtn = document.getElementById('gh-connect'), ghNowBtn = document.getElementById('gh-now'), ghOffBtn = document.getElementById('gh-off');
+  var ghLinkBtn = document.getElementById('gh-link-btn'), ghLinkEl = document.getElementById('gh-link');
 
   function ghLoadCfg(){ try { var c = JSON.parse(localStorage.getItem(GH_KEY) || 'null'); if (c && c.repo && c.token) return c; } catch (e) {} return null; }
   function ghSaveCfg(){ try { if (gh) localStorage.setItem(GH_KEY, JSON.stringify(gh)); else localStorage.removeItem(GH_KEY); } catch (e) {} }
@@ -1334,11 +1338,27 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
   function b64e(s){ var u = new TextEncoder().encode(s), bin = ''; for (var i = 0; i < u.length; i++) bin += String.fromCharCode(u[i]); return btoa(bin); }
   function b64d(s){ var bin = atob(String(s).replace(/\s/g, '')), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); }
 
+  function b64u(s){ return b64e(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function unb64u(s){ s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return b64d(s); }
+  function ghValid(c){ return c && typeof c.repo === 'string' && /^[\w.-]+\/[\w.-]+$/.test(c.repo) && typeof c.branch === 'string' && /^[\w][\w.\/-]*$/.test(c.branch) && typeof c.token === 'string' && c.token.length > 8; }
+  /* a setup link carries the settings after the # (never sent to a server); take them in and wipe the address bar */
+  function ghFromHash(){
+    var m = /^#gh=([\w-]+)$/.exec(location.hash || '');
+    if (!m) return null;
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { location.hash = ''; }
+    var c = null;
+    try { c = JSON.parse(unb64u(m[1])); } catch (e) { c = null; }
+    if (!ghValid(c)) return 'bad';
+    gh = { repo: c.repo, branch: c.branch, token: c.token }; ghSaveCfg(); ghBad = false; ghFails = 0; ghMsg = '';
+    return 'ok';
+  }
   function ghStart(){
     try { tomb = JSON.parse(localStorage.getItem(TOMB_KEY) || '{}') || {}; } catch (e) { tomb = {}; }
     gh = ghLoadCfg();
+    var fromLink = ghFromHash();
+    if (fromLink) { ghPanel.hidden = false; ghFill(); ghShowMsg(fromLink === 'ok' ? 'Connected from a setup link. Syncing...' : 'That setup link is not valid. Copy a fresh one from a connected browser.', fromLink !== 'ok'); }
     syncEl.classList.add('clickable'); syncEl.title = 'GitHub sync settings';
-    if (gh) ghSchedule(0);
+    if (gh) { if (fromLink === 'ok') ghSync().then(function(){ ghFill(); ghShowMsg(ghMsg, ghBad || ghFails > 0); }); else ghSchedule(0); }
     setInterval(function(){ if (gh && !ghBad && document.visibilityState === 'visible') ghSync(); }, 60000);
     document.addEventListener('visibilitychange', function(){ if (gh && !ghBad && document.visibilityState === 'visible') ghSchedule(200); });
   }
@@ -1473,7 +1493,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
     ghRepoEl.value = gh ? gh.repo : ''; ghBranchEl.value = gh ? gh.branch : 'progress'; ghTokenEl.value = '';
     ghTokenEl.placeholder = gh ? 'Saved. Paste to replace.' : 'github_pat_...';
     ghConnectBtn.textContent = gh ? 'Save and sync' : 'Connect and sync';
-    ghNowBtn.hidden = ghOffBtn.hidden = !gh;
+    ghNowBtn.hidden = ghOffBtn.hidden = ghLinkBtn.hidden = !gh; ghLinkEl.hidden = true;
     ghShowMsg(gh ? ghMsg : '', ghBad);
   }
   function ghOpen(){ ghPanel.hidden = false; ghFill(); (gh ? ghConnectBtn : ghRepoEl).focus(); ghPanel.scrollIntoView({ block: 'nearest' }); }
@@ -1490,6 +1510,15 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
     gh = { repo: repo, branch: branch, token: token }; ghSaveCfg(); ghBad = false; ghFails = 0; ghMsg = '';
     ghTokenEl.value = ''; ghShowMsg('Connecting to GitHub...', false);
     ghSync().then(function(){ ghFill(); ghShowMsg(ghMsg, ghBad || ghFails > 0); });
+  });
+  ghLinkBtn.addEventListener('click', function(){
+    if (!gh) return;
+    var link = location.origin + location.pathname + '#gh=' + b64u(JSON.stringify({ repo: gh.repo, branch: gh.branch, token: gh.token }));
+    ghLinkEl.value = link;
+    var shown = function(){ ghLinkEl.hidden = false; ghLinkEl.focus(); ghLinkEl.select(); ghShowMsg('Select and copy the link above. Anyone with it can write to this branch, so keep it private.', false); };
+    try {
+      navigator.clipboard.writeText(link).then(function(){ ghShowMsg('Setup link copied. Open it once in each new browser. Treat it like a password: keep it in a password manager, and do not paste it into chat or email.', false); }, shown);
+    } catch (e) { shown(); }
   });
   ghNowBtn.addEventListener('click', function(){
     ghBad = false; ghFails = 0; ghShowMsg('Syncing...', false);
