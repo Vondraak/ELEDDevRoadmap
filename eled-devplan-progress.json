@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-02T15:22:07.595Z",
+ "updated": "2026-10-02T15:22:09.225Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -18,6 +18,10 @@
   "p0-check-power-bi-pro-and-entra-id-p1-licenses": {
    "done": true,
    "at": "2026-10-02T15:22:07.423Z"
+  },
+  "p1-install-the-dev-tooling": {
+   "done": true,
+   "at": "2026-10-02T15:22:08.976Z"
   }
  }
 }
