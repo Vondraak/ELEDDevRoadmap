@@ -81,6 +81,24 @@ h1{font-size:clamp(2rem,4.4vw,2.8rem); font-weight:800; font-stretch:78%}
 .controls button:hover{border-color:var(--line-strong)}
 .switch{display:inline-flex; align-items:center; gap:8px; font-size:14px; color:var(--muted); cursor:pointer}
 .backup{display:inline-flex; gap:8px; flex-wrap:wrap}
+.sync[data-s="gh"]::before{background:var(--good)}
+.sync[data-s="ghbusy"]::before{background:var(--px-on)}
+.sync[data-s="gherr"]::before,.sync[data-s="ghauth"]::before{background:var(--accent)}
+.gh-panel{padding:16px; border:1px solid var(--line-strong); background:var(--panel); border-radius:8px; box-shadow:var(--shadow); display:grid; gap:12px}
+.gh-panel h2{font-size:1.15rem; font-weight:700; font-stretch:85%}
+.gh-panel p{margin:0; font-size:14.5px; color:var(--muted)}
+.gh-form{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:10px}
+.gh-form label{display:grid; gap:4px; font-size:13px; color:var(--muted); min-width:0}
+.gh-form input{font:inherit; font-size:15px; padding:8px 10px; border:1px solid var(--line-strong); border-radius:6px; background:var(--bg); color:var(--ink); min-width:0; width:100%}
+.gh-actions{display:flex; gap:8px; flex-wrap:wrap}
+.gh-panel .primary{background:var(--px-on); border-color:var(--px-on); color:#1B1204; font-weight:600}
+.gh-panel .gh-msg{min-height:1.4em; color:var(--ink)}
+.gh-panel .gh-msg[data-bad="1"]{color:var(--accent-ink); font-weight:600}
+.gh-how summary{cursor:pointer; font-size:14px; font-weight:600}
+.gh-how ol{margin:8px 0 0; padding-left:1.3em; font-size:14.5px; color:var(--muted); display:grid; gap:4px}
+.gh-how li b{color:var(--ink)}
+#sync.clickable{cursor:pointer}
+
 .import-bar{display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--accent); background:var(--accent-soft); border-radius:8px; font-size:14px}
 .import-bar .msg{flex:1 1 240px; min-width:0}
 .import-bar .primary{background:var(--px-on); border-color:var(--px-on); color:#1B1204; font-weight:600}
@@ -204,6 +222,7 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
       <button type="button" id="toggle-all">Expand all</button>
       <label class="switch"><input type="checkbox" id="hide-done" class="ck"> Hide done</label>
       <span class="backup" id="backup" hidden>
+        <button type="button" id="gh-open">GitHub sync</button>
         <button type="button" id="export-progress">Export progress</button>
         <button type="button" id="import-progress">Import progress</button>
         <input type="file" id="import-file" accept=".json,application/json" hidden>
@@ -214,6 +233,32 @@ pre code{background:none; padding:0; font-size:inherit; overflow-wrap:normal; wh
       <button type="button" class="btn primary" id="import-yes">Replace</button>
       <button type="button" class="btn" id="import-no">Cancel</button>
     </div>
+    <section class="gh-panel" id="gh-panel" aria-label="GitHub sync" hidden>
+      <h2>GitHub sync</h2>
+      <p>Saves your checkmarks to one small file on a branch of your repo, so every computer sees the same progress. Set it up once in each browser.</p>
+      <div class="gh-form">
+        <label>Repository <input id="gh-repo" type="text" placeholder="owner/repo" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+        <label>Branch <input id="gh-branch" type="text" value="progress" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+        <label>Token <input id="gh-token" type="password" placeholder="github_pat_..." autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      </div>
+      <div class="gh-actions">
+        <button type="button" class="btn primary" id="gh-connect">Connect and sync</button>
+        <button type="button" class="btn" id="gh-now" hidden>Sync now</button>
+        <button type="button" class="btn" id="gh-off" hidden>Disconnect</button>
+        <button type="button" class="btn" id="gh-close">Close</button>
+      </div>
+      <p class="gh-msg" id="gh-msg" role="status"></p>
+      <details class="gh-how"><summary>How to create the token</summary>
+        <ol>
+          <li>On GitHub, open <b>Settings</b>, then <b>Developer settings</b>, then <b>Personal access tokens</b>, then <b>Fine-grained tokens</b>, then <b>Generate new token</b>.</li>
+          <li>Name it <b>ELED roadmap</b>. Set <b>Resource owner</b> to the account or organization that owns the repo.</li>
+          <li>Under <b>Repository access</b>, choose <b>Only select repositories</b> and pick this repo.</li>
+          <li>Under <b>Repository permissions</b>, set <b>Contents</b> to <b>Read and write</b>. Leave everything else at No access.</li>
+          <li>Choose an expiration. When the token expires, the label at the top reads "GitHub sync needs attention" and you paste a new token here.</li>
+          <li>Generate the token, copy it, and paste it above. It is stored only in this browser. If the repo belongs to an organization, an owner may need to approve the token first.</li>
+        </ol>
+      </details>
+    </section>
     <div class="board"><a class="tile" href="#phase-0" data-tile="0"><span class="t-n">Phase 0</span><span class="t-name">Accounts</span><span class="pixels"><i data-px="p0-create-the-azure-devops-organization-and-project"></i><i data-px="p0-request-the-free-hosted-build-agent"></i><i data-px="p0-import-eledcalc-and-eledinstall-into-azure-repos"></i><i data-px="p0-confirm-azure-and-entra-rights"></i><i data-px="p0-check-power-bi-pro-and-entra-id-p1-licenses"></i><i data-px="p0-collect-sample-quotes-and-their-checklists"></i><i data-px="p0-run-the-rules-workshop-with-the-install-lead"></i><i data-px="p0-lock-the-open-decisions"></i></span><span class="t-c" data-count="0"></span></a><a class="tile" href="#phase-1" data-tile="1"><span class="t-n">Phase 1</span><span class="t-name">Azure setup</span><span class="pixels"><i data-px="p1-install-the-dev-tooling"></i><i data-px="p1-create-the-resource-group-sql-server-and-databas"></i><i data-px="p1-create-the-storage-account-and-attachments-conta"></i><i data-px="p1-create-the-static-web-app"></i><i data-px="p1-allow-browser-uploads-to-blob-cors"></i><i data-px="p1-register-the-entra-app-and-its-roles"></i><i data-px="p1-add-the-static-web-app-settings"></i><i data-px="p1-scaffold-the-api-project"></i><i data-px="p1-add-staticwebapp-config-json"></i><i data-px="p1-add-the-getroles-function"></i><i data-px="p1-create-the-deploy-pipeline"></i><i data-px="p1-protect-main-with-a-branch-policy"></i><i data-px="p1-create-the-azure-service-connection-for-migratio"></i><i data-px="p1-turn-on-application-insights"></i><i data-px="p1-sign-in-and-roles-work-end-to-end"></i></span><span class="t-c" data-count="1"></span></a><a class="tile" href="#phase-2" data-tile="2"><span class="t-n">Phase 2</span><span class="t-name">Database</span><span class="pixels"><i data-px="p2-connect-vs-code-to-the-dev-database"></i><i data-px="p2-add-the-migration-runner"></i><i data-px="p2-write-001-init-sql"></i><i data-px="p2-add-full-text-search-002-fulltext-sql"></i><i data-px="p2-create-the-app-and-reporting-logins"></i><i data-px="p2-give-every-checklist-item-a-stable-key"></i><i data-px="p2-add-the-seed-script"></i><i data-px="p2-add-the-migration-pipeline"></i><i data-px="p2-both-databases-match"></i></span><span class="t-c" data-count="2"></span></a><a class="tile" href="#phase-3" data-tile="3"><span class="t-n">Phase 3</span><span class="t-name">API</span><span class="pixels"><i data-px="p3-run-the-app-locally"></i><i data-px="p3-write-the-shared-libs-auth-db-blob"></i><i data-px="p3-build-the-quote-endpoints"></i><i data-px="p3-build-the-status-and-approval-endpoint"></i><i data-px="p3-build-the-rules-engine-rules-js"></i><i data-px="p3-build-the-checklist-endpoints"></i><i data-px="p3-build-the-search-endpoint"></i><i data-px="p3-build-the-attachment-endpoints"></i><i data-px="p3-build-the-admin-endpoints"></i><i data-px="p3-test-every-route-as-each-role"></i><i data-px="p3-the-api-holds-up"></i></span><span class="t-c" data-count="3"></span></a><a class="tile" href="#phase-4" data-tile="4"><span class="t-n">Phase 4</span><span class="t-name">ELEDCalc</span><span class="pixels"><i data-px="p4-add-getquotestate-and-setquotestate"></i><i data-px="p4-prove-the-save-and-reload-round-trip"></i><i data-px="p4-add-the-install-attributes-card"></i><i data-px="p4-add-the-save-bar-and-open-by-link"></i><i data-px="p4-lock-sent-quotes-and-flag-old-catalogs"></i><i data-px="p4-fix-the-reset-button"></i><i data-px="p4-keep-a-copy-of-the-quote-as-sent"></i><i data-px="p4-quotes-survive-a-reload"></i></span><span class="t-c" data-count="4"></span></a><a class="tile" href="#phase-5" data-tile="5"><span class="t-n">Phase 5</span><span class="t-name">ELEDInstall</span><span class="pixels"><i data-px="p5-write-mapquote-js"></i><i data-px="p5-render-from-the-checklist-s-own-definition"></i><i data-px="p5-replace-localstorage-with-the-api"></i><i data-px="p5-switch-item-state-to-stable-keys"></i><i data-px="p5-trim-the-toolbar-for-saved-checklists"></i><i data-px="p5-show-who-changed-each-item"></i><i data-px="p5-add-photo-uploads"></i><i data-px="p5-link-the-checklist-back-to-its-quote"></i><i data-px="p5-seed-the-starter-rules"></i><i data-px="p5-approval-builds-the-right-checklist"></i><i data-px="p5-run-the-pilot-demo"></i></span><span class="t-c" data-count="5"></span></a><a class="tile" href="#phase-6" data-tile="6"><span class="t-n">Phase 6</span><span class="t-name">Portal</span><span class="pixels"><i data-px="p6-set-up-the-portal-page-and-shared-styles"></i><i data-px="p6-build-the-search-view"></i><i data-px="p6-build-the-quote-detail-view"></i><i data-px="p6-build-the-rules-admin-view"></i><i data-px="p6-everything-is-findable-fast"></i></span><span class="t-c" data-count="6"></span></a><a class="tile" href="#phase-7" data-tile="7"><span class="t-n">Phase 7</span><span class="t-name">Import</span><span class="pixels"><i data-px="p7-set-up-the-import-tool"></i><i data-px="p7-map-each-spreadsheet-layout"></i><i data-px="p7-read-the-pdfs"></i><i data-px="p7-write-the-loader"></i><i data-px="p7-dry-run-then-load-dev-then-prod"></i><i data-px="p7-import-saved-eledinstall-checklists"></i><i data-px="p7-the-sample-is-in-and-searchable"></i></span><span class="t-c" data-count="7"></span></a><a class="tile" href="#phase-8" data-tile="8"><span class="t-n">Phase 8</span><span class="t-name">Power BI</span><span class="pixels"><i data-px="p8-create-the-reporting-views-003-reporting-views-s"></i><i data-px="p8-connect-power-bi-desktop"></i><i data-px="p8-build-the-model-and-measures"></i><i data-px="p8-save-the-report-in-the-repo"></i><i data-px="p8-publish-and-schedule-refresh"></i><i data-px="p8-numbers-reconcile"></i></span><span class="t-c" data-count="8"></span></a><a class="tile" href="#phase-9" data-tile="9"><span class="t-n">Phase 9</span><span class="t-name">Cutover</span><span class="pixels"><i data-px="p9-move-crews-in-progress-checklists"></i><i data-px="p9-take-the-public-calculator-offline"></i><i data-px="p9-retire-the-github-repos"></i><i data-px="p9-test-a-database-restore"></i><i data-px="p9-add-failure-alerts-and-a-cost-budget"></i><i data-px="p9-write-the-runbook"></i><i data-px="p9-ready-to-hand-over"></i></span><span class="t-c" data-count="9"></span></a></div>
     <details class="conv" id="conventions"><summary>Names and layout <span>resource names, repo tree, architecture</span></summary><div class="conv-body"><p>Use these names everywhere so commands, configs and the code below line up.</p>
 <div class="tablewrap"><table>
@@ -1090,7 +1135,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
   var byId = {}; boxes.forEach(function(b){ byId[b.dataset.check] = true; });
   var col = null, readOnly = false, pending = new Set(), writes = {};
   var syncEl = document.getElementById('sync');
-  var SYNC_TEXT = { local: 'Saved in this browser', synced: 'Synced to this page', readonly: 'View only', error: 'Sync failed, saved in this browser', nostore: 'Not saving: this browser blocks storage' };
+  var SYNC_TEXT = { local: 'Saved in this browser', synced: 'Synced to this page', readonly: 'View only', error: 'Sync failed, saved in this browser', gh: 'Synced to GitHub', ghbusy: 'Syncing to GitHub', gherr: 'GitHub sync failed, saved in this browser', ghauth: 'GitHub sync needs attention', nostore: 'Not saving: this browser blocks storage' };
   function setSync(s){ syncEl.dataset.s = s; syncEl.textContent = SYNC_TEXT[s]; }
   var storageOk = (function(){ try { localStorage.setItem(KEY + '.t', '1'); localStorage.removeItem(KEY + '.t'); return true; } catch (e) { return false; } })();
   var framed = true; try { framed = window.self !== window.top; } catch (e) { framed = true; }
@@ -1163,6 +1208,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
     var id = b.dataset.check;
     if (b.checked) { state[id] = { done: true, at: new Date().toISOString() }; delete manual[id]; } else delete state[id];
     saveLocal(); apply();
+     ghChanged(id, b.checked); 
     if (col) write(id, b.checked, state[id] ? state[id].at : null); else pending.add(id);
   });
   document.addEventListener('click', function(e){
@@ -1179,7 +1225,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
 
   function localMode(){
     setSync(storageOk ? 'local' : 'nostore');
-     if (!framed) document.getElementById('backup').hidden = false; 
+     if (!framed) { document.getElementById('backup').hidden = false; setTimeout(ghStart, 0); } 
   }
   function initDb(){
     var c = window.claude;
@@ -1255,7 +1301,7 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
       incoming = {};
       Object.keys(o.checks).forEach(function(id){
         var v = o.checks[id];
-        if (v && byId[id]) incoming[id] = { done: true, at: typeof v.at === 'string' ? v.at : null };
+        if (v && v.done !== false && byId[id]) incoming[id] = { done: true, at: typeof v.at === 'string' ? v.at : null };
       });
       importMsg.textContent = 'Replace your current progress (' + countDone(state) + ' done) with this file (' +
         countDone(incoming) + ' done, exported ' + (o.exported ? fmt(o.exported) : 'on an unknown date') + ')?';
@@ -1265,11 +1311,194 @@ az sql db delete -g rg-eled-platform -s sql-eled-platform -n eled-restore-test -
   });
   yes.addEventListener('click', function(){
     if (!incoming) return;
+    ghImported(state, incoming);
     state = incoming; incoming = null; saveLocal(); apply();
+    if (gh && !ghBad) ghSchedule(500);
     importMsg.textContent = 'Progress imported.'; yes.hidden = true;
     setTimeout(function(){ importBar.hidden = true; }, 2500);
   });
   document.getElementById('import-no').addEventListener('click', function(){ incoming = null; importBar.hidden = true; });
+  
+
+  
+  /* GitHub branch sync: progress lives in one JSON file on a branch of your repo */
+  var GH_KEY = 'eled-devplan-gh-v1', TOMB_KEY = 'eled-devplan-tomb-v1', GH_FILE = 'eled-devplan-progress.json';
+  var gh = null, tomb = {}, ghBusy = false, ghAgain = false, ghTimer = null, ghFails = 0, ghBad = false, ghMsg = '';
+  var ghPanel = document.getElementById('gh-panel'), ghRepoEl = document.getElementById('gh-repo'), ghBranchEl = document.getElementById('gh-branch');
+  var ghTokenEl = document.getElementById('gh-token'), ghMsgEl = document.getElementById('gh-msg');
+  var ghConnectBtn = document.getElementById('gh-connect'), ghNowBtn = document.getElementById('gh-now'), ghOffBtn = document.getElementById('gh-off');
+
+  function ghLoadCfg(){ try { var c = JSON.parse(localStorage.getItem(GH_KEY) || 'null'); if (c && c.repo && c.token) return c; } catch (e) {} return null; }
+  function ghSaveCfg(){ try { if (gh) localStorage.setItem(GH_KEY, JSON.stringify(gh)); else localStorage.removeItem(GH_KEY); } catch (e) {} }
+  function tombSave(){ try { localStorage.setItem(TOMB_KEY, JSON.stringify(tomb)); } catch (e) {} }
+  function b64e(s){ var u = new TextEncoder().encode(s), bin = ''; for (var i = 0; i < u.length; i++) bin += String.fromCharCode(u[i]); return btoa(bin); }
+  function b64d(s){ var bin = atob(String(s).replace(/\s/g, '')), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); }
+
+  function ghStart(){
+    try { tomb = JSON.parse(localStorage.getItem(TOMB_KEY) || '{}') || {}; } catch (e) { tomb = {}; }
+    gh = ghLoadCfg();
+    syncEl.classList.add('clickable'); syncEl.title = 'GitHub sync settings';
+    if (gh) ghSchedule(0);
+    setInterval(function(){ if (gh && !ghBad && document.visibilityState === 'visible') ghSync(); }, 60000);
+    document.addEventListener('visibilitychange', function(){ if (gh && !ghBad && document.visibilityState === 'visible') ghSchedule(200); });
+  }
+  function ghSchedule(ms){ clearTimeout(ghTimer); ghTimer = setTimeout(ghSync, ms); }
+  function ghChanged(id, checked){
+    if (checked) delete tomb[id]; else tomb[id] = new Date().toISOString();
+    tombSave();
+    if (gh && !ghBad) ghSchedule(1500);
+  }
+  function ghImported(prev, next){
+    var now = new Date().toISOString();
+    Object.keys(prev).forEach(function(id){ if (prev[id] && !next[id]) tomb[id] = now; });
+    Object.keys(next).forEach(function(id){ delete tomb[id]; if (gh) next[id].at = now; });
+    tombSave();
+  }
+
+  function ghFetch(method, url, body){
+    var headers = { 'Authorization': 'Bearer ' + gh.token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+    if (body) headers['Content-Type'] = 'application/json';
+    return fetch('https://api.github.com' + url, { method: method, headers: headers, cache: 'no-store', body: body ? JSON.stringify(body) : undefined }).then(function(r){
+      if (r.ok) return r.status === 204 ? null : r.json();
+      var e = new Error('GitHub ' + r.status); e.status = r.status; throw e;
+    });
+  }
+  function ghFatal(msg){ var e = new Error(msg); e.fatal = msg; return e; }
+
+  function ghMakeBranch(){
+    var seed = JSON.stringify({ app: 'eled-devplan', version: 3, updated: new Date().toISOString(), checks: {} }, null, 1);
+    var base = '/repos/' + gh.repo + '/git/';
+    return ghFetch('POST', base + 'trees', { tree: [{ path: GH_FILE, mode: '100644', type: 'blob', content: seed }] })
+      .then(function(t){ return ghFetch('POST', base + 'commits', { message: 'Start progress tracking', tree: t.sha, parents: [] }); })
+      .then(function(c){ return ghFetch('POST', base + 'refs', { ref: 'refs/heads/' + gh.branch, sha: c.sha }); })
+      .catch(function(e){ if (e.status !== 422) throw e; });
+  }
+  function ghGet(retried){
+    var url = '/repos/' + gh.repo + '/contents/' + GH_FILE + '?ref=' + encodeURIComponent(gh.branch);
+    return ghFetch('GET', url).then(function(o){
+      var parsed = null;
+      try { parsed = JSON.parse(b64d(o.content)); } catch (e) { parsed = null; }
+      if (!parsed || parsed.app !== 'eled-devplan' || !parsed.checks || typeof parsed.checks !== 'object') {
+        throw ghFatal('The file ' + GH_FILE + ' on branch ' + gh.branch + ' is not a progress file from this checklist.');
+      }
+      return { sha: o.sha, checks: parsed.checks };
+    }, function(e){
+      if (e.status !== 404) throw e;
+      return ghFetch('GET', '/repos/' + gh.repo + '/branches/' + encodeURIComponent(gh.branch)).then(function(){
+        return { sha: null, checks: {} };
+      }, function(e2){
+        if (e2.status !== 404 || retried) throw e2;
+        return ghFetch('GET', '/repos/' + gh.repo).then(function(){ return ghMakeBranch(); }, function(e3){
+          if (e3.status === 404) throw ghFatal('Repository not found, or this token cannot see it. Check the name and the token\'s repository access.');
+          throw e3;
+        }).then(function(){ return ghGet(true); });
+      });
+    });
+  }
+
+  function ghMerge(remote){
+    var out = {};
+    Object.keys(remote).forEach(function(id){
+      var v = remote[id];
+      if (v && typeof v === 'object') out[id] = { done: v.done !== false, at: typeof v.at === 'string' ? v.at : '' };
+    });
+    try {
+      var t2 = JSON.parse(localStorage.getItem(TOMB_KEY) || '{}') || {};
+      Object.keys(t2).forEach(function(id){ if (!tomb[id] || t2[id] > tomb[id]) tomb[id] = t2[id]; });
+    } catch (e) {}
+    ORDER.forEach(function(id){
+      var mine = state[id] ? { done: true, at: state[id].at || '' } : (tomb[id] ? { done: false, at: tomb[id] } : null);
+      var theirs = out[id] || null, win = theirs;
+      if (mine && (!theirs || mine.at > theirs.at || (mine.at === theirs.at && mine.done))) win = mine;
+      if (win) out[id] = win;
+    });
+    return out;
+  }
+  function ghApply(m){
+    ORDER.forEach(function(id){
+      var w = m[id];
+      if (!w) { delete state[id]; return; }
+      if (w.done) { state[id] = { done: true, at: w.at || null }; delete tomb[id]; }
+      else { delete state[id]; tomb[id] = w.at; }
+    });
+    saveLocal(); tombSave(); apply();
+  }
+  function ghDiffers(m, remote){
+    return Object.keys(m).some(function(id){
+      var r = remote[id];
+      return !r || (r.done !== false) !== m[id].done || (r.at || '') !== (m[id].at || '');
+    });
+  }
+  function ghCycle(n){
+    return ghGet(false).then(function(r){
+      var merged = ghMerge(r.checks);
+      ghApply(merged);
+      if (!ghDiffers(merged, r.checks)) return;
+      var done = Object.keys(merged).filter(function(k){ return merged[k].done; }).length;
+      return ghFetch('PUT', '/repos/' + gh.repo + '/contents/' + GH_FILE, {
+        message: 'progress: ' + done + ' of ' + ORDER.length + ' done',
+        content: b64e(JSON.stringify({ app: 'eled-devplan', version: 3, updated: new Date().toISOString(), checks: merged }, null, 1)),
+        branch: gh.branch,
+        sha: r.sha || undefined
+      }).catch(function(e){
+        if ((e.status === 409 || e.status === 422) && n < 3) return ghCycle(n + 1);
+        throw e;
+      });
+    });
+  }
+  function ghFail(err){
+    var s = err && err.status;
+    if (err && err.fatal) { ghBad = true; ghMsg = err.fatal; setSync('ghauth'); return; }
+    if (s === 401) { ghBad = true; ghMsg = 'GitHub rejected the token. It may have expired or been revoked. Paste a new one.'; setSync('ghauth'); return; }
+    if (s === 403) { ghBad = true; ghMsg = 'GitHub refused the request. The token needs Contents: Read and write on this repository, or a rate limit was hit. Fix it and press Sync now.'; setSync('ghauth'); return; }
+    ghFails++; ghMsg = 'Could not reach GitHub. Progress is saved in this browser and will retry.'; setSync('gherr');
+    ghSchedule(Math.min(60000, 4000 * Math.pow(2, ghFails - 1)));
+  }
+  function ghSync(){
+    if (!gh || ghBad) return Promise.resolve();
+    if (ghBusy) { ghAgain = true; return Promise.resolve(); }
+    ghBusy = true; setSync('ghbusy');
+    return ghCycle(0).then(function(){
+      ghFails = 0;
+      ghMsg = 'Synced at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' to branch ' + gh.branch + ' of ' + gh.repo + '.';
+      setSync('gh');
+    }).catch(ghFail).then(function(){
+      ghBusy = false;
+      if (ghAgain) { ghAgain = false; ghSchedule(300); }
+    });
+  }
+
+  function ghShowMsg(text, bad){ ghMsgEl.textContent = text; ghMsgEl.dataset.bad = bad ? '1' : ''; }
+  function ghFill(){
+    ghRepoEl.value = gh ? gh.repo : ''; ghBranchEl.value = gh ? gh.branch : 'progress'; ghTokenEl.value = '';
+    ghTokenEl.placeholder = gh ? 'Saved. Paste to replace.' : 'github_pat_...';
+    ghConnectBtn.textContent = gh ? 'Save and sync' : 'Connect and sync';
+    ghNowBtn.hidden = ghOffBtn.hidden = !gh;
+    ghShowMsg(gh ? ghMsg : '', ghBad);
+  }
+  function ghOpen(){ ghPanel.hidden = false; ghFill(); (gh ? ghConnectBtn : ghRepoEl).focus(); ghPanel.scrollIntoView({ block: 'nearest' }); }
+  document.getElementById('gh-open').addEventListener('click', function(){ if (ghPanel.hidden) ghOpen(); else ghPanel.hidden = true; });
+  syncEl.addEventListener('click', function(){ if (!framed) ghOpen(); });
+  document.getElementById('gh-close').addEventListener('click', function(){ ghPanel.hidden = true; });
+  [ghRepoEl, ghBranchEl, ghTokenEl].forEach(function(el){ el.addEventListener('keydown', function(e){ if (e.key === 'Enter') ghConnectBtn.click(); }); });
+  ghConnectBtn.addEventListener('click', function(){
+    var repo = ghRepoEl.value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/+$/, '');
+    var branch = ghBranchEl.value.trim() || 'progress', token = ghTokenEl.value.trim() || (gh && gh.token) || '';
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) { ghShowMsg('Enter the repository as owner/name, for example acme/eled-platform.', true); return; }
+    if (!/^[\w][\w.\/-]*$/.test(branch)) { ghShowMsg('That branch name is not valid.', true); return; }
+    if (!token) { ghShowMsg('Paste a token. The steps below show how to make one.', true); return; }
+    gh = { repo: repo, branch: branch, token: token }; ghSaveCfg(); ghBad = false; ghFails = 0; ghMsg = '';
+    ghTokenEl.value = ''; ghShowMsg('Connecting to GitHub...', false);
+    ghSync().then(function(){ ghFill(); ghShowMsg(ghMsg, ghBad || ghFails > 0); });
+  });
+  ghNowBtn.addEventListener('click', function(){
+    ghBad = false; ghFails = 0; ghShowMsg('Syncing...', false);
+    ghSync().then(function(){ ghShowMsg(ghMsg, ghBad || ghFails > 0); });
+  });
+  ghOffBtn.addEventListener('click', function(){
+    clearTimeout(ghTimer); gh = null; ghSaveCfg(); ghBad = false; ghFails = 0; ghMsg = '';
+    setSync(storageOk ? 'local' : 'nostore'); ghFill(); ghShowMsg('Disconnected. Progress stays saved in this browser, and the file on GitHub is untouched.', false);
+  });
   
 
   /* copy buttons on code blocks */
