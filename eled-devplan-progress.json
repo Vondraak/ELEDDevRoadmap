@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-02T15:22:09.225Z",
+ "updated": "2026-10-02T15:22:16.407Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -22,6 +22,38 @@
   "p1-install-the-dev-tooling": {
    "done": true,
    "at": "2026-10-02T15:22:08.976Z"
+  },
+  "p1-create-the-resource-group-sql-server-and-databas": {
+   "done": true,
+   "at": "2026-10-02T15:22:10.405Z"
+  },
+  "p1-create-the-storage-account-and-attachments-conta": {
+   "done": true,
+   "at": "2026-10-02T15:22:09.903Z"
+  },
+  "p1-create-the-static-web-app": {
+   "done": true,
+   "at": "2026-10-02T15:22:11.005Z"
+  },
+  "p1-allow-browser-uploads-to-blob-cors": {
+   "done": true,
+   "at": "2026-10-02T15:22:11.539Z"
+  },
+  "p1-register-the-entra-app-and-its-roles": {
+   "done": true,
+   "at": "2026-10-02T15:22:12.635Z"
+  },
+  "p1-add-the-static-web-app-settings": {
+   "done": true,
+   "at": "2026-10-02T15:22:14.142Z"
+  },
+  "p1-scaffold-the-api-project": {
+   "done": true,
+   "at": "2026-10-02T15:22:13.643Z"
+  },
+  "p1-add-staticwebapp-config-json": {
+   "done": true,
+   "at": "2026-10-02T15:22:14.673Z"
   }
  }
 }
