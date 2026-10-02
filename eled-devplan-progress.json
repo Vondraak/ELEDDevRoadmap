@@ -1,11 +1,23 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-02T15:22:01.305Z",
+ "updated": "2026-10-02T15:22:07.595Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
    "at": "2026-10-02T15:21:59.597Z"
+  },
+  "p0-import-eledcalc-and-eledinstall-into-azure-repos": {
+   "done": true,
+   "at": "2026-10-02T15:22:05.860Z"
+  },
+  "p0-confirm-azure-and-entra-rights": {
+   "done": true,
+   "at": "2026-10-02T15:22:04.928Z"
+  },
+  "p0-check-power-bi-pro-and-entra-id-p1-licenses": {
+   "done": true,
+   "at": "2026-10-02T15:22:07.423Z"
   }
  }
 }
