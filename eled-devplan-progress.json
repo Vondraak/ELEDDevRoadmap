@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T06:04:10.527Z",
+ "updated": "2026-10-06T06:07:17.699Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -86,6 +86,10 @@
   "p0-request-the-free-hosted-build-agent": {
    "done": true,
    "at": "2026-10-06T06:04:08.797Z"
+  },
+  "p2-connect-vs-code-to-the-dev-database": {
+   "done": true,
+   "at": "2026-10-06T06:07:15.901Z"
   }
  }
 }
