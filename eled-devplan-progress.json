@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T17:45:01.095Z",
+ "updated": "2026-10-06T18:10:46.244Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -122,6 +122,10 @@
   "p2-create-the-app-and-reporting-logins": {
    "done": true,
    "at": "2026-10-06T17:44:59.326Z"
+  },
+  "p3-write-the-shared-libs-auth-db-blob": {
+   "done": true,
+   "at": "2026-10-06T18:10:44.534Z"
   }
  }
 }
