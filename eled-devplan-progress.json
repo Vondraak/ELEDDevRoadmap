@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T06:07:17.699Z",
+ "updated": "2026-10-06T17:39:18.160Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -90,6 +90,18 @@
   "p2-connect-vs-code-to-the-dev-database": {
    "done": true,
    "at": "2026-10-06T06:07:15.901Z"
+  },
+  "p2-add-the-migration-runner": {
+   "done": true,
+   "at": "2026-10-06T17:39:15.348Z"
+  },
+  "p2-write-001-init-sql": {
+   "done": true,
+   "at": "2026-10-06T17:39:15.894Z"
+  },
+  "p2-add-full-text-search-002-fulltext-sql": {
+   "done": true,
+   "at": "2026-10-06T17:39:16.387Z"
   }
  }
 }
