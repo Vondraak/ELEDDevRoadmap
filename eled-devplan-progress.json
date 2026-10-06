@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T05:21:01.093Z",
+ "updated": "2026-10-06T05:47:28.612Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -66,6 +66,18 @@
   "p1-create-the-deploy-pipeline": {
    "done": true,
    "at": "2026-10-06T05:20:59.388Z"
+  },
+  "p1-protect-main-with-a-branch-policy": {
+   "done": true,
+   "at": "2026-10-06T05:47:26.837Z"
+  },
+  "p1-create-the-azure-service-connection-for-migratio": {
+   "done": true,
+   "at": "2026-10-06T05:47:26.179Z"
+  },
+  "p1-turn-on-application-insights": {
+   "done": true,
+   "at": "2026-10-06T05:47:25.721Z"
   }
  }
 }
