@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T17:39:18.160Z",
+ "updated": "2026-10-06T17:39:24.460Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -102,6 +102,18 @@
   "p2-add-full-text-search-002-fulltext-sql": {
    "done": true,
    "at": "2026-10-06T17:39:16.387Z"
+  },
+  "p2-give-every-checklist-item-a-stable-key": {
+   "done": true,
+   "at": "2026-10-06T17:39:21.503Z"
+  },
+  "p2-add-the-seed-script": {
+   "done": true,
+   "at": "2026-10-06T17:39:22.020Z"
+  },
+  "p2-add-the-migration-pipeline": {
+   "done": true,
+   "at": "2026-10-06T17:39:22.704Z"
   }
  }
 }
