@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T17:39:24.460Z",
+ "updated": "2026-10-06T17:39:29.818Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -114,6 +114,10 @@
   "p2-add-the-migration-pipeline": {
    "done": true,
    "at": "2026-10-06T17:39:22.704Z"
+  },
+  "p2-both-databases-match": {
+   "done": true,
+   "at": "2026-10-06T17:39:28.129Z"
   }
  }
 }
