@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T05:47:28.612Z",
+ "updated": "2026-10-06T06:03:57.052Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -78,6 +78,10 @@
   "p1-turn-on-application-insights": {
    "done": true,
    "at": "2026-10-06T05:47:25.721Z"
+  },
+  "p1-sign-in-and-roles-work-end-to-end": {
+   "done": true,
+   "at": "2026-10-06T06:03:55.243Z"
   }
  }
 }
