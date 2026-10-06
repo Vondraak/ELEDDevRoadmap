@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T19:45:41.856Z",
+ "updated": "2026-10-06T20:07:53.259Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -142,6 +142,10 @@
   "p3-build-the-status-and-approval-endpoint": {
    "done": true,
    "at": "2026-10-06T19:45:40.000Z"
+  },
+  "p3-build-the-checklist-endpoints": {
+   "done": true,
+   "at": "2026-10-06T20:07:51.551Z"
   }
  }
 }
