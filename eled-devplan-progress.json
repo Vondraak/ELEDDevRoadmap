@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T17:39:29.818Z",
+ "updated": "2026-10-06T17:45:01.095Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -118,6 +118,10 @@
   "p2-both-databases-match": {
    "done": true,
    "at": "2026-10-06T17:39:28.129Z"
+  },
+  "p2-create-the-app-and-reporting-logins": {
+   "done": true,
+   "at": "2026-10-06T17:44:59.326Z"
   }
  }
 }
