@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-07T06:25:32.167Z",
+ "updated": "2026-10-07T06:33:18.000Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -210,6 +210,14 @@
   "p5-switch-item-state-to-stable-keys": {
    "done": true,
    "at": "2026-10-07T06:25:30.433Z"
+  },
+  "p5-trim-the-toolbar-for-saved-checklists": {
+   "done": true,
+   "at": "2026-10-07T06:33:15.251Z"
+  },
+  "p5-link-the-checklist-back-to-its-quote": {
+   "done": true,
+   "at": "2026-10-07T06:33:16.226Z"
   }
  }
 }
