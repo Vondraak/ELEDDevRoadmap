@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-07T05:59:07.172Z",
+ "updated": "2026-10-07T06:25:32.167Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -194,6 +194,22 @@
   "p4-quotes-survive-a-reload": {
    "done": true,
    "at": "2026-10-07T05:59:05.444Z"
+  },
+  "p5-write-mapquote-js": {
+   "done": true,
+   "at": "2026-10-07T06:25:29.019Z"
+  },
+  "p5-render-from-the-checklist-s-own-definition": {
+   "done": true,
+   "at": "2026-10-07T06:25:29.469Z"
+  },
+  "p5-replace-localstorage-with-the-api": {
+   "done": true,
+   "at": "2026-10-07T06:25:29.940Z"
+  },
+  "p5-switch-item-state-to-stable-keys": {
+   "done": true,
+   "at": "2026-10-07T06:25:30.433Z"
   }
  }
 }
