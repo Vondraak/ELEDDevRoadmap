@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-07T05:40:03.557Z",
+ "updated": "2026-10-07T05:46:34.093Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -186,6 +186,10 @@
   "p4-lock-sent-quotes-and-flag-old-catalogs": {
    "done": true,
    "at": "2026-10-07T05:40:01.849Z"
+  },
+  "p4-keep-a-copy-of-the-quote-as-sent": {
+   "done": true,
+   "at": "2026-10-07T05:46:32.316Z"
   }
  }
 }
