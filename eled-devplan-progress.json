@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-07T06:49:08.157Z",
+ "updated": "2026-10-07T07:03:35.233Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -226,6 +226,10 @@
   "p5-add-photo-uploads": {
    "done": true,
    "at": "2026-10-07T06:49:05.398Z"
+  },
+  "p5-approval-builds-the-right-checklist": {
+   "done": true,
+   "at": "2026-10-07T07:03:35.174Z"
   }
  }
 }
