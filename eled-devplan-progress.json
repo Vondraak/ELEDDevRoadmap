@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-07T05:38:38.425Z",
+ "updated": "2026-10-07T05:40:03.557Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -182,6 +182,10 @@
   "p4-fix-the-reset-button": {
    "done": true,
    "at": "2026-10-07T05:38:36.697Z"
+  },
+  "p4-lock-sent-quotes-and-flag-old-catalogs": {
+   "done": true,
+   "at": "2026-10-07T05:40:01.849Z"
   }
  }
 }
