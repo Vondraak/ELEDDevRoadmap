@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-06T20:50:02.862Z",
+ "updated": "2026-10-07T05:03:07.909Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -56,8 +56,8 @@
    "at": "2026-10-02T15:22:14.673Z"
   },
   "p4-add-getquotestate-and-setquotestate": {
-   "done": false,
-   "at": "2026-10-02T15:32:23.234Z"
+   "done": true,
+   "at": "2026-10-07T05:03:05.446Z"
   },
   "p1-add-the-getroles-function": {
    "done": true,
@@ -166,6 +166,14 @@
   "p3-the-api-holds-up": {
    "done": true,
    "at": "2026-10-06T20:50:01.119Z"
+  },
+  "p4-prove-the-save-and-reload-round-trip": {
+   "done": true,
+   "at": "2026-10-07T05:03:04.430Z"
+  },
+  "p4-add-the-install-attributes-card": {
+   "done": true,
+   "at": "2026-10-07T05:03:06.130Z"
   }
  }
 }
