@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-08T18:20:26.602Z",
+ "updated": "2026-10-08T18:23:15.567Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -254,6 +254,10 @@
   "p8-create-the-reporting-views-003-reporting-views-s": {
    "done": true,
    "at": "2026-10-08T18:20:24.852Z"
+  },
+  "p9-move-crews-in-progress-checklists": {
+   "done": true,
+   "at": "2026-10-08T18:23:13.877Z"
   }
  }
 }
