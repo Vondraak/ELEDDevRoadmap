@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-08T17:54:47.666Z",
+ "updated": "2026-10-08T17:56:52.786Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -246,6 +246,10 @@
   "p6-build-the-quote-detail-view": {
    "done": true,
    "at": "2026-10-08T17:54:45.948Z"
+  },
+  "p6-build-the-rules-admin-view": {
+   "done": true,
+   "at": "2026-10-08T17:56:51.031Z"
   }
  }
 }
