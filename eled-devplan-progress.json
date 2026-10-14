@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-08T19:54:32.829Z",
+ "updated": "2026-10-14T20:02:34.885Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -262,6 +262,34 @@
   "p9-write-the-runbook": {
    "done": true,
    "at": "2026-10-08T19:54:31.126Z"
+  },
+  "p7-set-up-the-import-tool": {
+   "done": true,
+   "at": "2026-10-14T20:02:28.799Z"
+  },
+  "p7-map-each-spreadsheet-layout": {
+   "done": true,
+   "at": "2026-10-14T20:02:29.391Z"
+  },
+  "p7-read-the-pdfs": {
+   "done": true,
+   "at": "2026-10-14T20:02:30.107Z"
+  },
+  "p7-write-the-loader": {
+   "done": true,
+   "at": "2026-10-14T20:02:31.332Z"
+  },
+  "p7-dry-run-then-load-dev-then-prod": {
+   "done": true,
+   "at": "2026-10-14T20:02:31.840Z"
+  },
+  "p7-import-saved-eledinstall-checklists": {
+   "done": true,
+   "at": "2026-10-14T20:02:32.357Z"
+  },
+  "p7-the-sample-is-in-and-searchable": {
+   "done": true,
+   "at": "2026-10-14T20:02:33.157Z"
   }
  }
 }
