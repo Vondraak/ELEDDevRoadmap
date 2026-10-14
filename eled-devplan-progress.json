@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-14T20:02:40.533Z",
+ "updated": "2026-10-14T20:03:00.100Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -298,6 +298,14 @@
   "p9-retire-the-github-repos": {
    "done": true,
    "at": "2026-10-14T20:02:37.407Z"
+  },
+  "p0-run-the-rules-workshop-with-the-install-lead": {
+   "done": true,
+   "at": "2026-10-14T20:02:57.303Z"
+  },
+  "p0-lock-the-open-decisions": {
+   "done": true,
+   "at": "2026-10-14T20:02:58.352Z"
   }
  }
 }
