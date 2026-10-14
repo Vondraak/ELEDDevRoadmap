@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-14T20:03:09.696Z",
+ "updated": "2026-10-14T20:03:17.234Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -310,6 +310,14 @@
   "p6-everything-is-findable-fast": {
    "done": true,
    "at": "2026-10-14T20:03:07.890Z"
+  },
+  "p5-seed-the-starter-rules": {
+   "done": true,
+   "at": "2026-10-14T20:03:15.461Z"
+  },
+  "p5-run-the-pilot-demo": {
+   "done": true,
+   "at": "2026-10-14T20:03:17.069Z"
   }
  }
 }
