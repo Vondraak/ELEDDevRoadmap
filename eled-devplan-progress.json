@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-14T20:03:17.234Z",
+ "updated": "2026-10-14T21:36:19.944Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -318,6 +318,14 @@
   "p5-run-the-pilot-demo": {
    "done": true,
    "at": "2026-10-14T20:03:17.069Z"
+  },
+  "p8-connect-power-bi-desktop": {
+   "done": true,
+   "at": "2026-10-14T21:36:18.199Z"
+  },
+  "p8-build-the-model-and-measures": {
+   "done": true,
+   "at": "2026-10-14T21:36:17.158Z"
   }
  }
 }
