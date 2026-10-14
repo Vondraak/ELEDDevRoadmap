@@ -1,7 +1,7 @@
 {
  "app": "eled-devplan",
  "version": 3,
- "updated": "2026-10-14T21:36:19.944Z",
+ "updated": "2026-10-14T21:36:24.024Z",
  "checks": {
   "p0-create-the-azure-devops-organization-and-project": {
    "done": true,
@@ -326,6 +326,14 @@
   "p8-build-the-model-and-measures": {
    "done": true,
    "at": "2026-10-14T21:36:17.158Z"
+  },
+  "p8-publish-and-schedule-refresh": {
+   "done": true,
+   "at": "2026-10-14T21:36:21.416Z"
+  },
+  "p8-numbers-reconcile": {
+   "done": true,
+   "at": "2026-10-14T21:36:22.249Z"
   }
  }
 }
